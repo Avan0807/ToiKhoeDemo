@@ -6,32 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
+    // Tên bảng trong cơ sở dữ liệu (nếu khác tên mặc định của model)
+    protected $table = 'Doctors';
 
-    // Nếu bạn muốn xác định chính xác bảng (không cần thiết 
-    // nếu bảng tên mặc định là 'doctors', vì Laravel sẽ suy ra từ tên model)
-    // protected $table = 'doctors';
+    // Cột khóa chính trong bảng (nếu khác 'id')
+    protected $primaryKey = 'doctorID';
 
-    // Đặt cột khóa chính (nếu khác 'id')
-    // protected $primaryKey = 'id';
-
-    // Chỉ định các cột cho phép "mass assignment"
+    // Các cột cho phép "mass assignment"
     protected $fillable = [
         'name',
-        'specialty',
+        'specialization', // Đã sửa từ 'specialty' thành 'specialization'
         'email',
         'phone',
-        'address',
+        'location', // Đã sửa từ 'address' thành 'location'
+        'working_hours', // Thêm cột này nếu cần
         'status',
     ];
 
-    
+    // Định nghĩa quan hệ "One-to-Many" với Booking
     public function bookings()
     {
-        return $this->hasMany(Booking::class, 'doctor_id');
+        return $this->hasMany(Booking::class, 'doctorID', 'doctorID');
     }
-    // Nếu cần kiểu enum, có thể viết accessor/mutator 
-    // hoặc cast (trong Laravel 9+):
+
+    // Nếu cần kiểu enum, có thể sử dụng accessor/mutator hoặc casts
+    // (áp dụng cho Laravel 9+ hoặc Laravel Enum Package)
     // protected $casts = [
-    //     'status' => StatusEnum::class, // tự định nghĩa Enum
+    //     'status' => 'boolean', // Ví dụ nếu 'status' là kiểu boolean
     // ];
 }

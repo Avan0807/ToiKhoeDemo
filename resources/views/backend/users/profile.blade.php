@@ -74,6 +74,7 @@
                               <option value="">-----Select Role-----</option>
                                   <option value="admin" {{(($profile->role=='admin')? 'selected' : '')}}>Admin</option>
                                   <option value="user" {{(($profile->role=='user')? 'selected' : '')}}>User</option>
+                                  <option value="user" {{(($profile->role=='doctor')? 'selected' : '')}}>Doctor</option>
                           </select>
                         @error('role')
                         <span class="text-danger">{{$message}}</span>

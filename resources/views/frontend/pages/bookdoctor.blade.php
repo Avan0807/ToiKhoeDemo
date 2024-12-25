@@ -1,6 +1,8 @@
-@extends('layouts.app')
+@extends('frontend.layouts.master')
+@section('title','Booking Doctor')
 
-@section('content')
+@section('main-content')
+
 <div class="container">
     <h1>Đặt khám</h1>
     @if(session('success'))
@@ -33,8 +35,19 @@
                 @endforeach
             </select>
         </div>
+        <div class="form-group">
+            <label for="consultation_type">Hình thức khám</label>
+            <select name="consultation_type" id="consultation_type" class="form-control" required>
+                <option value="">-- Chọn hình thức khám --</option>
+                <option value="Online">Online</option>
+                <option value="In-Person">Tại phòng khám</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="note">Ghi chú</label>
+            <textarea name="note" id="note" class="form-control" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
+        </div>
         <button type="submit" class="btn btn-primary">Đặt lịch</button>
     </form>
-
 </div>
 @endsection

@@ -7,18 +7,19 @@ use App\Models\Doctor;
 
 class Booking extends Model
 {
-
-    // Tên bảng trong database (nếu không tuân theo quy tắc Laravel)
-    protected $table = 'bookings';
-
+    // Tên bảng trong cơ sở dữ liệu
+    protected $table = 'Appointment';
+    
     // Các cột có thể điền dữ liệu (mass assignment)
     protected $fillable = [
         'name',
         'phone',
         'date',
         'time',
-        'doctor_id',
+        'doctorID', // Sửa từ 'doctor_id' thành 'doctorID' để khớp với cơ sở dữ liệu
         'status',
+        'consultation_type', // Thêm cột này
+        'note', // Thêm cột này
     ];
 
     /**
@@ -26,7 +27,7 @@ class Booking extends Model
      */
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class, 'doctor_id');
+        // Khóa ngoại là 'doctorID', liên kết với cột 'doctorID' trong bảng Doctors
+        return $this->belongsTo(Doctor::class, 'doctorID', 'doctorID');
     }
-    
 }

@@ -1,15 +1,15 @@
-@extends('user.layouts.master')
+@extends('doctor.layouts.master')
 
 @section('main-content')
 <div class="container-fluid">
-    @include('user.layouts.notification')
+    @include('doctor.layouts.notification')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
     </div>
 
     <!-- Content Row -->
-     <div class="row">
+    {{-- <div class="row">
 
       <!-- Category -->
       <div class="col-xl-3 col-md-6 mb-4">
@@ -83,7 +83,7 @@
           </div>
         </div>
       </div>
-    </div> 
+    </div> --}}
 
     <!-- Content Row -->
 
@@ -132,8 +132,8 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{route('user.order.show',$order->id)}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-                        <form method="POST" action="{{route('user.order.delete',[$order->id])}}">
+                        <a href="{{route('doctor.order.show',$order->id)}}" class="btn btn-warning btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
+                        <form method="POST" action="{{route('doctor.order.delete',[$order->id])}}">
                           @csrf 
                           @method('delete')
                               <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>

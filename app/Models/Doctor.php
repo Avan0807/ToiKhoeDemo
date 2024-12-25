@@ -29,9 +29,4 @@ class Doctor extends Model
         return $this->hasMany(Booking::class, 'doctorID', 'doctorID');
     }
 
-    // Nếu cần kiểu enum, có thể sử dụng accessor/mutator hoặc casts
-    // (áp dụng cho Laravel 9+ hoặc Laravel Enum Package)
-    // protected $casts = [
-    //     'status' => 'boolean', // Ví dụ nếu 'status' là kiểu boolean
-    // ];
 }

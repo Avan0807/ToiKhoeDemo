@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Ecommerce Laravel || DASHBOARD</title>
+    <title>CODY || BẢNG TỔNG QUAN</title>
   
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.pinimg.com/236x/9c/f2/42/9cf242c32ab2412f8aa73ec0e011156c.jpg">

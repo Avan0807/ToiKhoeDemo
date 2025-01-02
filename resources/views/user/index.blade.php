@@ -5,11 +5,11 @@
     @include('user.layouts.notification')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+      <h1 class="h3 mb-0 text-gray-800">Trang tổng quan</h1>
     </div>
 
     <!-- Content Row -->
-     <div class="row">
+    {{-- <div class="row">
 
       <!-- Category -->
       <div class="col-xl-3 col-md-6 mb-4">
@@ -83,7 +83,7 @@
           </div>
         </div>
       </div>
-    </div> 
+    </div> --}}
 
     <!-- Content Row -->
 
@@ -97,13 +97,13 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Order No.</th>
-              <th>Name</th>
+              <th>Mã đơn hàng.</th>
+              <th>Tên</th>
               <th>Email</th>
-              <th>Qty.</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Số lượng</th>
+              <th>Tổng cộng</th>
+              <th>Trạng thái</th>
+              <th>Hoạt động</th>
             </tr>
           </thead>
           
@@ -122,11 +122,11 @@
                     <td>${{number_format($order->total_amount,2)}}</td>
                     <td>
                         @if($order->status=='new')
-                          <span class="badge badge-primary">NEW</span>
+                          <span class="badge badge-primary">MỚI</span>
                         @elseif($order->status=='process')
-                          <span class="badge badge-warning">PROCESSING</span>
+                          <span class="badge badge-warning">XỬ LÝ</span>
                         @elseif($order->status=='delivered')
-                          <span class="badge badge-success">DELIVERED</span>
+                          <span class="badge badge-success">ĐÃ GIAO HÀNG</span>
                         @else
                           <span class="badge badge-danger">{{$order->status}}</span>
                         @endif
@@ -145,7 +145,7 @@
             @endphp
               @endforeach
               @else
-                <td colspan="8" class="text-center"><h4 class="my-4">No orders found! Try ordering some products to view it here.</h4></td>
+                <td colspan="8" class="text-center"><h4 class="my-4">Không tìm thấy đơn hàng nào! Hãy thử đặt hàng một số sản phẩm để xem tại đây.</h4></td>
               @endif
           </tbody>
         </table>
@@ -286,26 +286,10 @@ var myLineChart = new Chart(ctx, {
     }
   }
 });
-
-
-
-
-
-
-
-
-
-
-
             })
             .catch(function (error) {
             //   vm.answer = 'Error! Could not reach the API. ' + error
             console.log(error)
             });
-
-
-
-
-
   </script>
 @endpush

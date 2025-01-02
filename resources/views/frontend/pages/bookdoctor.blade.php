@@ -2,15 +2,31 @@
 @section('title','Booking Doctor')
 
 @section('main-content')
-<div class="doctor-list-container">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <h4>Tìm kiếm theo</h4>
-        <ul>
-            <li>Bác sĩ <span class="count">1990</span></li>
-            <li>Bệnh viện <span class="count">30</span></li>
+
+    <div class="doctor-list-container">
+        <!-- Sidebar -->
+        <div class="single-widget category">
+        <h3 class="title">Danh sách bác sĩ</h3>
+        <ul class="doctor-list">
+
+            @if($doctors)
+                @foreach($doctors as $doctor)
+                    <li>
+                        <a href="#">{{ $doctor->name }} - {{ $doctor->specialization->name ?? 'Chưa có chuyên môn' }}</a>
+                        <ul>
+                            <li>Điện thoại: {{ $doctor->phone }}</li>
+                            <li>Email: {{ $doctor->email }}</li>
+                            <li>Địa chỉ: {{ $doctor->location }}</li>
+                            @if($doctor->status)
+                                <li>Trạng thái: {{ $doctor->status == 1 ? 'Hoạt động' : 'Không hoạt động' }}</li>
+                            @endif
+                        </ul>
+                    </li>
+                @endforeach
+            @endif
         </ul>
     </div>
+
 
     <!-- Main Content -->
     <div class="main-content">

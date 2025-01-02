@@ -187,29 +187,29 @@ Route::group(['prefix'=>'/user','middleware'=>['user']],function(){
 
 // Doctor section start
 Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
-    Route::get('/','HomeController@index')->name('doctor');
+    Route::get('/','DoctorsController@index')->name('doctor');
      // Profile
-     Route::get('/profile','HomeController@profile')->name('doctor-profile');
-     Route::post('/profile/{id}','HomeController@profileUpdate')->name('doctor-profile-update');
+     Route::get('/profile','DoctorsController@profile')->name('doctor-profile');
+     Route::post('/profile/{id}','DoctorsController@profileUpdate')->name('doctor-profile-update');
     //  Order
-    Route::get('/order',"HomeController@orderIndex")->name('doctor.order.index');
-    Route::get('/order/show/{id}',"HomeController@orderShow")->name('doctor.order.show');
-    Route::delete('/order/delete/{id}','HomeController@doctorOrderDelete')->name('doctor.order.delete');
+    Route::get('/order',"DoctorsController@orderIndex")->name('doctor.order.index');
+    Route::get('/order/show/{id}',"DoctorsController@orderShow")->name('doctor.order.show');
+    Route::delete('/order/delete/{id}','DoctorsController@doctorOrderDelete')->name('doctor.order.delete');
     // Product Review
-    Route::get('/doctor-review','HomeController@productReviewIndex')->name('doctor.productreview.index');
-    Route::delete('/doctor-review/delete/{id}','HomeController@productReviewDelete')->name('doctor.productreview.delete');
-    Route::get('/doctor-review/edit/{id}','HomeController@productReviewEdit')->name('doctor.productreview.edit');
-    Route::patch('/doctor-review/update/{id}','HomeController@productReviewUpdate')->name('doctor.productreview.update');
+    Route::get('/doctor-review','DoctorsController@productReviewIndex')->name('doctor.productreview.index');
+    Route::delete('/doctor-review/delete/{id}','DoctorsController@productReviewDelete')->name('doctor.productreview.delete');
+    Route::get('/doctor-review/edit/{id}','DoctorsController@productReviewEdit')->name('doctor.productreview.edit');
+    Route::patch('/doctor-review/update/{id}','DoctorsController@productReviewUpdate')->name('doctor.productreview.update');
     
     // Post comment
-    Route::get('doctor-post/comment','HomeController@doctorComment')->name('doctor.post-comment.index');
-    Route::delete('doctor-post/comment/delete/{id}','HomeController@doctorCommentDelete')->name('doctor.post-comment.delete');
-    Route::get('doctor-post/comment/edit/{id}','HomeController@doctorCommentEdit')->name('doctor.post-comment.edit');
-    Route::patch('doctor-post/comment/udpate/{id}','HomeController@doctorCommentUpdate')->name('doctor.post-comment.update');
+    Route::get('doctor-post/comment','DoctorsController@doctorComment')->name('doctor.post-comment.index');
+    Route::delete('doctor-post/comment/delete/{id}','DoctorsController@doctorCommentDelete')->name('doctor.post-comment.delete');
+    Route::get('doctor-post/comment/edit/{id}','DoctorsController@doctorCommentEdit')->name('doctor.post-comment.edit');
+    Route::patch('doctor-post/comment/udpate/{id}','DoctorsController@doctorCommentUpdate')->name('doctor.post-comment.update');
     
     // Password Change
-    Route::get('change-password', 'HomeController@changePassword')->name('doctor.change.password.form');
-    Route::post('change-password', 'HomeController@changPasswordStore')->name('change.password');
+    Route::get('change-password', 'DoctorsController@changePassword')->name('doctor.change.password.form');
+    Route::post('change-password', 'DoctorsController@changPasswordStore')->name('change.password');
 
 });
 

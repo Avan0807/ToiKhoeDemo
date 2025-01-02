@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +32,7 @@ class DoctorsController extends Controller
     public function profile(){
         $profile=Auth()->user();
         // return $profile;
-        return view('doctor.doctors.profile')->with('profile',$profile);
+        return view('doctor.users.profile')->with('profile',$profile);
     }
 
     public function profileUpdate(Request $request,$id){

@@ -10,8 +10,8 @@
                 <div class="col-12">
                     <div class="bread-inner">
                         <ul class="bread-list">
-                            <li><a href="{{route('home')}}">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="javascript:void(0);">Blog Single Sidebar</a></li>
+                            <li><a href="{{route('home')}}">Trang chủ<i class="ti-arrow-right"></i></a></li>
+                            <li class="active"><a href="javascript:void(0);">Bài viết thanh bên đơn</a></li>
                         </ul>
                     </div>
                 </div>
@@ -48,7 +48,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="content-tags">
-                                                <h4>Tags:</h4>
+                                                <h4>Thẻ:</h4>
                                                 <ul class="tag-inner">
                                                     @php
                                                         $tags=explode(',',$post->tags);
@@ -66,7 +66,7 @@
                             <div class="col-12 mt-4">
                                 <div class="reply">
                                     <div class="reply-head comment-form" id="commentFormContainer">
-                                        <h2 class="reply-title">Leave a Comment</h2>
+                                        <h2 class="reply-title">Để lại bình luận</h2>
                                         <!-- Comment Form -->
                                         <form class="form comment_form" id="commentForm" action="{{route('post-comment.store',$post->slug)}}" method="POST">
                                             @csrf
@@ -85,7 +85,7 @@
                                                 </div> --}}
                                                 <div class="col-12">
                                                     <div class="form-group  comment_form_body">
-                                                        <label>Your Message<span>*</span></label>
+                                                        <label>Tin nhắn của bạn<span>*</span></label>
                                                         <textarea name="comment" id="comment" rows="10" placeholder=""></textarea>
                                                         <input type="hidden" name="post_id" value="{{ $post->id }}" />
                                                         <input type="hidden" name="parent_id" id="parent_id" value="" />
@@ -93,7 +93,7 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group button">
-                                                        <button type="submit" class="btn"><span class="comment_btn comment">Post Comment</span><span class="comment_btn reply" style="display: none;">Reply Comment</span></button>
+                                                        <button type="submit" class="btn"><span class="comment_btn comment">Đăng bình luận</span><span class="comment_btn reply" style="display: none;">Trả lời Bình luận</span></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -105,7 +105,7 @@
 
                             @else
                             <p class="text-center p-5">
-                                You need to <a href="{{route('login.form')}}" style="color:rgb(54, 54, 204)">Login</a> OR <a style="color:blue" href="{{route('register.form')}}">Register</a> for comment.
+                                Bạn cần phải <a href="{{route('login.form')}}" style="color:rgb(54, 54, 204)">đăng nhập</a> hoặc <a style="color:blue" href="{{route('register.form')}}">Đăng ký</a> để bình luận.
 
                             </p>
 
@@ -114,7 +114,7 @@
                             @endauth
                             <div class="col-12">
                                 <div class="comments">
-                                    <h3 class="comment-title">Comments ({{$post->allComments->count()}})</h3>
+                                    <h3 class="comment-title">Bình luận ({{$post->allComments->count()}})</h3>
                                     <!-- Single Comment -->
                                     @include('frontend.pages.comment', ['comments' => $post->comments, 'post_id' => $post->id, 'depth' => 3])
                                     <!-- End Single Comment -->
@@ -135,7 +135,7 @@
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
                         <div class="single-widget category">
-                            <h3 class="title">Blog Categories</h3>
+                            <h3 class="title">Thể loại bài viết</h3>
                             <ul class="categor-list">
                                 {{-- {{count(Helper::postCategoryList())}} --}}
                                 @foreach(Helper::postCategoryList('posts') as $cat)
@@ -146,7 +146,7 @@
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
                         <div class="single-widget recent-post">
-                            <h3 class="title">Recent post</h3>
+                            <h3 class="title">Bài viết gần đây</h3>
                             @foreach($recent_posts as $post)
                                 <!-- Single Post -->
                                 <div class="single-post">
@@ -174,14 +174,14 @@
                         <!--/ End Single Widget -->
                         <!-- Single Widget -->
                         <div class="single-widget newsletter">
-                            <h3 class="title">Newslatter</h3>
+                            <h3 class="title">Bản tin</h3>
                             <div class="letter-inner">
-                                <h4>Subscribe & get news <br> latest updates.</h4>
+                                <h4>Đăng ký & nhận tin tức <br>cập nhật mới nhất.</h4>
                                 <form action="{{route('subscribe')}}" method="POST">
                                     @csrf
                                     <div class="form-inner">
                                         <input type="email" name="email" placeholder="Enter your email">
-                                        <button type="submit" class="btn mt-2">Submit</button>
+                                        <button type="submit" class="btn mt-2">Đăng</button>
                                     </div>
                                 </form>
                             </div>

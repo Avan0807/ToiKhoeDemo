@@ -35,6 +35,6 @@ class MatchOldPassword implements Rule
      */
     public function message()
     {
-        return 'Current password must match with old password';
+        return 'Mật khẩu hiện tại phải trùng với mật khẩu cũ';
     }
 }

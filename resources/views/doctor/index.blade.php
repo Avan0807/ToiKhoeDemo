@@ -5,7 +5,7 @@
     @include('doctor.layouts.notification')
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+      <h1 class="h3 mb-0 text-gray-800">Trang của bác sĩ</h1>
     </div>
 
     <!-- Content Row -->
@@ -87,6 +87,7 @@
 
     <!-- Content Row -->
 
+    {{--
     <div class="row">
       @php
           $orders=DB::table('orders')->where('user_id',auth()->user()->id)->paginate(10);
@@ -153,8 +154,18 @@
         {{$orders->links()}}
       </div>
     </div>
-
+    --}}
   </div>
+
+  <style>
+    .sidebar {
+        background-color: #0924ec !important;
+        background-image: linear-gradient(113deg, #314aff 10%, #60616f 100%) !important;
+        background-size: cover !important;
+    }
+  </style>
+
+
 @endsection
 
 @push('scripts')

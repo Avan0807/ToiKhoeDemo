@@ -12,6 +12,9 @@ class Doctor extends Model
     // Cột khóa chính trong bảng (nếu khác 'id')
     protected $primaryKey = 'doctorID';
 
+    // Tắt timestamps
+    public $timestamps = false;
+
     // Các cột cho phép "mass assignment"
     protected $fillable = [
         'name',
@@ -29,4 +32,5 @@ class Doctor extends Model
         return $this->hasMany(Booking::class, 'doctorID', 'doctorID');
     }
 
+    
 }

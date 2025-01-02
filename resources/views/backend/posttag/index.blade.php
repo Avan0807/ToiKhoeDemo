@@ -108,9 +108,9 @@
               // alert(dataID);
               e.preventDefault();
               swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this data!",
-                    icon: "warning",
+                    title: "Bạn có chắc không?",
+                    text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
+                    icon: "cảnh báo",
                     buttons: true,
                     dangerMode: true,
                 })
@@ -118,7 +118,7 @@
                     if (willDelete) {
                        form.submit();
                     } else {
-                        swal("Your data is safe!");
+                        swal("Dữ liệu của bạn an toàn!");
                     }
                 });
           })

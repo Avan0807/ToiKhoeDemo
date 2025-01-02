@@ -1,5 +1,5 @@
 @extends('frontend.layouts.master')
-@section('title','Wishlist Page')
+@section('title','Trang danh sách mong muốn')
 @section('main-content')
 	<!-- Breadcrumbs -->
 	<div class="breadcrumbs">
@@ -8,8 +8,8 @@
 				<div class="col-12">
 					<div class="bread-inner">
 						<ul class="bread-list">
-							<li><a href="{{('home')}}">Home<i class="ti-arrow-right"></i></a></li>
-							<li class="active"><a href="javascript:void(0);">Wishlist</a></li>
+							<li><a href="{{('home')}}">Trang chủ<i class="ti-arrow-right"></i></a></li>
+							<li class="active"><a href="javascript:void(0);">Danh sách mong muốn</a></li>
 						</ul>
 					</div>
 				</div>
@@ -27,10 +27,10 @@
 					<table class="table shopping-summery">
 						<thead>
 							<tr class="main-hading">
-								<th>PRODUCT</th>
-								<th>NAME</th>
-								<th class="text-center">TOTAL</th> 
-								<th class="text-center">ADD TO CART</th> 
+								<th>SẢN PHẨM</th>
+								<th>TÊN</th>
+								<th class="text-center">TỔNG CỘNG</th> 
+								<th class="text-center">THÊM VÀO GIỎ HÀNG</th> 
 								<th class="text-center"><i class="ti-trash remove-icon"></i></th>
 							</tr>
 						</thead>
@@ -47,14 +47,14 @@
 											<p class="product-des">{!!($wishlist['summary']) !!}</p>
 										</td>
 										<td class="total-amount" data-title="Total"><span>${{$wishlist['amount']}}</span></td>
-										<td><a href="{{route('add-to-cart',$wishlist->product['slug'])}}" class='btn text-white'>Add To Cart</a></td>
+										<td><a href="{{route('add-to-cart',$wishlist->product['slug'])}}" class='btn text-white'>Thêm vào giỏ hàng</a></td>
 										<td class="action" data-title="Remove"><a href="{{route('wishlist-delete',$wishlist->id)}}"><i class="ti-trash remove-icon"></i></a></td>
 									</tr>
 								@endforeach
 							@else 
 								<tr>
 									<td class="text-center">
-										There are no any wishlist available. <a href="{{route('product-grids')}}" style="color:blue;">Continue shopping</a>
+										Không có danh sách mong muốn nào có sẵn. <a href="{{route('product-grids')}}" style="color:blue;">Tiếp tục mua sắm</a>
 
 									</td>
 								</tr>
@@ -71,48 +71,48 @@
 	<!--/ End Shopping Cart -->
 			
 	<!-- Start Shop Services Area  -->
-	<section class="shop-services section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-rocket"></i>
-						<h4>Free shiping</h4>
-						<p>Orders over $100</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-reload"></i>
-						<h4>Free Return</h4>
-						<p>Within 30 days returns</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-lock"></i>
-						<h4>Sucure Payment</h4>
-						<p>100% secure payment</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-tag"></i>
-						<h4>Best Peice</h4>
-						<p>Guaranteed price</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-			</div>
-		</div>
-	</section>
+    <section class="shop-services section home">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 col-12">
+                    <!-- Dịch vụ Đơn -->
+                    <div class="single-service">
+                        <i class="ti-rocket"></i>
+                        <h4>Miễn phí vận chuyển</h4>
+                        <p>Đơn hàng trên $100</p>
+                    </div>
+                    <!-- Kết thúc Dịch vụ Đơn -->
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <!-- Dịch vụ Đơn -->
+                    <div class="single-service">
+                        <i class="ti-reload"></i>
+                        <h4>Miễn phí trả lại</h4>
+                        <p>Trong vòng 30 ngày</p>
+                    </div>
+                    <!-- Kết thúc Dịch vụ Đơn -->
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <!-- Dịch vụ Đơn -->
+                    <div class="single-service">
+                        <i class="ti-lock"></i>
+                        <h4>Thanh toán an toàn</h4>
+                        <p>100% bảo mật</p>
+                    </div>
+                    <!-- Kết thúc Dịch vụ Đơn -->
+                </div>
+                <div class="col-lg-3 col-md-6 col-12">
+                    <!-- Dịch vụ Đơn -->
+                    <div class="single-service">
+                        <i class="ti-tag"></i>
+                        <h4>Giá tốt nhất</h4>
+                        <p>Đảm bảo giá tốt</p>
+                    </div>
+                    <!-- Kết thúc Dịch vụ Đơn -->
+                </div>
+            </div>
+        </div>
+    </section>
 	<!-- End Shop Newsletter -->
 	
 	@include('frontend.layouts.newsletter')

@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-@section('title','Ecommerce Laravel || All Notifications')
+@section('title','CODY || Tất cả thông báo')
 @section('main-content')
 <div class="card">
     <div class="row">
@@ -7,16 +7,16 @@
            @include('backend.layouts.notification')
         </div>
     </div>
-  <h5 class="card-header">Notifications</h5>
+  <h5 class="card-header">Thông báo</h5>
   <div class="card-body">
     @if(count(Auth::user()->Notifications)>0)
     <table class="table  table-hover admin-table" id="notification-dataTable">
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Time</th>
-          <th scope="col">Title</th>
-          <th scope="col">Action</th>
+          <th scope="col">Thời gian</th>
+          <th scope="col">Tiêu đề</th>
+          <th scope="col">Hoạt động</th>
         </tr>
       </thead>
       <tbody>
@@ -40,7 +40,7 @@
       </tbody>
     </table>
     @else
-      <h2>Notifications Empty!</h2>
+      <h2>Thông báo trống!</h2>
     @endif
   </div>
 </div>
@@ -87,18 +87,18 @@
             // alert(dataID);
             e.preventDefault();
             swal({
-                  title: "Are you sure?",
-                  text: "Once deleted, you will not be able to recover this data!",
-                  icon: "warning",
-                  buttons: true,
-                  dangerMode: true,
-              })
-              .then((willDelete) => {
-                  if (willDelete) {
-                    form.submit();
-                  } else {
-                      swal("Your data is safe!");
-                  }
+                    title: "Bạn có chắc không?",
+                    text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
+                    icon: "cảnh báo",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                       form.submit();
+                    } else {
+                        swal("Dữ liệu của bạn an toàn!");
+                    }
               });
         })
     })

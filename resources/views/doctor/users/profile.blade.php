@@ -1,6 +1,6 @@
 @extends('doctor.layouts.master')
 
-@section('title','Admin Profile')
+@section('title','Doctor Profile')
 
 @section('main-content')
 
@@ -13,7 +13,7 @@
    <div class="card-header py-3">
      <h4 class=" font-weight-bold">Profile</h4>
      <ul class="breadcrumbs">
-         <li><a href="{{route('admin')}}" style="color:#999">Dashboard</a></li>
+         <li><a href="{{route('doctor')}}" style="color:#999">Dashboard</a></li>
          <li><a href="" class="active text-primary">Profile Page</a></li>
      </ul>
    </div>

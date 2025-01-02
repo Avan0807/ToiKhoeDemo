@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Product Lists</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách sản phẩm</h6>
       <a href="{{route('product.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a>
     </div>
     <div class="card-body">
@@ -19,18 +19,18 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Featured</th>
-              <th>Price</th>
-              <th>Discount</th>
-              <th>Size</th>
-              <th>Condition</th>
-              <th>Brand</th>
-              <th>Stock</th>
-              <th>Photo</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Tiêu đề</th>
+              <th>Loại</th>
+              <th>Nổi bật</th>
+              <th>Giá</th>
+              <th>Giảm giá</th>
+              <th>Loại</th>
+              <th>Tình trạng</th>
+              <th>Thương hiệu</th>
+              <th>Kho</th>
+              <th>Ảnh</th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
             </tr>
           </thead>
           <tbody>
@@ -94,7 +94,7 @@
         </table>
         <span style="float:right">{{$products->links()}}</span>
         @else
-          <h6 class="text-center">No Products found!!! Please create Product</h6>
+          <h6 class="text-center">Không tìm thấy sản phẩm nào!!! Vui lòng tạo sản phẩm</h6>
         @endif
       </div>
     </div>
@@ -158,9 +158,9 @@
               // alert(dataID);
               e.preventDefault();
               swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this data!",
-                    icon: "warning",
+                    title: "Bạn có chắc không?",
+                    text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
+                    icon: "cảnh báo",
                     buttons: true,
                     dangerMode: true,
                 })
@@ -168,7 +168,7 @@
                     if (willDelete) {
                        form.submit();
                     } else {
-                        swal("Your data is safe!");
+                        swal("Dữ liệu của bạn an toàn!");
                     }
                 });
           })

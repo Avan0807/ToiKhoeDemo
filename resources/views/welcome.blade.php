@@ -101,7 +101,7 @@
 
 <!DOCTYPE html>
 <head>
-  <title>Pusher Test</title>
+  <title>Kiểm tra đẩy</title>
   <script src="https://js.pusher.com/6.0/pusher.min.js"></script>
   <script>
 
@@ -119,9 +119,9 @@
   </script>
 </head>
 <body>
-  <h1>Pusher Test</h1>
+  <h1>Kiểm tra đẩy</h1>
   <p>
-    Try publishing an event to channel <code>my-channel</code>
-    with event name <code>my-event</code>.
+    Hãy thử xuất bản một sự kiện lên kênh <code>my-channel</code>
+    với tên sự kiện <code>my-event</code>.
   </p>
 </body>

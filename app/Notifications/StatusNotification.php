@@ -82,7 +82,7 @@ class StatusNotification extends Notification
     public function toBroadcast($notifiable)
     {
         return new BroadcastMessage([
-            'title' => $this->details['title'],
+            'title' => 'Đơn hàng mới đã nhận',
             'actionURL' => $this->details['actionURL'],
             'url' => route('admin.notification', $this->id),
             'fas' => $this->details['fas'],

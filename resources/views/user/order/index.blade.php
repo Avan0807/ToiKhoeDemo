@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Order Lists</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách đơn hàng</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -18,14 +18,14 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Order No.</th>
-              <th>Name</th>
+              <th>Mã đơn hàng.</th>
+              <th>Tên</th>
               <th>Email</th>
-              <th>Qty.</th>
-              <th>Charge</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Số lượng</th>
+              <th>Tính phí</th>
+              <th>Tổng cộng</th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
             </tr>
           </thead>
           <tbody>
@@ -42,15 +42,15 @@
                     <td>{{$order->first_name}} {{$order->last_name}}</td>
                     <td>{{$order->email}}</td>
                     <td>{{$order->quantity}}</td>
-                    <td>@foreach($shipping_charge as $data) $ {{number_format($data,2)}} @endforeach</td>
-                    <td>${{number_format($order->total_amount,2)}}</td>
+                    <td>@foreach($shipping_charge as $data)  {{number_format($data,)}} đ @endforeach</td>
+                    <td>{{number_format($order->total_amount,)}}đ</td>
                     <td>
                         @if($order->status=='new')
-                          <span class="badge badge-primary">NEW</span>
+                          <span class="badge badge-primary">MỚI</span>
                         @elseif($order->status=='process')
-                          <span class="badge badge-warning">PROCESSING</span>
+                          <span class="badge badge-warning">XỬ LÝ</span>
                         @elseif($order->status=='delivered')
-                          <span class="badge badge-success">DELIVERED</span>
+                          <span class="badge badge-success">ĐÃ GIAO HÀNG</span>
                         @else
                           <span class="badge badge-danger">{{$order->status}}</span>
                         @endif
@@ -72,7 +72,7 @@
         </table>
         <span style="float:right">{{$orders->links()}}</span>
         @else
-          <h6 class="text-center">No orders found!!! Please order some products</h6>
+          <h6 class="text-center">Không tìm thấy đơn hàng nào!!! Vui lòng đặt hàng một số sản phẩm</h6>
         @endif
       </div>
     </div>
@@ -128,9 +128,9 @@
               // alert(dataID);
               e.preventDefault();
               swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this data!",
-                    icon: "warning",
+                    title: "Bạn có chắc không?",
+                    text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
+                    icon: "cảnh báo",
                     buttons: true,
                     dangerMode: true,
                 })
@@ -138,7 +138,7 @@
                     if (willDelete) {
                        form.submit();
                     } else {
-                        swal("Your data is safe!");
+                        swal("Dữ liệu của bạn an toàn!");
                     }
                 });
           })

@@ -3,7 +3,7 @@
 @section('main-content')
 
 <div class="card">
-    <h5 class="card-header">Add Brand</h5>
+    <h5 class="card-header">Thêm thương hiệu</h5>
     <div class="card-body">
       <form method="post" action="{{route('brand.store')}}">
         {{csrf_field()}}
@@ -16,18 +16,18 @@
         </div>
         
         <div class="form-group">
-          <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
+          <label for="status" class="col-form-label">Trạng thái <span class="text-danger">*</span></label>
           <select name="status" class="form-control">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+              <option value="active">Hoạt động</option>
+              <option value="inactive">Không hoạt động</option>
           </select>
           @error('status')
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
         <div class="form-group mb-3">
-          <button type="reset" class="btn btn-warning">Reset</button>
-           <button class="btn btn-success" type="submit">Submit</button>
+          <button type="reset" class="btn btn-warning">Đặt lại</button>
+           <button class="btn btn-success" type="submit">Đăng</button>
         </div>
       </form>
     </div>
@@ -46,7 +46,7 @@
 
     $(document).ready(function() {
     $('#description').summernote({
-      placeholder: "Write short description.....",
+      placeholder: "Viết mô tả ngắn.....",
         tabsize: 2,
         height: 150
     });

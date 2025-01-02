@@ -18,7 +18,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Order</div>
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tổng đơn hàng</div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\Order::countActiveOrder()}}</div>
@@ -40,7 +40,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Products</div>
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Sản Phẩm</div>
                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Product::countActiveProduct()}}</div>
               </div>
               <div class="col-auto">
@@ -57,7 +57,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Category</div>
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Loại</div>
                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Category::countActiveCategory()}}</div>
               </div>
               <div class="col-auto">
@@ -74,7 +74,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Blog</div>
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Bài Viết</div>
                 <div class="h5 mb-0 font-weight-bold text-gray-800">{{\App\Models\Post::countActivePost()}}</div>
               </div>
               <div class="col-auto">
@@ -93,7 +93,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">New Order</div>
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Đơn hàng mới</div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\Order::countNewReceivedOrder()}}</div>
@@ -114,7 +114,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Processing Order</div>
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Đang xử lý đơn hàng</div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\Order::countProcessingOrder()}}</div>
@@ -135,7 +135,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Delivered Order</div>
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Đơn hàng đã giao</div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\Order::countDeliveredOrder()}}</div>
@@ -156,7 +156,7 @@
           <div class="card-body">
             <div class="row no-gutters align-items-center">
               <div class="col mr-2">
-                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Cancelled Order</div>
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Đơn hàng đã hủy</div>
                 <div class="row no-gutters align-items-center">
                   <div class="col-auto">
                     <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{\App\Models\Order::countCancelledOrder()}}</div>
@@ -179,7 +179,7 @@
         <div class="card shadow mb-4">
           <!-- Card Header - Dropdown -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Tổng quan về thu nhập</h6>
 
           </div>
           <!-- Card Body -->
@@ -196,7 +196,7 @@
         <div class="card shadow mb-4">
           <!-- Card Header - Dropdown -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Người Dùng</h6>
           </div>
           <!-- Card Body -->
           <div class="card-body" style="overflow:hidden">
@@ -224,7 +224,7 @@
   {
       var data = google.visualization.arrayToDataTable(analytics);
       var options = {
-          title : 'Last 7 Days registered user'
+          title : 'Người dùng đã đăng ký trong 7 ngày qua'
       };
       var chart = new google.visualization.PieChart(document.getElementById('pie_chart'));
       chart.draw(data, options);
@@ -274,7 +274,7 @@
                   data: {
                     labels: data_keys, // ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                     datasets: [{
-                      label: "Earnings",
+                      label: "Thu nhập",
                       lineTension: 0.3,
                       backgroundColor: "rgba(78, 115, 223, 0.05)",
                       borderColor: "rgba(78, 115, 223, 1)",
@@ -313,12 +313,12 @@
                         }
                       }],
                       yAxes: [{
-                        ticks: {
-                          maxTicksLimit: 5,
-                          padding: 10,
-                          // Include a dollar sign in the ticks
-                          callback: function(value, index, values) {
-                            return '$' + number_format(value);
+                          ticks: {
+                            min: -10000000,      
+                            max:  10000000,     
+                            stepSize: 5000000, 
+                            callback: function(value) {
+                              return value.toLocaleString('vi-VN') + 'đ';
                           }
                         },
                         gridLines: {

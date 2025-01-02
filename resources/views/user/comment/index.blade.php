@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Comment Lists</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách bình luận</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -18,23 +18,23 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Author</th>
-              <th>Post Title</th>
-              <th>Message</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Tác giả</th>
+              <th>Tiêu đề bài viết</th>
+              <th>Tin nhắn</th>
+              <th>Ngày</th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
             </tr>
           </thead>
           <tfoot>
             <tr>
               <th>#</th>
-              <th>Author</th>
-              <th>Post Title</th>
-              <th>Message</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Tác giả</th>
+              <th>Tiêu đề bài viết</th>
+              <th>Tin nhắn</th>
+              <th>Ngày</th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
             </tr>
           </tfoot>
           <tbody>
@@ -66,7 +66,7 @@
         </table>
         <span style="float:right">{{$comments->links()}}</span>
         @else
-          <h6 class="text-center">No post comments found!!!</h6>
+          <h6 class="text-center">Không tìm thấy bình luận nào!!!</h6>
         @endif
       </div>
     </div>
@@ -122,9 +122,9 @@
               // alert(dataID);
               e.preventDefault();
               swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this data!",
-                    icon: "warning",
+                    title: "Bạn có chắc không?",
+                    text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
+                    icon: "cảnh báo",
                     buttons: true,
                     dangerMode: true,
                 })
@@ -132,7 +132,7 @@
                     if (willDelete) {
                        form.submit();
                     } else {
-                        swal("Your data is safe!");
+                        swal("Dữ liệu của bạn an toàn!");
                     }
                 });
           })

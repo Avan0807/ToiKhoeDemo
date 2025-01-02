@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','Ecommerce Laravel || Blog Page')
+@section('title','Ecommerce Laravel || Trang Bài viết')
 
 @section('main-content')
     <!-- Breadcrumbs -->
@@ -10,17 +10,17 @@
                 <div class="col-12">
                     <div class="bread-inner">
                         <ul class="bread-list">
-                            <li><a href="{{route('home')}}">Home<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="javascript:void(0);">Blog Grid Sidebar</a></li>
+                            <li><a href="{{route('home')}}">Trang chủ<i class="ti-arrow-right"></i></a></li>
+                            <li class="active"><a href="javascript:void(0);">Danh sách Bài viết với Sidebar</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Breadcrumbs -->
+    <!-- Kết thúc Breadcrumbs -->
 
-    <!-- Start Blog Single -->
+    <!-- Bắt đầu Bài viết Single -->
     <section class="blog-single shop-blog grid section">
         <div class="container">
             <div class="row">
@@ -29,44 +29,44 @@
                         @foreach($posts as $post)
                         {{-- {{$post}} --}}
                             <div class="col-lg-6 col-md-6 col-12">
-                                <!-- Start Single Blog  -->
+                                <!-- Bắt đầu Bài viết Đơn -->
                                 <div class="shop-single-blog">
                                 <img src="{{$post->photo}}" alt="{{$post->photo}}">
                                     <div class="content">
                                         <p class="date"><i class="fa fa-calendar" aria-hidden="true"></i> {{$post->created_at->format('d M, Y. D')}}
                                             <span class="float-right">
                                                 <i class="fa fa-user" aria-hidden="true"></i>
-                                                 {{$post->author_info->name ?? 'Anonymous'}}
+                                                 {{$post->author_info->name ?? 'Ẩn danh'}}
                                             </span>
                                         </p>
                                         <a href="{{route('blog.detail',$post->slug)}}" class="title">{{$post->title}}</a>
                                         <p>{!! html_entity_decode($post->summary) !!}</p>
-                                        <a href="{{route('blog.detail',$post->slug)}}" class="more-btn">Continue Reading</a>
+                                        <a href="{{route('blog.detail',$post->slug)}}" class="more-btn">Xem thêm</a>
                                     </div>
                                 </div>
-                                <!-- End Single Blog  -->
+                                <!-- Kết thúc Bài viết Đơn -->
                             </div>
                         @endforeach
                         <div class="col-12">
-                            <!-- Pagination -->
+                            <!-- Phân trang -->
                             {{-- {{$posts->appends($_GET)->links()}} --}}
-                            <!--/ End Pagination -->
+                            <!--/ Kết thúc Phân trang -->
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-4 col-12">
                     <div class="main-sidebar">
-                        <!-- Single Widget -->
+                        <!-- Widget Tìm kiếm -->
                         <div class="single-widget search">
                             <form class="form" method="GET" action="{{route('blog.search')}}">
-                                <input type="text" placeholder="Search Here..." name="search">
-                                <button class="button" type="sumbit"><i class="fa fa-search"></i></button>
+                                <input type="text" placeholder="Tìm kiếm tại đây..." name="search">
+                                <button class="button" type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
+                        <!--/ Kết thúc Widget Tìm kiếm -->
+                        <!-- Widget Danh mục -->
                         <div class="single-widget category">
-                            <h3 class="title">Blog Categories</h3>
+                            <h3 class="title">Danh mục Bài viết</h3>
                             <ul class="categor-list">
                                 @if(!empty($_GET['category']))
                                     @php
@@ -85,12 +85,12 @@
 
                             </ul>
                         </div>
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
+                        <!--/ Kết thúc Widget Danh mục -->
+                        <!-- Widget Bài viết gần đây -->
                         <div class="single-widget recent-post">
-                            <h3 class="title">Recent post</h3>
+                            <h3 class="title">Bài viết gần đây</h3>
                             @foreach($recent_posts as $post)
-                                <!-- Single Post -->
+                                <!-- Bài viết Đơn -->
                                 <div class="single-post">
                                     <div class="image">
                                         <img src="{{$post->photo}}" alt="{{$post->photo}}">
@@ -100,39 +100,34 @@
                                         <ul class="comment">
                                             <li><i class="fa fa-calendar" aria-hidden="true"></i>{{$post->created_at->format('d M, y')}}</li>
                                             <li><i class="fa fa-user" aria-hidden="true"></i>
-                                                {{$post->author_info->name ?? 'Anonymous'}}
+                                                {{$post->author_info->name ?? 'Ẩn danh'}}
                                             </li>
                                         </ul>
                                     </div>
                                 </div>
-                                <!-- End Single Post -->
+                                <!-- Kết thúc Bài viết Đơn -->
                             @endforeach
                         </div>
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
-
-                        <!--/ End Single Widget -->
-                        <!-- Single Widget -->
+                        <!--/ Kết thúc Widget Bài viết gần đây -->
+                        <!-- Widget Newsletter -->
                         <div class="single-widget newsletter">
-                            <h3 class="title">Newslatter</h3>
+                            <h3 class="title">Bản tin</h3>
                             <div class="letter-inner">
-                                <h4>Subscribe & get news <br> latest updates.</h4>
+                                <h4>Đăng ký & nhận tin tức <br> cập nhật mới nhất.</h4>
                                 <form method="POST" action="{{route('subscribe')}}" class="form-inner">
                                     @csrf
-                                    <input type="email" name="email" placeholder="Enter your email">
-                                    <button type="submit" class="btn " style="width: 100%">Submit</button>
+                                    <input type="email" name="email" placeholder="Nhập email của bạn">
+                                    <button type="submit" class="btn " style="width: 100%">Gửi</button>
                                 </form>
                             </div>
                         </div>
-                        <!--/ End Single Widget -->
+                        <!--/ Kết thúc Widget Newsletter -->
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!--/ End Blog Single -->
+    <!--/ Kết thúc Bài viết Single -->
 @endsection
 @push('styles')
     <style>
@@ -140,5 +135,4 @@
             display:inline-flex;
         }
     </style>
-
 @endpush

@@ -28,7 +28,7 @@
       <button type="submit" class="btn btn-primary">Cập nhật</button>
     </form>
   </div>
-</div><!-- Visit 'codeastro' for more projects -->
+</div>
 @endsection
 
 @push('styles')

@@ -52,9 +52,9 @@
             <select name="role" class="form-control">
                 <option value="">-----Chọn vai trò-----</option>
                 @foreach($roles as $role)
-                    <option value="{{$role->role}}" {{(($role->role=='admin') ? 'selected' : '')}}>Admin</option>
-                    <option value="{{$role->role}}" {{(($role->role=='user') ? 'selected' : '')}}>User</option>
-                    <option value="{{$role->role}}" {{(($role->role=='doctor') ? 'selected' : '')}}>Doctor</option>
+                    <option value="{{$role->role}}" {{(($role->role=='admin') ? 'selected' : '')}}>Quản trị viên</option>
+                    <option value="{{$role->role}}" {{(($role->role=='user') ? 'selected' : '')}}>Người dùng</option>
+                    <option value="{{$role->role}}" {{(($role->role=='doctor') ? 'selected' : '')}}>Bác sĩ</option>
                 @endforeach
             </select>
           @error('role')

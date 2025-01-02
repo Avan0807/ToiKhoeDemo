@@ -11,15 +11,15 @@
     <table class="table table-striped table-hover">
       <thead>
         <tr>
-            <th>#</th>
-            <th>Order No.</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Qty.</th>
-            <th>Charge</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Action</th>
+                <th>#</th>
+                <th>Mã đơn hàng</th>
+                <th>Tên</th>
+                <th>Email</th>
+                <th>Số lượng</th>
+                <th>Phí</th>
+                <th>Tổng cộng</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
         </tr>
       </thead>
       <tbody>

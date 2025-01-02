@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Post Tag Lists</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách thẻ bài viết</h6>
       <a href="{{route('post-tag.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Post Tag</a>
     </div>
     <div class="card-body">
@@ -19,10 +19,10 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Title</th>
+              <th>Tiêu đề</th>
               <th>Slug</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Trạng thái</th>
+              <th>Hoạt động</th>
             </tr>
           </thead>
           <tbody>
@@ -52,7 +52,7 @@
         </table>
         <span style="float:right">{{$postTags->links()}}</span>
         @else
-          <h6 class="text-center">No Post Tag found!!! Please create post tag</h6>
+          <h6 class="text-center">Không tìm thấy thẻ bài viết!!! Vui lòng tạo thẻ bài viết</h6>
         @endif
       </div>
     </div>

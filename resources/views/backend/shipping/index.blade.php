@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Shipping List</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách vận chuyển</h6>
       <a href="{{route('shipping.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Shipping</a>
     </div>
     <div class="card-body">
@@ -19,10 +19,10 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Title</th>
-              <th>Price</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Tiêu đề</th>
+              <th>Giá</th>
+              <th>Trạng thái</th>
+              <th>Hoạt động</th>
             </tr>
           </thead>
           <tbody>
@@ -72,7 +72,7 @@
         </table>
         <span style="float:right">{{$shippings->links()}}</span>
         @else
-          <h6 class="text-center">No shippings found!!! Please create shipping</h6>
+          <h6 class="text-center">Không tìm thấy shipping!!! Vui lòng tạo shipping</h6>
         @endif
       </div>
     </div>

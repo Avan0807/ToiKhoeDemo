@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-@section('title','Ecommerce Laravel || Comment Page')
+@section('title','Ecommerce Laravel || Trang quản lý bình luận')
 @section('main-content')
  <!-- DataTales Example -->
  <div class="card shadow mb-4">
@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Comment Lists</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách bình luận</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -18,12 +18,12 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Author</th>
-              <th>Post Title</th>
-              <th>Message</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Tác giả</th>
+              <th>Tiêu đề bài viết</th>
+              <th>Nội dung</th>
+              <th>Ngày</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -36,17 +36,17 @@
                     <td>{{$comment->created_at->format('M d D, Y g: i a')}}</td>
                     <td>
                         @if($comment->status=='active')
-                          <span class="badge badge-success">{{$comment->status}}</span>
+                          <span class="badge badge-success">Hoạt động</span>
                         @else
-                          <span class="badge badge-warning">{{$comment->status}}</span>
+                          <span class="badge badge-warning">Không hoạt động</span>
                         @endif
                     </td>
                     <td>
-                        <a href="{{route('comment.edit',$comment->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <a href="{{route('comment.edit',$comment->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="Chỉnh sửa" data-placement="bottom"><i class="fas fa-edit"></i></a>
                         <form method="POST" action="{{route('comment.destroy',[$comment->id])}}">
                           @csrf
                           @method('delete')
-                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$comment->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$comment->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -55,7 +55,7 @@
         </table>
         <span style="float:right">{{$comments->links()}}</span>
         @else
-          <h6 class="text-center">No post comments found!!!</h6>
+          <h6 class="text-center">Không tìm thấy bình luận nào!</h6>
         @endif
       </div>
     </div>
@@ -108,12 +108,11 @@
           $('.dltBtn').click(function(e){
             var form=$(this).closest('form');
               var dataID=$(this).data('id');
-              // alert(dataID);
               e.preventDefault();
               swal({
                     title: "Bạn có chắc không?",
                     text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
-                    icon: "cảnh báo",
+                    icon: "warning",
                     buttons: true,
                     dangerMode: true,
                 })

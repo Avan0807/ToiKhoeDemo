@@ -1,12 +1,12 @@
 @extends('backend.layouts.master')
-@section('title','Ecommerce Laravel || DASHBOARD')
+@section('title','CODY || Trang tổng quan')
 @section('main-content')
 <div class="container-fluid">
     @include('backend.layouts.notification')
     <!-- Page Heading -->
     <!-- Visit 'yaemiko' for more projects -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+      <h1 class="h3 mb-0 text-gray-800">Trang tổng quan</h1>
     </div>
 
     <!-- Content Row -->

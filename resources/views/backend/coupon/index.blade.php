@@ -9,8 +9,8 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Coupon List</h6>
-      <a href="{{route('coupon.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Coupon</a>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách mã giảm giá</h6>
+      <a href="{{route('coupon.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Thêm mã giảm giá"><i class="fas fa-plus"></i> Thêm mã giảm giá</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -19,11 +19,11 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Coupon Code</th>
-              <th>Type</th>
-              <th>Value</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Mã giảm giá</th>
+              <th>Loại</th>
+              <th>Giá trị</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           
@@ -34,59 +34,40 @@
                     <td>{{$coupon->code}}</td>
                     <td>
                         @if($coupon->type=='fixed')
-                            <span class="badge badge-primary">{{$coupon->type}}</span>
+                            <span class="badge badge-primary">Cố định</span>
                         @else
-                            <span class="badge badge-warning">{{$coupon->type}}</span>
+                            <span class="badge badge-warning">Phần trăm</span>
                         @endif
                     </td>
                     <td>
                         @if($coupon->type=='fixed')
-                            ${{number_format($coupon->value,2)}}
+                            {{number_format($coupon->value,2)}} đ
                         @else
                             {{$coupon->value}}%
-                        @endif</td>
-                    <td>
-                        @if($coupon->status=='active')
-                            <span class="badge badge-success">{{$coupon->status}}</span>
-                        @else
-                            <span class="badge badge-warning">{{$coupon->status}}</span>
                         @endif
                     </td>
                     <td>
-                        <a href="{{route('coupon.edit',$coupon->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('coupon.destroy',[$coupon->id])}}">
+                        @if($coupon->status=='active')
+                            <span class="badge badge-success">Hoạt động</span>
+                        @else
+                            <span class="badge badge-warning">Không hoạt động</span>
+                        @endif
+                    </td>
+                    <td>
+                        <a href="{{route('coupon.edit', $coupon->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="Chỉnh sửa" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{route('coupon.destroy', [$coupon->id])}}">
                           @csrf 
                           @method('delete')
-                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$coupon->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                              <button class="btn btn-danger btn-sm dltBtn" data-id={{$coupon->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
-                    {{-- Delete Modal --}}
-                    {{-- <div class="modal fade" id="delModal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="#delModal{{$user->id}}Label" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="#delModal{{$user->id}}Label">Delete user</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div><!-- Visit 'codeastro' for more projects -->
-                            <div class="modal-body">
-                              <form method="post" action="{{ route('banners.destroy',$user->id) }}">
-                                @csrf 
-                                @method('delete')
-                                <button type="submit" class="btn btn-danger" style="margin:auto; text-align:center">Parmanent delete user</button>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                    </div> --}}
                 </tr>  
             @endforeach
           </tbody>
         </table>
         <span style="float:right">{{$coupons->links()}}</span>
         @else
-          <h6 class="text-center">No Coupon found!!! Please create coupon</h6>
+          <h6 class="text-center">Không tìm thấy mã giảm giá! Vui lòng thêm mã giảm giá mới.</h6>
         @endif
       </div>
     </div>
@@ -97,11 +78,11 @@
   <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
   <style>
-      div.dataTables_wrapper div.dataTables_paginate{
+      div.dataTables_wrapper div.dataTables_paginate {
           display: none;
       }
       .zoom {
-        transition: transform .2s; /* Animation */
+        transition: transform .2s;
       }
 
       .zoom:hover {
@@ -120,49 +101,40 @@
   <!-- Page level custom scripts -->
   <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
   <script>
-      
-      $('#banner-dataTable').DataTable( {
-            "columnDefs":[
-                {
-                    "orderable":false,
-                    "targets":[4,5]
-                }
-            ]
-        } );
+      $('#banner-dataTable').DataTable({
+          "columnDefs": [
+              {
+                  "orderable": false,
+                  "targets": [4, 5]
+              }
+          ]
+      });
 
-        // Sweet alert
-
-        function deleteData(id){
-            
-        }
-  </script>
-  <script>
-      $(document).ready(function(){
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-          $('.dltBtn').click(function(e){
-            var form=$(this).closest('form');
-              var dataID=$(this).data('id');
-              // alert(dataID);
+      $(document).ready(function () {
+          $.ajaxSetup({
+              headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              }
+          });
+          $('.dltBtn').click(function (e) {
+              var form = $(this).closest('form');
+              var dataID = $(this).data('id');
               e.preventDefault();
               swal({
-                    title: "Bạn có chắc không?",
-                    text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
-                    icon: "cảnh báo",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                       form.submit();
-                    } else {
-                        swal("Dữ liệu của bạn an toàn!");
-                    }
-                });
-          })
-      })
+                  title: "Bạn có chắc không?",
+                  text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+              })
+                  .then((willDelete) => {
+                      if (willDelete) {
+                          form.submit();
+                      } else {
+                          swal("Dữ liệu của bạn an toàn!");
+                      }
+                  });
+          });
+      });
   </script>
 @endpush

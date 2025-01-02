@@ -1,5 +1,5 @@
 @extends('backend.layouts.master')
-@section('title','Ecommerce Laravel || Banner Edit')
+@section('title','CODY || Chỉnh sửa Banner')
 @section('main-content')
 
 <div class="card">

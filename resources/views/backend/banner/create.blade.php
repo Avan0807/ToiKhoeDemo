@@ -1,11 +1,11 @@
 @extends('backend.layouts.master')
 
-@section('title','Ecommerce Laravel || Banner Create')
+@section('title','CODY || Tạo Banner')
 
 @section('main-content')
 
 <div class="card">
-    <h5 class="card-header">Thêm Banner</h5>
+    <h5 class="card-header">Tạo Banner</h5>
     <div class="card-body">
       <form method="post" action="{{route('banner.store')}}">
         {{csrf_field()}}

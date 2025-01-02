@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-@section('title','Admin Profile')
+@section('title','Hồ sơ quản trị')
 
 @section('main-content')
 
@@ -11,9 +11,9 @@
         </div>
     </div>
    <div class="card-header py-3">
-     <h4 class=" font-weight-bold">Profile</h4>
+     <h4 class=" font-weight-bold">Hồ sơ</h4>
      <ul class="breadcrumbs">
-         <li><a href="{{route('admin')}}" style="color:#999">Dashboard</a></li>
+         <li><a href="{{route('admin')}}" style="color:#999">Trang tổng quan</a></li>
          <li><a href="" class="active text-primary">Trang hồ sơ</a></li>
      </ul>
    </div>

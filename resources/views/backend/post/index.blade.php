@@ -9,8 +9,8 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Post Lists</h6>
-      <a href="{{route('post.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Post</a>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách bài viết</h6>
+      <a href="{{route('post.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Thêm bài viết"><i class="fas fa-plus"></i> Thêm bài viết</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -19,13 +19,13 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Tag</th>
-              <th>Author</th>
-              <th>Photo</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Tiêu đề</th>
+              <th>Danh mục</th>
+              <th>Thẻ</th>
+              <th>Tác giả</th>
+              <th>Ảnh</th>
+              <th>Trạng thái</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>
@@ -33,9 +33,6 @@
             @foreach($posts as $post)   
               @php 
               $author_info=DB::table('users')->select('name')->where('id',$post->added_by)->get();
-              // dd($sub_cat_info);
-              // dd($author_info);
-
               @endphp
                 <tr>
                     <td>{{$post->id}}</td>
@@ -57,17 +54,17 @@
                     </td>                   
                     <td>
                         @if($post->status=='active')
-                            <span class="badge badge-success">{{$post->status}}</span>
+                            <span class="badge badge-success">Hoạt động</span>
                         @else
-                            <span class="badge badge-warning">{{$post->status}}</span>
+                            <span class="badge badge-warning">Không hoạt động</span>
                         @endif
                     </td>
                     <td>
-                        <a href="{{route('post.edit',$post->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <a href="{{route('post.edit',$post->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="Chỉnh sửa" data-placement="bottom"><i class="fas fa-edit"></i></a>
                     <form method="POST" action="{{route('post.destroy',[$post->id])}}">
                       @csrf 
                       @method('delete')
-                          <button class="btn btn-danger btn-sm dltBtn" data-id={{$post->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                          <button class="btn btn-danger btn-sm dltBtn" data-id={{$post->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                         </form>
                     </td>
                 </tr>  
@@ -76,11 +73,10 @@
         </table>
         <span style="float:right">{{$posts->links()}}</span>
         @else
-          <h6 class="text-center">No posts found!!! Please create Post</h6>
+          <h6 class="text-center">Không tìm thấy bài viết nào!!! Vui lòng tạo bài viết mới</h6>
         @endif
       </div>
     </div>
-    <!-- Visit 'codeastro' for more projects -->
 </div>
 @endsection
 
@@ -137,12 +133,11 @@
           $('.dltBtn').click(function(e){
               var form=$(this).closest('form');
               var dataID=$(this).data('id');
-              // alert(dataID);
               e.preventDefault();
               swal({
                     title: "Bạn có chắc không?",
                     text: "Sau khi xóa, bạn sẽ không thể khôi phục dữ liệu này!",
-                    icon: "cảnh báo",
+                    icon: "warning",
                     buttons: true,
                     dangerMode: true,
                 })

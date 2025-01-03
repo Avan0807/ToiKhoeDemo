@@ -1,84 +1,91 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Srmklive\PayPal\Services\ExpressCheckout;
 use Illuminate\Http\Request;
 use NunoMaduro\Collision\Provider;
 use App\Models\Cart;
 use App\Models\Product;
 use DB;
+
 class PaypalController extends Controller
 {
+    /**
+     * Xử lý thanh toán qua PayPal
+     */
     public function payment()
     {
-        $cart = Cart::where('user_id',auth()->user()->id)->where('order_id',null)->get()->toArray();
+        $cart = Cart::where('user_id', auth()->user()->id)
+                    ->where('order_id', null)
+                    ->get()
+                    ->toArray();
         
         $data = [];
         
-        // return $cart;
-        $data['items'] = array_map(function ($item) use($cart) {
-            $name=Product::where('id',$item['product_id'])->pluck('title');
+        // Chuẩn bị dữ liệu cho PayPal
+        $data['items'] = array_map(function ($item) {
+            $name = Product::where('id', $item['product_id'])->pluck('title');
             return [
-                'name' =>$name ,
+                'name'  => $name,
                 'price' => $item['price'],
-                'desc'  => 'Thank you for using paypal',
-                'qty' => $item['quantity']
+                'desc'  => 'Cảm ơn bạn đã sử dụng PayPal',
+                'qty'   => $item['quantity']
             ];
         }, $cart);
 
-        $data['invoice_id'] ='ORD-'.strtoupper(uniqid());
+        $data['invoice_id']          = 'ORD-' . strtoupper(uniqid());
         $data['invoice_description'] = "Order #{$data['invoice_id']} Invoice";
-        $data['return_url'] = route('payment.success');
-        $data['cancel_url'] = route('payment.cancel');
+        $data['return_url']          = route('payment.success');
+        $data['cancel_url']          = route('payment.cancel');
 
+        // Tính tổng tiền
         $total = 0;
         foreach($data['items'] as $item) {
-            $total += $item['price']*$item['qty'];
+            $total += $item['price'] * $item['qty'];
         }
-
         $data['total'] = $total;
+
+        // Nếu có mã giảm giá
         if(session('coupon')){
             $data['shipping_discount'] = session('coupon')['value'];
         }
-        Cart::where('user_id', auth()->user()->id)->where('order_id', null)->update(['order_id' => session()->get('id')]);
 
-        // return session()->get('id');
-        $provider = new ExpressCheckout;
-  
+        // Gắn order_id cho cart (để liên kết với đơn hàng)
+        Cart::where('user_id', auth()->user()->id)
+            ->where('order_id', null)
+            ->update(['order_id' => session()->get('id')]);
+        
+        $provider = new ExpressCheckout();
         $response = $provider->setExpressCheckout($data);
-    
+
         return redirect($response['paypal_link']);
     }
-   
+
     /**
-     * Responds with a welcome message with instructions
-     *
-     * @return \Illuminate\Http\Response
+     * Xử lý khi người dùng hủy thanh toán
      */
     public function cancel()
     {
-        dd('Your payment is canceled. You can create cancel page here.');
+        dd('Thanh toán của bạn đã bị hủy. Bạn có thể tạo trang hủy thanh toán tại đây.');
     }
-  
+
     /**
-     * Responds with a welcome message with instructions
-     *
-     * @return \Illuminate\Http\Response
+     * Xử lý khi thanh toán thành công
      */
     public function success(Request $request)
     {
-        $provider = new ExpressCheckout;
+        $provider = new ExpressCheckout();
         $response = $provider->getExpressCheckoutDetails($request->token);
-        // return $response;
-  
+
         if (in_array(strtoupper($response['ACK']), ['SUCCESS', 'SUCCESSWITHWARNING'])) {
-            request()->session()->flash('success','You have successfully paid through Paypal! Thank You');
+            request()->session()->flash('success','Bạn đã thanh toán qua PayPal thành công! Cảm ơn bạn.');
             session()->forget('cart');
             session()->forget('coupon');
             return redirect()->route('home');
         }
-  
-        request()->session()->flash('error','Something went wrong please try again!!!');
+
+        request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại!!!');
         return redirect()->back();
     }
 }

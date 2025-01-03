@@ -15,7 +15,7 @@
 	<meta property="og:description" content="{{$product_detail->description}}">
 @endsection
 
-@section('title','Ecommerce Laravel || Chi Tiết Sản Phẩm')
+@section('title','CODY || Chi Tiết Sản Phẩm')
 
 @section('main-content')
 
@@ -85,7 +85,7 @@
                                                 @php
                                                     $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
                                                 @endphp
-												<p class="price"><span class="discount">{{number_format($after_discount,2)}} đ</span><s>{{number_format($product_detail->price,2)}} đ</s></p>
+												<p class="price"><span class="discount">{{number_format($after_discount,0,',','.')}} đ</span><s>{{number_format($product_detail->price,0,',','.')}} đ</s></p>
 												<p class="description">{!!($product_detail->summary)!!}</p>
 											</div>
 											<!-- Kết thúc Mô Tả -->
@@ -140,16 +140,16 @@
 												<p class="cat mt-1">Danh mục con :<a href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a></p>
 												@endif
 												<p class="availability"> Trạng thái:
-    @if($product_detail->stock > 0)
-        @if($product_detail->stock < 5)
-            <span class="badge badge-warning">Còn ít</span>
-        @else
-            <span class="badge badge-success">Còn hàng</span>
-        @endif
-    @else
-        <span class="badge badge-danger">Hết hàng</span>
-    @endif
-</p>
+													@if($product_detail->stock > 0)
+														@if($product_detail->stock < 5)
+															<span class="badge badge-warning">Còn ít</span>
+														@else
+															<span class="badge badge-success">Còn hàng</span>
+														@endif
+													@else
+														<span class="badge badge-danger">Hết hàng</span>
+													@endif
+												</p>
 											</div>
 											<!-- Kết thúc Mua Sản Phẩm -->
 
@@ -186,7 +186,7 @@
 											@endphp
                                             <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
                                             <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                            <span class="price-dec">{{$data->discount}} % Giảm</span>
+                                            <span class="price-dec">Giảm {{$data->discount}}%</span>
                                         </a>
                                     </div>
                                     <div class="product-content">
@@ -195,8 +195,8 @@
                                             @php
                                                 $after_discount=($data->price-(($data->discount*$data->price)/100));
                                             @endphp
-                                            <span class="old">{{number_format($data->price,2)}} đ</span>
-                                            <span>{{number_format($after_discount,2)}} đ</span>
+                                            <span class="old">{{number_format($data->price,0,',','.')}} đ</span>
+                                            <span>{{number_format($after_discount,0,',','.')}} đ</span>
                                         </div>
                                     </div>
                                 </div>

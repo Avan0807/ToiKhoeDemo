@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','Ecommerce Laravel || Trang Đăng Nhập')
+@section('title','CODY || Trang Đăng Nhập')
 
 @section('main-content')
     <!-- Breadcrumbs -->

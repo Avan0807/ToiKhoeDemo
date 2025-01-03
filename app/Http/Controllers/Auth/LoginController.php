@@ -36,7 +36,7 @@ class LoginController extends Controller
 
         if ($users) {
             Auth::login($users);
-            return redirect('/')->with('success', 'You are logged in from ' . $provider);
+            return redirect('/')->with('success', 'Bạn đã đăng nhập từ ' . $provider);
         } else {
             $user = User::create([
                 'name' => $userSocial->getName(),

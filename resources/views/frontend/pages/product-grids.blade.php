@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','Ecommerce Laravel || PRODUCT PAGE')
+@section('title','CODY || TRANG SẢN PHẨM')
 
 @section('main-content')
 	<!-- Breadcrumbs -->
@@ -102,7 +102,7 @@
                                                 @php
                                                     $org=($product->price-($product->price*$product->discount)/100);
                                                 @endphp
-                                                <p class="price"><del class="text-muted">{{number_format($product->price,)}} đ</del>{{number_format($org,)}} đ</p>
+                                                <p class="price"><del class="text-muted">{{number_format($product->price,0,',','.')}} đ</del>{{number_format($org,)}} đ</p>
 
                                             </div>
                                         </div>
@@ -192,8 +192,8 @@
                                                 @php
                                                     $after_discount=($product->price-($product->price*$product->discount)/100);
                                                 @endphp
-                                                <span>{{number_format($after_discount,)}}đ</span>
-                                                <del style="padding-left:4%;">{{number_format($product->price,)}}đ</del>
+                                                <span>{{number_format($after_discount,0,',','.')}}đ</span>
+                                                <del style="padding-left:4%;">{{number_format($product->price,0,',','.')}}đ</del>
                                             </div>
                                         </div>
                                     </div>
@@ -285,7 +285,7 @@
                                             @php
                                                 $after_discount=($product->price-($product->price*$product->discount)/100);
                                             @endphp
-                                            <h3><small><del class="text-muted">{{number_format($product->price,)}} đ</del></small>{{number_format($after_discount,)}} đ </h3>
+                                            <h3><small><del class="text-muted">{{number_format($product->price,0,',','.')}} đ</del></small>{{number_format($after_discount,0,',','.')}} đ </h3>
                                             <div class="quickview-peragraph">
                                                 <p>{!! html_entity_decode($product->summary) !!}</p>
                                             </div>

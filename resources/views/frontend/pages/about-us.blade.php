@@ -1,6 +1,6 @@
 @extends('frontend.layouts.master')
 
-@section('title','Ecommerce Laravel || About Us')
+@section('title','CODY || Giới thiệu về chúng tôi')
 
 @section('main-content')
 

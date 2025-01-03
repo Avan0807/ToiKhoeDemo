@@ -355,11 +355,11 @@ class FrontendController extends Controller
         $data= $request->all();
         if(Auth::attempt(['email' => $data['email'], 'password' => $data['password'],'status'=>'active'])){
             Session::put('user',$data['email']);
-            request()->session()->flash('success','Logged in successfully!');
+            request()->session()->flash('success','Đã đăng nhập thành công!');
             return redirect()->route('home');
         }
         else{
-            request()->session()->flash('error','Invalid email and password pleas try again!');
+            request()->session()->flash('error','Email và mật khẩu không hợp lệ, vui lòng thử lại!');
             return redirect()->back();
         }
     }
@@ -367,7 +367,7 @@ class FrontendController extends Controller
     public function logout(){
         Session::forget('user');
         Auth::logout();
-        request()->session()->flash('success','Logged out successfully');
+        request()->session()->flash('success','Đã đăng xuất thành công');
         return back();
     }
 
@@ -386,11 +386,11 @@ class FrontendController extends Controller
         $check=$this->create($data);
         Session::put('user',$data['email']);
         if($check){
-            request()->session()->flash('success','Registered successfully');
+            request()->session()->flash('success','Đã đăng ký thành công');
             return redirect()->route('home');
         }
         else{
-            request()->session()->flash('error','Please try again!');
+            request()->session()->flash('error','Vui lòng thử lại!');
             return back();
         }
     }
@@ -411,16 +411,16 @@ class FrontendController extends Controller
         if(! Newsletter::isSubscribed($request->email)){
                 Newsletter::subscribePending($request->email);
                 if(Newsletter::lastActionSucceeded()){
-                    request()->session()->flash('success','Subscribed! Please check your email');
+                    request()->session()->flash('success','Đã đăng ký! Vui lòng kiểm tra email của bạn');
                     return redirect()->route('home');
                 }
                 else{
                     Newsletter::getLastError();
-                    return back()->with('error','Something went wrong! please try again');
+                    return back()->with('error','Có gì đó không ổn! Vui lòng thử lại');
                 }
             }
             else{
-                request()->session()->flash('error','Already Subscribed');
+                request()->session()->flash('error','Đã đăng ký');
                 return back();
             }
     }

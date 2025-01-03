@@ -6,12 +6,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+
 class DoctorsController extends Controller
 {
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * Áp dụng middleware auth để đảm bảo chỉ user đã đăng nhập mới truy cập được
      */
     public function __construct()
     {
@@ -19,206 +18,226 @@ class DoctorsController extends Controller
     }
 
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * Trang index cho bác sĩ
      */
-
-
     public function index(){
         return view('doctor.index');
     }
 
+    /**
+     * Trang hồ sơ (profile) của bác sĩ
+     */
     public function profile(){
-        $profile=Auth()->user();
-        // return $profile;
-        return view('doctor.users.profile')->with('profile',$profile);
+        $profile = auth()->user();
+        return view('doctor.users.profile')->with('profile', $profile);
     }
 
-    public function profileUpdate(Request $request,$id){
-        // return $request->all();
-        $user=User::findOrFail($id);
-        $data=$request->all();
-        $status=$user->fill($data)->save();
+    /**
+     * Cập nhật hồ sơ (profile) của bác sĩ
+     */
+    public function profileUpdate(Request $request, $id){
+        $user   = User::findOrFail($id);
+        $data   = $request->all();
+        $status = $user->fill($data)->save();
         if($status){
-            request()->session()->flash('success','Successfully updated your profile');
+            request()->session()->flash('success','Cập nhật thông tin thành công');
         }
         else{
-            request()->session()->flash('error','Please try again!');
+            request()->session()->flash('error','Vui lòng thử lại!');
         }
         return redirect()->back();
     }
 
-    // Order
+    /**
+     * Danh sách đơn hàng của bác sĩ (orderIndex)
+     */
     public function orderIndex(){
-        $orders=Order::orderBy('id','DESC')->where('user_id',auth()->user()->id)->paginate(10);
+        $orders = Order::orderBy('id','DESC')
+                       ->where('user_id', auth()->user()->id)
+                       ->paginate(10);
         return view('doctor.order.index')->with('orders',$orders);
     }
+
+    /**
+     * Xóa đơn hàng (doctorOrderDelete)
+     */
     public function doctorOrderDelete($id)
     {
-        $order=Order::find($id);
+        $order = Order::find($id);
         if($order){
-           if($order->status=="process" || $order->status=='delivered' || $order->status=='cancel'){
-                return redirect()->back()->with('error','You can not delete this order now');
+           if($order->status == "process" || $order->status == 'delivered' || $order->status == 'cancel'){
+                return redirect()->back()->with('error','Bạn không thể xóa đơn hàng này vào lúc này');
            }
            else{
-                $status=$order->delete();
+                $status = $order->delete();
                 if($status){
-                    request()->session()->flash('success','Order Successfully deleted');
+                    request()->session()->flash('success','Đã xóa đơn hàng thành công');
                 }
                 else{
-                    request()->session()->flash('error','Order can not deleted');
+                    request()->session()->flash('error','Không thể xóa đơn hàng, vui lòng thử lại');
                 }
                 return redirect()->route('doctor.order.index');
            }
         }
         else{
-            request()->session()->flash('error','Order can not found');
+            request()->session()->flash('error','Không tìm thấy đơn hàng');
             return redirect()->back();
         }
     }
 
+    /**
+     * Xem chi tiết đơn hàng (orderShow)
+     */
     public function orderShow($id)
     {
-        $order=Order::find($id);
-        // return $order;
-        return view('doctor.order.show')->with('order',$order);
-    }
-    // Product Review
-    public function productReviewIndex(){
-        $reviews=ProductReview::getAllUserReview();
-        return view('doctor.review.index')->with('reviews',$reviews);
-    }
-
-    public function productReviewEdit($id)
-    {
-        $review=ProductReview::find($id);
-        // return $review;
-        return view('doctor.review.edit')->with('review',$review);
+        $order = Order::find($id);
+        return view('doctor.order.show')->with('order', $order);
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Danh sách đánh giá sản phẩm (productReviewIndex)
+     */
+    public function productReviewIndex(){
+        $reviews = ProductReview::getAllUserReview();
+        return view('doctor.review.index')->with('reviews', $reviews);
+    }
+
+    /**
+     * Trang chỉnh sửa đánh giá sản phẩm (productReviewEdit)
+     */
+    public function productReviewEdit($id)
+    {
+        $review = ProductReview::find($id);
+        return view('doctor.review.edit')->with('review', $review);
+    }
+
+    /**
+     * Cập nhật đánh giá sản phẩm (productReviewUpdate)
      */
     public function productReviewUpdate(Request $request, $id)
     {
-        $review=ProductReview::find($id);
+        $review = ProductReview::find($id);
         if($review){
-            $data=$request->all();
-            $status=$review->fill($data)->update();
+            $data   = $request->all();
+            $status = $review->fill($data)->update();
             if($status){
-                request()->session()->flash('success','Review updated');
+                request()->session()->flash('success','Cập nhật đánh giá thành công');
             }
             else{
-                request()->session()->flash('error','Something went wrong! Please try again!!');
+                request()->session()->flash('error','Đã xảy ra lỗi! Vui lòng thử lại!');
             }
         }
         else{
-            request()->session()->flash('error','Review not found!!');
+            request()->session()->flash('error','Không tìm thấy đánh giá!');
         }
 
         return redirect()->route('doctor.productreview.index');
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Xóa đánh giá sản phẩm (productReviewDelete)
      */
     public function productReviewDelete($id)
     {
-        $review=ProductReview::find($id);
-        $status=$review->delete();
+        $review = ProductReview::find($id);
+        $status = $review->delete();
         if($status){
-            request()->session()->flash('success','Review deleted');
+            request()->session()->flash('success','Xóa đánh giá thành công');
         }
         else{
-            request()->session()->flash('error','Something went wrong! Try again');
+            request()->session()->flash('error','Đã xảy ra lỗi! Vui lòng thử lại');
         }
         return redirect()->route('doctor.productreview.index');
     }
 
+    /**
+     * Danh sách bình luận bài viết (doctorComment)
+     */
     public function doctorComment()
     {
-        $comments=PostComment::getAllUserComments();
-        return view('doctor.comment.index')->with('comments',$comments);
+        $comments = PostComment::getAllUserComments();
+        return view('doctor.comment.index')->with('comments', $comments);
     }
+
+    /**
+     * Xóa bình luận bài viết (doctorCommentDelete)
+     */
     public function doctorCommentDelete($id){
-        $comment=PostComment::find($id);
+        $comment = PostComment::find($id);
         if($comment){
-            $status=$comment->delete();
+            $status = $comment->delete();
             if($status){
-                request()->session()->flash('success','Post Comment deleted');
+                request()->session()->flash('success','Đã xóa bình luận bài viết');
             }
             else{
-                request()->session()->flash('error','Error occurred please try again');
+                request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
             }
             return back();
         }
         else{
-            request()->session()->flash('error','Post Comment not found');
-            return redirect()->back();
-        }
-    }
-    public function doctorCommentEdit($id)
-    {
-        $comments=PostComment::find($id);
-        if($comments){
-            return view('doctor.comment.edit')->with('comment',$comments);
-        }
-        else{
-            request()->session()->flash('error','Comment not found');
+            request()->session()->flash('error','Không tìm thấy bình luận bài viết');
             return redirect()->back();
         }
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * Trang chỉnh sửa bình luận bài viết (doctorCommentEdit)
+     */
+    public function doctorCommentEdit($id)
+    {
+        $comments = PostComment::find($id);
+        if($comments){
+            return view('doctor.comment.edit')->with('comment', $comments);
+        }
+        else{
+            request()->session()->flash('error','Không tìm thấy bình luận');
+            return redirect()->back();
+        }
+    }
+
+    /**
+     * Cập nhật bình luận bài viết (doctorCommentUpdate)
      */
     public function doctorCommentUpdate(Request $request, $id)
     {
-        $comment=PostComment::find($id);
+        $comment = PostComment::find($id);
         if($comment){
-            $data=$request->all();
-            // return $data;
-            $status=$comment->fill($data)->update();
+            $data   = $request->all();
+            $status = $comment->fill($data)->update();
             if($status){
-                request()->session()->flash('success','Comment updated');
+                request()->session()->flash('success','Cập nhật bình luận thành công');
             }
             else{
-                request()->session()->flash('error','Something went wrong! Please try again!!');
+                request()->session()->flash('error','Đã xảy ra lỗi! Vui lòng thử lại!');
             }
             return redirect()->route('doctor.post-comment.index');
         }
         else{
-            request()->session()->flash('error','Comment not found');
+            request()->session()->flash('error','Không tìm thấy bình luận');
             return redirect()->back();
         }
-
     }
 
+    /**
+     * Trang đổi mật khẩu cho bác sĩ
+     */
     public function changePassword(){
         return view('doctor.layouts.doctorPasswordChange');
     }
+
+    /**
+     * Lưu mật khẩu mới (changPasswordStore)
+     */
     public function changPasswordStore(Request $request)
     {
         $request->validate([
-            'current_password' => ['required', new MatchOldPassword],
-            'new_password' => ['required'],
+            'current_password'     => ['required', new MatchOldPassword],
+            'new_password'         => ['required'],
             'new_confirm_password' => ['same:new_password'],
         ]);
    
-        User::find(auth()->user()->id)->update(['password'=> Hash::make($request->new_password)]);
+        User::find(auth()->user()->id)->update(['password' => Hash::make($request->new_password)]);
    
-        return redirect()->route('doctor')->with('success','Password changed successfully');
+        return redirect()->route('doctor')->with('success','Đổi mật khẩu thành công');
     }
 }

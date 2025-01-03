@@ -1,5 +1,5 @@
 @extends('frontend.layouts.master')
-@section('title','Booking Doctor')
+@section('title','Đặt lịch hẹn bác sĩ')
 
 @section('main-content')
 

@@ -61,10 +61,10 @@ class ProductReviewController extends Controller
         ];
         Notification::send($user,new StatusNotification($details));
         if($status){
-            request()->session()->flash('success','Thank you for your honest review!');
+            request()->session()->flash('success','Cảm ơn bạn đã đánh giá trung thực!');
         }
         else{
-            request()->session()->flash('error','Something went wrong! Please try again!!');
+            request()->session()->flash('error','Có lỗi xảy ra! Vui lòng thử lại!!');
         }
         return redirect()->back();
     }
@@ -119,14 +119,14 @@ class ProductReviewController extends Controller
             // ];
             // Notification::send($user,new StatusNotification($details));
             if($status){
-                request()->session()->flash('success','Review updated');
+                request()->session()->flash('success','Đánh giá đã cập nhật');
             }
             else{
-                request()->session()->flash('error','Something went wrong! Please try again!!');
+                request()->session()->flash('error','Có lỗi xảy ra! Vui lòng thử lại!!');
             }
         }
         else{
-            request()->session()->flash('error','Review not found!!');
+            request()->session()->flash('error','Không tìm thấy đánh giá!!');
         }
 
         return redirect()->route('review.index');
@@ -143,10 +143,10 @@ class ProductReviewController extends Controller
         $review=ProductReview::find($id);
         $status=$review->delete();
         if($status){
-            request()->session()->flash('success','Review deleted');
+            request()->session()->flash('success','Đánh giá đã xóa');
         }
         else{
-            request()->session()->flash('error','Something went wrong! Try again');
+            request()->session()->flash('error','Có gì đó không ổn! Hãy thử lại');
         }
         return redirect()->route('review.index');
     }

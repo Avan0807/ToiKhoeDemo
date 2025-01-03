@@ -9,18 +9,18 @@ use App\Models\Coupon;
 class ShippingController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Hiển thị danh sách phí vận chuyển (admin).
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        $shipping=Shipping::orderBy('id','DESC')->paginate(10);
-        return view('backend.shipping.index')->with('shippings',$shipping);
+        $shipping = Shipping::orderBy('id','DESC')->paginate(10);
+        return view('backend.shipping.index')->with('shippings', $shipping);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Trang thêm mới phí vận chuyển.
      *
      * @return \Illuminate\Http\Response
      */
@@ -30,58 +30,57 @@ class ShippingController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Lưu phí vận chuyển mới.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'type'=>'string|required',
-            'price'=>'nullable|numeric',
-            'status'=>'required|in:active,inactive'
+        $this->validate($request, [
+            'type'   => 'string|required',
+            'price'  => 'nullable|numeric',
+            'status' => 'required|in:active,inactive'
         ]);
-        $data=$request->all();
-        // return $data;
-        $status=Shipping::create($data);
+        $data   = $request->all();
+        $status = Shipping::create($data);
+
         if($status){
-            request()->session()->flash('success','Shipping created successfully');
-        }
-        else{
-            request()->session()->flash('error','Error, Please try again');
+            request()->session()->flash('success','Thêm phí vận chuyển thành công');
+        } else {
+            request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
         }
         return redirect()->route('shipping.index');
     }
 
     /**
-     * Display the specified resource.
+     * Hiển thị chi tiết phí vận chuyển (nếu cần).
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        // Hiện chưa sử dụng
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Trang chỉnh sửa phí vận chuyển.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        $shipping=Shipping::find($id);
+        $shipping = Shipping::find($id);
         if(!$shipping){
-            request()->session()->flash('error','Shipping not found');
+            request()->session()->flash('error','Không tìm thấy phí vận chuyển');
         }
-        return view('backend.shipping.edit')->with('shipping',$shipping);
+        return view('backend.shipping.edit')->with('shipping', $shipping);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Cập nhật phí vận chuyển.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -89,45 +88,45 @@ class ShippingController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $shipping=Shipping::find($id);
-        $this->validate($request,[
-            'type'=>'string|required',
-            'price'=>'nullable|numeric',
-            'status'=>'required|in:active,inactive'
+        $shipping = Shipping::find($id);
+
+        $this->validate($request, [
+            'type'   => 'string|required',
+            'price'  => 'nullable|numeric',
+            'status' => 'required|in:active,inactive'
         ]);
-        $data=$request->all();
-        // return $data;
-        $status=$shipping->fill($data)->save();
+        $data   = $request->all();
+        $status = $shipping->fill($data)->save();
+
         if($status){
-            request()->session()->flash('success','Shipping updated');
-        }
-        else{
-            request()->session()->flash('error','Error, Please try again');
+            request()->session()->flash('success','Cập nhật phí vận chuyển thành công');
+        } else {
+            request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
         }
         return redirect()->route('shipping.index');
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Xóa phí vận chuyển.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        $shipping=Shipping::find($id);
+        $shipping = Shipping::find($id);
         if($shipping){
-            $status=$shipping->delete();
+            $status = $shipping->delete();
             if($status){
-                request()->session()->flash('success','Shipping deleted');
+                request()->session()->flash('success','Đã xóa phí vận chuyển');
             }
             else{
-                request()->session()->flash('error','Error, Please try again');
+                request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
             }
             return redirect()->route('shipping.index');
         }
         else{
-            request()->session()->flash('error','Shipping not found');
+            request()->session()->flash('error','Không tìm thấy phí vận chuyển');
             return redirect()->back();
         }
     }

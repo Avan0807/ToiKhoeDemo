@@ -364,7 +364,7 @@
                                         <ul>
 										    <li class="order_subtotal" data-price="{{Helper::totalCartPrice()}}">Tổng cộng giỏ hàng
                                                 <span>
-                                                    {{number_format(Helper::totalCartPrice(),)}} đ
+                                                    {{number_format(Helper::totalCartPrice(),0, ',', '.')}} đ
                                                 </span>
 
                                             </li>
@@ -374,7 +374,7 @@
                                                     <select name="shipping" class="nice-select" required>
                                                         <option value="">Chọn địa chỉ của bạn</option>
                                                         @foreach(Helper::shipping() as $shipping)
-                                                        <option value="{{$shipping->id}}" class="shippingOption" data-price="{{$shipping->price}}">{{$shipping->type}}: ${{$shipping->price}}</option>
+                                                        <option value="{{$shipping->id}}" class="shippingOption" data-price="{{$shipping->price}}">{{$shipping->type}}: {{$shipping->price}}đ</option>
                                                         @endforeach
                                                     </select>
                                                 @else
@@ -383,7 +383,7 @@
                                             </li>
 
                                             @if(session('coupon'))
-                                            <li class="coupon_price" data-price="{{session('coupon')['value']}}">You Save<span>${{number_format(session('coupon')['value'],2)}}</span></li>
+                                            <li class="coupon_price" data-price="{{session('coupon')['value']}}">Bạn tiết kiệm được<span>{{number_format(session('coupon')['value'],0, ',', '.')}}đ</span></li>
                                             @endif
                                             @php
                                                 $total_amount=Helper::totalCartPrice();
@@ -392,9 +392,9 @@
                                                 }
                                             @endphp
                                             @if(session('coupon'))
-                                                <li class="last"  id="order_total_price">Total<span>{{number_format($total_amount,)}} đ</span></li>
+                                                <li class="last"  id="order_total_price">Tổng cộng<span>{{number_format($total_amount,0, ',', '.')}} đ</span></li>
                                             @else
-                                                <li class="last"  id="order_total_price">Total<span>{{number_format($total_amount,)}} đ</span></li>
+                                                <li class="last"  id="order_total_price">Tổng cộng<span>{{number_format($total_amount,0, ',', '.')}} đ</span></li>
                                             @endif
                                         </ul>
                                     </div>

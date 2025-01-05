@@ -217,3 +217,10 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
+
+
+// Api 
+Route::group(['prefix'=>'api',],function(){
+    Route::get('users','ApiController@index')->name('users.index');
+    
+});

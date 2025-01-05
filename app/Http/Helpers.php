@@ -160,7 +160,7 @@ class Helper{
         if($order){
             $shipping_price=(float)$order->shipping->price;
             $order_price=self::orderPrice($id,$user_id);
-            return number_format((float)($order_price+$shipping_price),2,'.','');
+            return number_format((float)($order_price+$shipping_price),0,',','.');
         }else{
             return 0;
         }
@@ -175,7 +175,7 @@ class Helper{
         foreach($month_data as $data){
             $price = $data->cart_info->sum('price');
         }
-        return number_format((float)($price),2,'.','');
+        return number_format((float)($price),0,',','.');
     }
 
     public static function shipping(){

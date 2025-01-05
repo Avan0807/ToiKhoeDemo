@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use App\Models\Order;
+use App\Models\ProductReview;
+use App\Models\PostComment;
+
 
 class DoctorsController extends Controller
 {
@@ -102,7 +106,7 @@ class DoctorsController extends Controller
         return view('doctor.review.index')->with('reviews', $reviews);
     }
 
-    /**
+    /** 
      * Trang chỉnh sửa đánh giá sản phẩm (productReviewEdit)
      */
     public function productReviewEdit($id)

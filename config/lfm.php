@@ -164,4 +164,6 @@ return [
     'php_ini_overrides'        => [
         'memory_limit' => '256M',
     ],
+
+    'base_url' => '/storage',
 ];

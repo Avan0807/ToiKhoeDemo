@@ -221,6 +221,12 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 
 // Api 
 Route::group(['prefix'=>'api',],function(){
-    Route::get('users','ApiController@index')->name('users.index');
+
+    // user
+    Route::get('users','ApiController@users')->name('users.index');
     
+    //products
+    Route::get('products', 'ApiController@products')->name('products.index');
+
+    // thêm các thứ vào đây 
 });

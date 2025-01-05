@@ -224,6 +224,8 @@ Route::group(['prefix'=>'api',],function(){
 
     // user
     Route::get('users','ApiController@users')->name('users.index');
+    Route::post('updateusers', 'ApiController@updateusers')->name('users.updateusers');
+
     
     //products
     Route::get('products', 'ApiController@products')->name('products.index');

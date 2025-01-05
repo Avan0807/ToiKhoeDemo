@@ -166,4 +166,7 @@ return [
     ],
 
     'base_url' => '/storage',
+
+    'lang' => 'vi',
+
 ];

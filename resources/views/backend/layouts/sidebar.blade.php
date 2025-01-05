@@ -46,7 +46,7 @@
     <li class="nav-item">
         <a class="nav-link" href="{{route('file-manager')}}">
             <i class="fas fa-fw fa-chart-area"></i>
-            <span>Media Manager</span></a>
+            <span>Quản lý ảnh</span></a>
 
 
     <li class="nav-item">

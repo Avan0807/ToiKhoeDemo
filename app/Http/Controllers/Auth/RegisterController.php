@@ -28,7 +28,8 @@ class RegisterController extends Controller
             'phone' => ['required', 'string', 'max:15', 'unique:users'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'province' => ['required', 'string', 'max:255'], // Đảm bảo tỉnh thành hợp lệ
+            'province' => ['required', 'string', 'max:255'],
+
         ]);
     }
 
@@ -40,6 +41,7 @@ class RegisterController extends Controller
             'email' => $data['email'] ?? null, // Email không bắt buộc
             'password' => Hash::make($data['password']),
             'province' => $data['province'], // Lưu tỉnh thành
+            'role' => 'user',
         ]);
     }
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
+namespace App\Http\Controllers\Auth;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,12 +15,12 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         try {
+            // Validator kiểm tra số điện thoại
             $validator = Validator::make($request->all(), [
-                'email' => 'required|email',
+                'phoneNumber' => 'required|string',
                 'password' => 'required|string',
             ], [
-                'email.required' => 'Email không được để trống',
-                'email.email' => 'Email không đúng định dạng',
+                'phoneNumber.required' => 'Số điện thoại không được để trống',
                 'password.required' => 'Mật khẩu không được để trống'
             ]);
 
@@ -30,14 +32,16 @@ class LoginController extends Controller
                 ], 422);
             }
 
-            if (!Auth::attempt($request->only('email', 'password'))) {
+            // Xác thực với số điện thoại và mật khẩu
+            if (!Auth::attempt(['phoneNumber' => $request->phoneNumber, 'password' => $request->password])) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Email hoặc mật khẩu không đúng'
+                    'message' => 'Số điện thoại hoặc mật khẩu không đúng'
                 ], 401);
             }
 
-            $user = User::where('email', $request->email)->first();
+            // Lấy thông tin user
+            $user = User::where('phoneNumber', $request->phone)->first();
             $token = $user->createToken('authToken')->plainTextToken;
 
             return response()->json([

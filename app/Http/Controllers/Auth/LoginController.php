@@ -3,61 +3,74 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Socialite;
-use App\User;
-use Auth;
-use Illuminate\Support\Str;
-use Session;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use App\Models\User;
 
 class LoginController extends Controller
 {
-    use AuthenticatesUsers;
-
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    public function __construct()
+    public function login(Request $request)
     {
-        $this->middleware('guest')->except('logout');
-    }
-
-    public function redirect($provider)
-    {
-        return Socialite::driver($provider)->redirect();
-    }
-
-    public function Callback($provider)
-    {
-        $userSocial = Socialite::driver($provider)->stateless()->user();
-        $users = User::where(['email' => $userSocial->getEmail()])->first();
-
-        if ($users) {
-            Auth::login($users);
-            return redirect('/')->with('success', 'Bạn đã đăng nhập từ ' . $provider);
-        } else {
-            $user = User::create([
-                'name' => $userSocial->getName(),
-                'email' => $userSocial->getEmail(),
-                'image' => $userSocial->getAvatar(),
-                'provider_id' => $userSocial->getId(),
-                'provider' => $provider,
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+                'password' => 'required|string',
+            ], [
+                'email.required' => 'Email không được để trống',
+                'email.email' => 'Email không đúng định dạng',
+                'password.required' => 'Mật khẩu không được để trống'
             ]);
-            return redirect()->route('home');
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            if (!Auth::attempt($request->only('email', 'password'))) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Email hoặc mật khẩu không đúng'
+                ], 401);
+            }
+
+            $user = User::where('email', $request->email)->first();
+            $token = $user->createToken('authToken')->plainTextToken;
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng nhập thành công',
+                'user' => $user,
+                'token' => $token,
+                'token_type' => 'Bearer'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đăng nhập thất bại',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
-
-    // Define login credentials
-    public function credentials(Request $request)
+    public function logout(Request $request)
     {
-        return [
-            'email' => $request->email,
-            'password' => $request->password,
-            'status' => 'active',
-            'role' => 'admin',
-        ];
+        try {
+            $request->user()->currentAccessToken()->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng xuất thành công'
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đăng xuất thất bại',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

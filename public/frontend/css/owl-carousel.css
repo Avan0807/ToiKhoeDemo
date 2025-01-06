@@ -1,11 +1,6 @@
-/**
- *
- * 
- *
- */
-/*
- * 	
- */
+.custom-banner-section {
+  margin-top: 10px;
+}
 .owl-theme .owl-nav {
   text-align: center;
   -webkit-tap-highlight-color: transparent;
@@ -40,7 +35,7 @@
 .owl-theme .owl-dots .owl-dot {
   display: inline-block;
   zoom: 1;
-  *display: inline;
+  display: inline;
 }
 .owl-theme .owl-dots .owl-dot span {
   width: 10px;
@@ -272,4 +267,101 @@
 .owl-carousel .owl-video-frame {
   position: relative;
   z-index: 1;
+}
+
+/* Banner lớn bên trái */
+/* .banner-large {
+  position: relative;
+  height: 550px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  color: #fff;
+} */
+
+.banner-large .banner-content {
+  background: rgba(0, 0, 0, 0.5); /* Nền mờ cho nội dung */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Banner nhỏ bên phải */
+.banner-small {
+  position: relative;
+  height: 265px; /* Chiều cao banner nhỏ */
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  /* padding: 15px; */
+  color: #fff;
+}
+
+.banner-small .banner-content {
+  background: rgba(0, 0, 0, 0.5); /* Nền mờ */
+  padding: 10px;
+  /* border-radius: 8px; */
+  width: 100%;
+}
+
+/* Nút trong banner */
+.ws-btn {
+  color: #fff;
+  background: #f45b69;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.ws-btn:hover {
+  background: #ff3c4f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .banner-large {
+    height: 300px;
+  }
+
+  .banner-small {
+    height: 150px;
+  }
+
+  .banner-content {
+    padding: 10px;
+  }
+}
+
+/* Tùy chỉnh chiều cao và phong cách ảnh */
+.single-banner img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Nội dung trên banner */
+.single-banner .content {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Khoảng cách giữa các slide */
+.splide__list {
+  padding: 10px 0;
+}
+
+#Banner-larger {
+  border-radius: 5px;
 }

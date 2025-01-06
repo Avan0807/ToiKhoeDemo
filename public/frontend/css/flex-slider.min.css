@@ -278,7 +278,7 @@ html[xmlns] .slides {
   padding: 0;
   display: inline-block;
   zoom: 1;
-  *display: inline;
+  display: inline;
 }
 .img-slider .flex-control-nav li {
   display: block;

@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\GetdoctorsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GetdoctorsController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
-// use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DoctorsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -34,3 +35,12 @@ Route::post('/logout', [LoginController::class, 'logout']);
 // Get list doctor
 // Route::middleware('auth:sanctum')->get('/doctors', [GetdoctorsController::class, 'home']);
 Route::middleware('auth:sanctum')->get('/doctors', [GetdoctorsController::class, 'home']);
+
+
+//Get product
+Route::get('/products', [ProductController::class, 'getAllProducts']);
+Route::get('/products/{id}', [ProductController::class, 'getProductById']);
+
+
+//Get doctors controller
+Route::get('/alldoctors', [DoctorsController::class, 'getAllDoctors']);

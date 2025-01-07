@@ -18,19 +18,17 @@ class Doctor extends Model
     // Các cột cho phép "mass assignment"
     protected $fillable = [
         'name',
-        'specialization', // Đã sửa từ 'specialty' thành 'specialization'
+        'specialization',
         'email',
         'phone',
-        'location', // Đã sửa từ 'address' thành 'location'
-        'working_hours', // Thêm cột này nếu cần
+        'location',
+        'working_hours',
         'status',
     ];
 
-    // Định nghĩa quan hệ "One-to-Many" với Booking
+
     public function bookings()
     {
         return $this->hasMany(Booking::class, 'doctorID', 'doctorID');
     }
-
-    
 }

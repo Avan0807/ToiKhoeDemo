@@ -27,6 +27,9 @@
 <link rel="stylesheet" href="{{ asset('frontend/css/jquery.fancybox.min.css') }}">
 <!-- Themify Icons -->
 <link rel="stylesheet" href="{{ asset('frontend/css/themify-icons.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
 <!-- Nice Select CSS -->
 <link rel="stylesheet" href="{{ asset('frontend/css/niceselect.css') }}">
 <!-- Animate CSS -->
@@ -51,6 +54,8 @@
 
 <!-- Splide JS -->
 <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+
+
 
 <style>
     /* Multilevel dropdown */

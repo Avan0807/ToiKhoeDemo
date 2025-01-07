@@ -7,6 +7,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DoctorsController;
+use App\Http\Controllers\AppointmentsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -44,3 +46,8 @@ Route::get('/products/{id}', [ProductController::class, 'getProductById']);
 
 //Get doctors controller
 Route::get('/alldoctors', [DoctorsController::class, 'getAllDoctors']);
+
+
+//Get Appointment
+
+Route::get('/appointments', [AppointmentsController::class, 'getAllAppointments']);

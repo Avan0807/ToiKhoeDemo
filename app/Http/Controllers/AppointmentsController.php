@@ -32,4 +32,28 @@ class AppointmentsController extends Controller
             ], 500);
         }
     }
+    public function getAppointmentsByUser($userID)
+    {
+        try {
+            $appointments = Appointment::where('userID', $userID)->get();
+
+            if ($appointments->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy cuộc hẹn nào cho userID này.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'appointments' => $appointments,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy danh sách cuộc hẹn.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

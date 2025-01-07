@@ -51,3 +51,4 @@ Route::get('/alldoctors', [DoctorsController::class, 'getAllDoctors']);
 //Get Appointment
 
 Route::get('/appointments', [AppointmentsController::class, 'getAllAppointments']);
+Route::get('/appointments/{userID}', [AppointmentsController::class, 'getAppointmentsByUser']);

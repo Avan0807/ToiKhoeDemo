@@ -20,7 +20,7 @@ class ApiController extends Controller
         // Xác thực dữ liệu đầu vào
         $validatedData = $request->validate([
             'name' => 'string|required|max:30',
-            'email' => 'string|required|unique:users',
+            'email' => 'string|required|unique:email',
             'password' => 'string|required',
             'role' => 'required|in:admin,user,doctor',
             'status' => 'required|in:active,inactive',

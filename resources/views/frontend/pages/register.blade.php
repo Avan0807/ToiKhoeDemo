@@ -43,7 +43,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Email của bạn<span>*</span></label>
-                                        <input type="text" name="email" placeholder="" required="required" value="{{old('email')}}">
+                                        <input type="email" name="email" placeholder="" required="required" value="{{old('email')}}">
                                         @error('email')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror

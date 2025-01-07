@@ -39,7 +39,7 @@ class UsersController extends Controller
         $this->validate($request,
         [
             'name'=>'string|required|max:30',
-            'email'=>'string|required|unique:users',
+            'email'=>'string|required|unique:email',
             'password'=>'string|required',
             'role'=>'required|in:admin,user,doctor',
             'status'=>'required|in:active,inactive',
@@ -97,7 +97,7 @@ class UsersController extends Controller
         $this->validate($request,
         [
             'name'=>'string|required|max:30',
-            'email'=>'string|required',
+            'email'=>'string|required|unique:email',
             'role'=>'required|in:admin,user,doctor',
             'status'=>'required|in:active,inactive',
             'photo'=>'nullable|string',

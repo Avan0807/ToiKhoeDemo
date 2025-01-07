@@ -1,67 +1,51 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Models\Doctor;
 
 class GetdoctorsController extends Controller
 {
-    public function login(Request $request)
+    /**
+     * Get list of doctors in the same province as the authenticated user.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function home(Request $request)
     {
         try {
-            // Xác thực thông tin
-            $validator = Validator::make($request->all(), [
-                'phoneNumber' => 'required|string',
-                'password' => 'required|string',
-            ], [
-                'phoneNumber.required' => 'Số điện thoại không được để trống',
-                'password.required' => 'Mật khẩu không được để trống'
-            ]);
+            $user = Auth::user();
 
-            if ($validator->fails()) {
+            if (!$user) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors()
-                ], 422);
-            }
-
-            // Xác thực user
-            if (!Auth::attempt(['phoneNumber' => $request->phoneNumber, 'password' => $request->password])) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số điện thoại hoặc mật khẩu không đúng'
+                    'message' => 'Người dùng chưa đăng nhập',
                 ], 401);
             }
 
-            // Lấy thông tin user
-            $user = User::where('phoneNumber', $request->phoneNumber)->first();
-            $token = $user->createToken('authToken')->plainTextToken;
+            \Log::info('User ID: ' . $user->id);
+            \Log::info('User Province: ' . $user->province);
 
-            // Lọc danh sách bác sĩ theo province
-            $province = $user->province; // Lấy tỉnh/thành phố của user
-            $doctors = Doctor::where('location', 'like', "%$province%")->get(['doctorID', 'name', 'specialization', 'experience', 'working_hours', 'location', 'phone', 'email', 'photo']);
+            $doctors = Doctor::where('location', 'like', "%{$user->province}%")->get();
+            \Log::info('Doctors Found: ', $doctors->toArray());
 
             return response()->json([
                 'success' => true,
-                'message' => 'Đăng nhập thành công',
-                'user' => $user,
-                'province' => $province,
-                'doctors' => $doctors, // Danh sách bác sĩ theo khu vực
-                'token' => $token,
-                'token_type' => 'Bearer'
+                'message' => 'Danh sách bác sĩ',
+                'province' => $user->province,
+                'doctors' => $doctors,
             ], 200);
         } catch (\Exception $e) {
+            \Log::error('Error in GetDoctors: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Đăng nhập thất bại',
-                'error' => $e->getMessage()
+                'message' => 'Lỗi khi lấy danh sách bác sĩ',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\GetdoctorsController;
+use App\Http\Controllers\GetdoctorsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
@@ -32,4 +32,5 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout']);
 
 // Get list doctor
+// Route::middleware('auth:sanctum')->get('/doctors', [GetdoctorsController::class, 'home']);
 Route::middleware('auth:sanctum')->get('/doctors', [GetdoctorsController::class, 'home']);

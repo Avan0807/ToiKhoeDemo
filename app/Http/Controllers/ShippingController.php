@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Shipping;
 use App\Models\Coupon;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class ShippingController extends Controller
 {
@@ -24,7 +25,7 @@ class ShippingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): ViewContract
     {
         return view('backend.shipping.create');
     }

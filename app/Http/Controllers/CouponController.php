@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Coupon;
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use Illuminate\Contracts\View\View as ViewContract;
+use Illuminate\Http\Response;
+use Illuminate\Http\RedirectResponse;
+
 
 class CouponController extends Controller
 {
@@ -24,7 +28,8 @@ class CouponController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    
+    public function create(): ViewContract
     {
         return view('backend.coupon.create');
     }
@@ -148,10 +153,9 @@ class CouponController extends Controller
 
         if(!$coupon){
             request()->session()->flash('error','Mã giảm giá không hợp lệ, vui lòng thử lại!');
-            return back();
+            return redirect()->back();
         }
 
-        if($coupon){
             $total_price = Cart::where('user_id', auth()->user()->id)
                                ->where('order_id', null)
                                ->sum('price');
@@ -165,5 +169,5 @@ class CouponController extends Controller
             request()->session()->flash('success','Áp dụng mã giảm giá thành công');
             return redirect()->back();
         }
-    }
+    
 }

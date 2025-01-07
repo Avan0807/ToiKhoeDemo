@@ -10,7 +10,7 @@
      </div>
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách sản phẩm</h6>
-      <a href="{{route('product.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a>
+      <a href="{{route('product.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -50,8 +50,8 @@
                       </sub>
                     </td>
                     <td>{{(($product->is_featured==1)? 'Yes': 'No')}}</td>
-                    <td>${{$product->price}}</td>
-                    <td>  {{$product->discount}}%</td>
+                    <td>{{$product->price}}đ</td>
+                    <td>{{$product->discount}}%</td>
                     <td>{{$product->size}}</td>
                     <td>{{$product->condition}}</td>
                     <td> {{ucfirst($product->brand->title)}}</td>
@@ -98,7 +98,7 @@
         @endif
       </div>
     </div>
-</div><!-- Visit 'codeastro' for more projects -->
+</div>
 @endsection
 
 @push('styles')

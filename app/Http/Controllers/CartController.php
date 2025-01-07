@@ -9,6 +9,7 @@ use App\Models\Wishlist;
 use App\Models\Cart;
 use Illuminate\Support\Str;
 use Helper;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class CartController extends Controller
 {

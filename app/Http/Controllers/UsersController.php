@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class UsersController extends Controller
 {
     /**
@@ -23,7 +25,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): ViewContract
     {
         return view('backend.users.create');
     }

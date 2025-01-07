@@ -12,6 +12,7 @@
         "anhskohbo/no-captcha": "^3.6",
         "barryvdh/laravel-dompdf": "^0.8.6",
         "fideloper/proxy": "^4.4",
+        "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.0",
         "laravel/framework": "^8.0",
         "laravel/socialite": "^5.0",
@@ -19,7 +20,7 @@
         "laravel/ui": "^3.0",
         "mews/captcha": "^3.3",
         "pusher/pusher-php-server": "^5.0",
-        "spatie/laravel-newsletter": "^4.8",
+        "spatie/laravel-newsletter": "^4.11",
         "srmklive/paypal": "~1.0",
         "symfony/mailer": "^5.4",
         "unisharp/laravel-filemanager": "^2.1"

@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Wishlist;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class WishlistController extends Controller
 {

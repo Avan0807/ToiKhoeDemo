@@ -8,6 +8,8 @@ use Notification;
 use App\Notifications\StatusNotification;
 use App\User;
 use App\Models\ProductReview;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class ProductReviewController extends Controller
 {
     /**

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PostCategory;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class PostCategoryController extends Controller
 {
     /**
@@ -23,7 +25,7 @@ class PostCategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): ViewContract
     {
         return view('backend.postcategory.create');
     }

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class ProductController extends Controller
 {

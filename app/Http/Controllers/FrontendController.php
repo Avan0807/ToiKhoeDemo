@@ -19,6 +19,8 @@ use DB;
 use Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class FrontendController extends Controller
 {
    
@@ -67,11 +69,10 @@ class FrontendController extends Controller
             $products->whereIn('cat_id',$cat_ids);
             // return $products;
         }
-        if(!empty($_GET['brand'])){
-            $slugs=explode(',',$_GET['brand']);
-            $brand_ids=Brand::select('id')->whereIn('slug',$slugs)->pluck('id')->toArray();
-            return $brand_ids;
-            $products->whereIn('brand_id',$brand_ids);
+        if (!empty($_GET['brand'])) {
+            $slugs = explode(',', $_GET['brand']);
+            $brand_ids = Brand::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
+            $products->whereIn('brand_id', $brand_ids);
         }
         if(!empty($_GET['sortBy'])){
             if($_GET['sortBy']=='title'){
@@ -118,7 +119,6 @@ class FrontendController extends Controller
         if(!empty($_GET['brand'])){
             $slugs=explode(',',$_GET['brand']);
             $brand_ids=Brand::select('id')->whereIn('slug',$slugs)->pluck('id')->toArray();
-            return $brand_ids;
             $products->whereIn('brand_id',$brand_ids);
         }
         if(!empty($_GET['sortBy'])){
@@ -258,7 +258,6 @@ class FrontendController extends Controller
             $slug=explode(',',$_GET['category']);
             // dd($slug);
             $cat_ids=PostCategory::select('id')->whereIn('slug',$slug)->pluck('id')->toArray();
-            return $cat_ids;
             $post->whereIn('post_cat_id',$cat_ids);
             // return $post;
         }

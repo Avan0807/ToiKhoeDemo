@@ -9,6 +9,7 @@ use App\User;
 use App\Models\Order;
 use App\Models\ProductReview;
 use App\Models\PostComment;
+use Illuminate\Contracts\View\View as ViewContract;
 
 
 class DoctorsController extends Controller

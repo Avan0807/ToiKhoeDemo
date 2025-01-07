@@ -12,6 +12,7 @@ use Notification;
 use Helper;
 use Illuminate\Support\Str;
 use App\Notifications\StatusNotification;
+use Illuminate\Http\RedirectResponse;
 
 class OrderController extends Controller
 {
@@ -40,9 +41,9 @@ class OrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $this->validate($request,[
+        $this->validate($request, [
             'first_name' => 'string|required',
             'last_name'  => 'string|required',
             'address1'   => 'string|required',
@@ -50,13 +51,13 @@ class OrderController extends Controller
             'coupon'     => 'nullable|numeric',
             'phone'      => 'numeric|required',
             'post_code'  => 'string|nullable',
-            'email'      => 'string|required'
+            'email'      => 'string|required',
         ]);
 
         // Kiểm tra giỏ hàng có trống hay không
         if(empty(Cart::where('user_id', auth()->user()->id)->where('order_id', null)->first())){
             request()->session()->flash('error','Giỏ hàng đang trống!');
-            return back();
+            return redirect()->back();
         }
 
         // Tạo đơn hàng

@@ -8,6 +8,8 @@ use Notification;
 use App\User;
 use App\Notifications\StatusNotification;
 use App\Models\PostComment;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class PostCommentController extends Controller
 {
     /**
@@ -139,7 +141,7 @@ class PostCommentController extends Controller
             else{
                 request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
             }
-            return back();
+            return redirect()->back();
         }
         else{
             request()->session()->flash('error','Đăng bình luận không tìm thấy');

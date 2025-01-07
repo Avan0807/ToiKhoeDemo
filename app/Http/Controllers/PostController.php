@@ -8,6 +8,7 @@ use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\PostTag;
 use App\User;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class PostController extends Controller
 {

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\PostTag;
 use Illuminate\Support\Str;
+use Illuminate\Http\Response;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class PostTagController extends Controller
 {
     /**
@@ -23,7 +26,7 @@ class PostTagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(): ViewContract
     {
         return view('backend.posttag.create');
     }

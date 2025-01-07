@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class CategoryController extends Controller
 {
@@ -85,7 +86,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id): ViewContract
     {
         $parent_cats = Category::where('is_parent', 1)->get();
         $category    = Category::findOrFail($id);

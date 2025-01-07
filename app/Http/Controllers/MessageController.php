@@ -5,6 +5,8 @@ use Auth;
 use Illuminate\Http\Request;
 use App\Models\Message;
 use App\Events\MessageSent;
+use Illuminate\Contracts\View\View as ViewContract;
+
 class MessageController extends Controller
 {
     /**
@@ -80,7 +82,7 @@ class MessageController extends Controller
             return view('backend.message.show')->with('message',$message);
         }
         else{
-            return back();
+            return redirect()->back();
         }
     }
 
@@ -123,6 +125,6 @@ class MessageController extends Controller
         else{
             request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
         }
-        return back();
+        return redirect()->back();
     }
 }

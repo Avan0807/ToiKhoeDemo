@@ -9,6 +9,7 @@ use App\Models\ProductReview;
 use App\Models\PostComment;
 use App\Rules\MatchOldPassword;
 use Hash;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class HomeController extends Controller
 {

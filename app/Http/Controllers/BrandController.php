@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Brand;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\View\View as ViewContract;
 
 class BrandController extends Controller
 {
@@ -20,7 +21,7 @@ class BrandController extends Controller
     /**
      * Hiển thị form thêm mới
      */
-    public function create()
+    public function create(): ViewContract
     {
         return view('backend.brand.create');
     }

@@ -15,7 +15,7 @@ class DoctorsController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except(['getAllDoctors']);
+        $this->middleware('auth')->except(['getAllDoctors', 'getDoctorsByDoctorId']);
     }
 
     /**
@@ -253,6 +253,30 @@ class DoctorsController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể lấy danh sách bác sĩ.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function getDoctorsByDoctorId($doctorID)
+    {
+        try {
+            $doctors = Doctor::where('doctorID', $doctorID)->get();
+
+            if ($doctors->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Không tìm thấy bác sĩ nào cho ID {$doctorID}.",
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'doctors' => $doctors,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy thông tin bác sĩ.',
                 'error' => $e->getMessage(),
             ], 500);
         }

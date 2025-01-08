@@ -25,9 +25,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/register', [RegisterController::class, 'apiRegister']);
 
-
-
-
 // Login
 Route::post('/login', [LoginController::class, 'login']);
 
@@ -46,6 +43,7 @@ Route::get('/products/{id}', [ProductController::class, 'getProductById']);
 
 //Get doctors controller
 Route::get('/alldoctors', [DoctorsController::class, 'getAllDoctors']);
+Route::get('/doctors/{doctorID}', [DoctorsController::class, 'getDoctorsByDoctorId']);
 
 
 //Get Appointment

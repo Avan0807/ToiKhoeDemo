@@ -10,7 +10,7 @@
      </div>
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách người dùng</h6>
-      <a href="{{route('users.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add User</a>
+      <a href="{{route('users.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Thêm người dùng</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -21,7 +21,7 @@
               <th>Tên</th>
               <th>Email</th>
               <th>Ảnh</th>
-              <th>Anh Văn</th>
+              <th>Thời gian tham gia</th>
               <th>Vai trò</th>
               <th>Trạng thái</th>
               <th>Hoạt động</th>

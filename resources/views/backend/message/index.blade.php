@@ -26,7 +26,7 @@
           <td scope="row">{{$loop->index +1}}</td>
           <td>{{$message->name}} {{$message->read_at}}</td>
           <td>{{$message->subject}}</td>
-          <td>{{$message->created_at->format('F d, Y h:i A')}}</td>
+          <td>{{$message->created_at->setTimezone('Asia/Ho_Chi_Minh')->format('F d, Y h:i A')}}</td>
           <td>
             <a href="{{route('message.show',$message->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
             <form method="POST" action="{{route('message.destroy',[$message->id])}}">

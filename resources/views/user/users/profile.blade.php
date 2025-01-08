@@ -1,6 +1,6 @@
 @extends('user.layouts.master')
 
-@section('title','Users Profile')
+@section('title','HỒ SƠ NGƯỜI DÙNG')
 
 @section('main-content')
 

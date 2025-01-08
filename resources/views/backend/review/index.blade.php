@@ -46,7 +46,7 @@
                         @endfor
                      </ul>
                     </td>
-                    <td>{{$review->created_at->format('M d D, Y g: i a')}}</td>
+                    <td>{{$review->created_at->setTimezone('Asia/Ho_Chi_Minh')->format('F d, Y h:i A')}}</td>
                     <td>
                         @if($review->status=='active')
                           <span class="badge badge-success">{{$review->status}}</span>

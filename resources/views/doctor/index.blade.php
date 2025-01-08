@@ -153,10 +153,14 @@
 
         {{$orders->links()}}
       </div>
-    </div>
-    --}}
-  </div>
+    </div>   
+  
+      --}}
+      </div>
 
+@endsection
+
+@push('styles')
   <style>
     .sidebar {
         background-color: #0924ec !important;
@@ -164,9 +168,7 @@
         background-size: cover !important;
     }
   </style>
-
-
-@endsection
+@endpush
 
 @push('scripts')
 <script type="text/javascript">

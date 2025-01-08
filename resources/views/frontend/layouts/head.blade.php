@@ -11,7 +11,8 @@
 <link rel="icon" type="image/png" href="https://i.pinimg.com/236x/5b/51/64/5b5164dcf86e0b3825931f217964b144.jpg">
 <!-- Web Font -->
 <link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
-
+<!-- Animation css  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 <!-- StyleSheet -->
 <link rel="manifest" href="/manifest.json">

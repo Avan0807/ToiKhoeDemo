@@ -8,9 +8,10 @@
             @include('backend.layouts.notification')
          </div>
      </div>
+     
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Users List</h6>
-      <a href="{{route('users.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add User</a>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách người dùng</h6>
+      <a href="{{route('users.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Thêm người dùng</a>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -18,13 +19,13 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Name</th>
+              <th>Tên</th>
               <th>Email</th>
-              <th>Photo</th>
-              <th>Join Date</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Ảnh</th>
+              <th>Ngày tham gia</th>
+              <th>Vai trò</th>
+              <th>Trạng thái</th>
+              <th>Hoạt động</th>
             </tr>
           </thead>
           <tbody>

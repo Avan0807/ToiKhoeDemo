@@ -1,10 +1,10 @@
 @extends('user.layouts.master')
 
-@section('title','Order Detail')
+@section('title','Chi tiết đơn hàng')
 
 @section('main-content')
 <div class="card">
-<h5 class="card-header">Order       <a href="{{route('order.pdf',$order->id)}}" class=" btn btn-sm btn-primary shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Generate PDF</a>
+<h5 class="card-header">Đơn hàng       <a href="{{route('order.pdf',$order->id)}}" class=" btn btn-sm btn-primary shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Tạo PDF</a>
   </h5>
   <div class="card-body">
     @if($order)
@@ -12,7 +12,7 @@
       <thead>
         <tr>
             <th>#</th>
-            <th>Order No.</th>
+            <th>Số đơn hàng</th>
             <th>Tên</th>
             <th>Email</th>
             <th>Số lượng</th>
@@ -43,11 +43,11 @@
                 @endif
             </td>
             <td>
-                <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="Chỉnh sửa" data-placement="bottom"><i class="fas fa-edit"></i></a>
                 <form method="POST" action="{{route('order.destroy',[$order->id])}}">
                   @csrf 
                   @method('delete')
-                      <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                      <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Xóa"><i class="fas fa-trash-alt"></i></button>
                 </form>
             </td>
           

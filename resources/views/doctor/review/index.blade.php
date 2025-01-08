@@ -9,7 +9,7 @@
          </div>
      </div>
     <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary float-left">Review Lists</h6>
+      <h6 class="m-0 font-weight-bold text-primary float-left">Danh sách đánh giá</h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -18,13 +18,13 @@
           <thead>
             <tr>
               <th>#</th>
-              <th>Review By</th>
-              <th>Product Title</th>
-              <th>Review</th>
-              <th>Rate</th>
-              <th>Date</th>
-              <th>Status</th>
-              <th>Action</th>
+              <th>Đánh giá bởi</th>
+              <th>Tiêu đề sản phẩm</th>
+              <th>Đánh giá</th>
+              <th>Tỷ lệ</th>
+              <th>Ngày</th>
+              <th>Trạng thái</th>
+              <th>Chức năng</th>
             </tr>
           </thead>
           <tbody>
@@ -48,7 +48,7 @@
                         @endfor
                      </ul>
                     </td>
-                    <td>{{$review->created_at->format('M d D, Y g: i a')}}</td>
+                    <td>{{$review->created_at->setTimezone('Asia/Ho_Chi_Minh')->format('F d, Y h:i A')}}</td>
                     <td>
                         @if($review->status=='active')
                           <span class="badge badge-success">{{$review->status}}</span>
@@ -57,8 +57,8 @@
                         @endif
                     </td>
                     <td>
-                        <a href="{{route('doctor.productreview.edit',$review->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                        <form method="POST" action="{{route('doctor.productreview.delete',[$review->id])}}">
+                        <a href="{{route('user.productreview.edit',$review->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
+                        <form method="POST" action="{{route('user.productreview.delete',[$review->id])}}">
                           @csrf
                           @method('delete')
                               <button class="btn btn-danger btn-sm dltBtn" data-id={{$review->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
@@ -74,7 +74,7 @@
         </table>
         <span style="float:right">{{$reviews->links()}}</span>
         @else
-          <h6 class="text-center">No reviews found!!!</h6>
+          <h6 class="text-center">Không tìm thấy đánh giá nào!!!</h6>
         @endif
       </div>
     </div>
@@ -87,6 +87,12 @@
   <style>
       div.dataTables_wrapper div.dataTables_paginate{
           display: none;
+      }
+
+      .sidebar {
+        background-color: #0924ec !important;
+        background-image: linear-gradient(113deg, #314aff 10%, #60616f 100%) !important;
+        background-size: cover !important;
       }
   </style>
 @endpush

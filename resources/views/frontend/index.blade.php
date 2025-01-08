@@ -1,38 +1,98 @@
 @extends('frontend.layouts.master')
 @section('title','CODY || TRANG CHỦ')
 @section('main-content')
-<!-- Slider Area -->
-@if(count($banners)>0)
-    <section id="Gslider" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-            @foreach($banners as $key=>$banner)
-        <li data-target="#Gslider" data-slide-to="{{$key}}" class="{{(($key==0)? 'active' : '')}}"></li>
-            @endforeach
-
-        </ol>
-        <div class="carousel-inner" role="listbox">
+<!-- Slider Area 
+    @if(count($banners)>0)
+        <section id="Gslider" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
                 @foreach($banners as $key=>$banner)
-                <div class="carousel-item {{(($key==0)? 'active' : '')}}">
-                    <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
-                    <div class="carousel-caption d-none d-md-block text-left">
-                        <h1 class="wow fadeInDown">{{$banner->title}}</h1>
-                        <p>{!! html_entity_decode($banner->description) !!}</p>
-                        <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{route('product-grids')}}" role="button">Mua ngay<i class="far fa-arrow-alt-circle-right"></i></i></a>
+            <li data-target="#Gslider" data-slide-to="{{$key}}" class="{{(($key==0)? 'active' : '')}}"></li>
+                @endforeach
+
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                    @foreach($banners as $key=>$banner)
+                    <div class="carousel-item {{(($key==0)? 'active' : '')}}">
+                        <img class="first-slide" src="{{$banner->photo}}" alt="First slide">
+                        <div class="carousel-caption d-none d-md-block text-left">
+                            <h1 class="wow fadeInDown">{{$banner->title}}</h1>
+                            <p>{!! html_entity_decode($banner->description) !!}</p>
+                            <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{route('product-grids')}}" role="button">Mua ngay<i class="far fa-arrow-alt-circle-right"></i></i></a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+            <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Trước</span>
+            </a>
+            <a class="carousel-control-next" href="#Gslider" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Sau</span>
+            </a>
+        </section>
+    @endif
+        -->
+        @if (count($banners) > 0)
+            <section class="custom-banner-section py-3">
+                <div class="container-fluid">
+                    <div class="row">
+                        <!-- Banner lớn bên trái với slide động -->
+                        <div class="col-lg-8 col-md-12 mb-lg-0 mb-3">
+                            <section id="Gslider" class="carousel slide" data-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    @foreach ($banners as $key => $banner)
+                                        <li data-target="#Gslider" data-slide-to="{{ $key }}"
+                                            class="{{ $key == 0 ? 'active' : '' }}">
+                                        </li>
+                                    @endforeach
+
+                                </ol>
+                                <div class="carousel-inner" role="listbox">
+                                    @foreach ($banners as $key => $banner)
+                                        <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
+                                            <img class="first-slide" src="{{ $banner->photo }}" alt="First slide">
+                                            <div class="carousel-caption d-none d-md-block text-left">
+                                                <h1 class="wow fadeInDown">{{ $banner->title }}</h1>
+                                                <p>{!! html_entity_decode($banner->description) !!}</p>
+                                                <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{ route('product-grids') }}"
+                                                    role="button">Shop Now<i class="far fa-arrow-alt-circle-right"></i></i></a>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Trước</span>
+                                </a>
+                                <a class="carousel-control-next" href="#Gslider" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Sau</span>
+                                </a>
+                            </section>
+                        </div>
+
+                        <!-- Hai banner nhỏ bên phải -->
+                        <div class="col-lg-4 col-md-12">
+                            <div class="banner-small mb-3"
+                                style="background-image: url('{{ $banners[0]->photo ?? '' }}'); height: 265px;">
+                                <div class="banner-content">
+                                    <h3>{{ $banners[0]->title ?? '' }}</h3>
+                                    <p>{!! html_entity_decode($banners[1]->description ?? '') !!}</p>
+                                </div>
+                            </div>
+                            <div class="banner-small"
+                                style="background-image: url('{{ $banners[1]->photo ?? '' }}'); height: 265px;">
+                                <div class="banner-content">
+                                    <h3>{{ $banners[1]->title ?? '' }}</h3>
+                                    <p>{!! html_entity_decode($banners[2]->description ?? '') !!}</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            @endforeach
-        </div>
-        <a class="carousel-control-prev" href="#Gslider" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Trước</span>
-        </a>
-        <a class="carousel-control-next" href="#Gslider" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Sau</span>
-        </a>
-    </section>
-@endif
-
+            </section>
+        @endif
 <!--/ End Slider Area -->
 
 <!-- Start Small Banner  -->
@@ -160,10 +220,12 @@
             </div>
         </div>
 </div>
+
 <!-- End Product Area -->
+ 
 {{-- @php
     $featured=DB::table('products')->where('is_featured',1)->where('status','active')->orderBy('id','DESC')->limit(1)->get();
-@endphp --}}
+@endphp 
 <!-- Start Midium Banner  -->
 <section class="midium-banner">
     <div class="container">
@@ -190,7 +252,8 @@
         </div>
     </div>
 </section>
-<!-- End Midium Banner --
+<!-- End Midium Banner -->
+--}}
 
 <!-- Start Most Popular -->
 <div class="product-area most-popular section">

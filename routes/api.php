@@ -8,6 +8,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +31,12 @@ Route::post('/login', [LoginController::class, 'login']);
 
 // Logout
 Route::post('/logout', [LoginController::class, 'logout']);
+
+// Upload user avt
+Route::post('/user/{userID}/upload-avatar', [UsersController::class, 'uploadAvatar']);
+Route::get('/user/{userID}/get-avatar', [UsersController::class, 'getAvatarByUserId']);
+
+
 
 // Get list doctor
 // Route::middleware('auth:sanctum')->get('/doctors', [GetdoctorsController::class, 'home']);

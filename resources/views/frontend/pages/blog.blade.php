@@ -40,7 +40,8 @@
                                             </span>
                                         </p>
                                         <a href="{{route('blog.detail',$post->slug)}}" class="title">{{$post->title}}</a>
-                                        <p>{!! html_entity_decode($post->summary) !!}</p>
+                                       
+                          <!--      bỏ tóm tắt         <p>{!! html_entity_decode($post->summary) !!}</p> -->
                                         <a href="{{route('blog.detail',$post->slug)}}" class="more-btn">Xem thêm</a>
                                     </div>
                                 </div>

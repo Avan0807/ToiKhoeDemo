@@ -23,7 +23,7 @@
         "spatie/laravel-newsletter": "^4.11",
         "srmklive/paypal": "~1.0",
         "symfony/mailer": "^5.4",
-        "unisharp/laravel-filemanager": "^2.1"
+        "unisharp/laravel-filemanager": "^2.6"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

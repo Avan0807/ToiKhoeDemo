@@ -9209,10 +9209,10 @@
             "type": "library",
             "extra": {
                 "laravel": {
+                    "aliases": [],
                     "providers": [
                         "UniSharp\\LaravelFilemanager\\LaravelFilemanagerServiceProvider"
-                    ],
-                    "aliases": []
+                    ]
                 }
             },
             "installation-source": "dist",

@@ -222,12 +222,12 @@ Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']
 Route::group(['prefix'=>'api',],function(){
 
     // user
-    Route::get('users','ApiController@users')->name('users.index');
-    Route::post('updateusers', 'ApiController@updateusers')->name('users.updateusers');
+    Route::get('users','ApiController@users')->name('usersapi.index');
+    Route::post('updateusers', 'ApiController@updateusers')->name('usersapi.updateusers');
 
     
     //products
-    Route::get('products', 'ApiController@products')->name('products.index');
+    Route::get('products', 'ApiController@products')->name('productsapi.index');
 
     // thêm các thứ vào đây 
 });

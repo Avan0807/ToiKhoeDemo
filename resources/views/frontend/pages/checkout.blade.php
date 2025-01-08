@@ -361,41 +361,46 @@
                                 <div class="single-widget">
                                     <h2>TỔNG CỘNG GIỎ HÀNG</h2>
                                     <div class="content">
+                                        @php
+                                            // Lấy giá trị tổng cộng giỏ hàng và chiết khấu (nếu có)
+                                            $totalCartPrice = Helper::totalCartPrice();
+                                            $discount = session('coupon')['value'] ?? 0;
+                                            $finalTotal = $totalCartPrice - $discount;
+                                        @endphp
                                         <ul>
-										    <li class="order_subtotal" data-price="{{Helper::totalCartPrice()}}">Tổng cộng giỏ hàng
-                                                <span>
-                                                    {{number_format(Helper::totalCartPrice(),0, ',', '.')}} đ
-                                                </span>
-
+                                            <!-- Tổng cộng giỏ hàng -->
+                                            <li class="order_subtotal" data-price="{{ $totalCartPrice }}">
+                                                Tổng cộng giỏ hàng
+                                                <span>{{ number_format($totalCartPrice, 0, ',', '.') }}đ</span>
                                             </li>
+                                            <!-- Chi phí vận chuyển -->
                                             <li class="shipping">
                                                 Chi phí vận chuyển
-                                                @if(count(Helper::shipping())>0 && Helper::cartCount()>0)
+                                                @if(!empty(Helper::shipping()) && Helper::cartCount() > 0)
                                                     <select name="shipping" class="nice-select" required>
                                                         <option value="">Chọn địa chỉ của bạn</option>
                                                         @foreach(Helper::shipping() as $shipping)
-                                                        <option value="{{$shipping->id}}" class="shippingOption" data-price="{{$shipping->price}}">{{$shipping->type}}: {{$shipping->price}}đ</option>
+                                                            <option value="{{ $shipping->id }}" class="shippingOption" data-price="{{ $shipping->price }}">
+                                                                {{ $shipping->type }}: {{ number_format($shipping->price, 0, ',', '.') }}đ
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 @else
                                                     <span>Miễn phí</span>
                                                 @endif
                                             </li>
-
-                                            @if(session('coupon'))
-                                            <li class="coupon_price" data-price="{{session('coupon')['value']}}">Bạn tiết kiệm được<span>{{number_format(session('coupon')['value'],0, ',', '.')}}đ</span></li>
+                                            <!-- Mã giảm giá -->
+                                            @if($discount > 0)
+                                                <li class="coupon_price" data-price="{{ $discount }}">
+                                                    Bạn tiết kiệm được
+                                                    <span>{{ number_format($discount, 0, ',', '.') }}đ</span>
+                                                </li>
                                             @endif
-                                            @php
-                                                $total_amount=Helper::totalCartPrice();
-                                                if(session('coupon')){
-                                                    $total_amount=$total_amount-session('coupon')['value'];
-                                                }
-                                            @endphp
-                                            @if(session('coupon'))
-                                                <li class="last"  id="order_total_price">Tổng cộng<span>{{number_format($total_amount,0, ',', '.')}} đ</span></li>
-                                            @else
-                                                <li class="last"  id="order_total_price">Tổng cộng<span>{{number_format($total_amount,0, ',', '.')}} đ</span></li>
-                                            @endif
+                                            <!-- Tổng cộng -->
+                                            <li class="last" id="order_total_price">
+                                                Tổng cộng
+                                                <span>{{ number_format($finalTotal, 0, ',', '.') }}đ</span>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -404,31 +409,30 @@
                                 <div class="single-widget">
                                     <h2>Phương thức thanh toán</h2>
                                     <div class="content">
-    <div class="checkbox">
-        {{-- <label class="checkbox-inline" for="1"><input name="updates" id="1" type="checkbox"> Check Payments</label> --}}
-        <form-group>
-            <input name="payment_method"  type="radio" value="cod" required> <label> Thanh toán khi nhận hàng</label><br>
-            <!-- <input name="payment_method"  type="radio" value="paypal"> <label> PayPal</label><br> -->
-            <input name="payment_method"  type="radio" value="cardpay" required> <label> Thanh toán bằng thẻ</label><br>
+                                        <div class="checkbox">
+                                            {{-- <label class="checkbox-inline" for="1"><input name="updates" id="1" type="checkbox"> Check Payments</label> --}}
+                                            <form-group>
+                                                <input name="payment_method"  type="radio" value="cod" required> <label> Thanh toán khi nhận hàng</label><br>
+                                                <!-- <input name="payment_method"  type="radio" value="paypal"> <label> PayPal</label><br> -->
+                                                <input name="payment_method"  type="radio" value="cardpay" required> <label> Thanh toán bằng thẻ</label><br>
 
-            <!-- Credit Card Details -->
-            <div id="creditCardDetails" style="display: none;">
-                <label for="cardNumber">Số thẻ:</label>
-                <input type="text" id="cardNumber" name="card_number" maxlength="16"><br>
+                                                <!-- Credit Card Details -->
+                                                <div id="creditCardDetails" style="display: none;">
+                                                    <label for="cardNumber">Số thẻ:</label>
+                                                    <input type="text" id="cardNumber" name="card_number" maxlength="16"><br>
 
-                <label for="cardName">Tên trên thẻ:</label>
-                <input type="text" id="cardName" name="card_name"><br>
+                                                    <label for="cardName">Tên trên thẻ:</label>
+                                                    <input type="text" id="cardName" name="card_name"><br>
 
-                <label for="expirationDate">Ngày hết hạn:</label>
-                <input type="text" id="expirationDate" name="expiration_date" maxlength="5"><br>
+                                                    <label for="expirationDate">Ngày hết hạn:</label>
+                                                    <input type="text" id="expirationDate" name="expiration_date" maxlength="5"><br>
 
-                <label for="cvv">CVV:</label>
-                <input type="text" id="cvv" name="cvv" maxlength="3"><br>
-            </div>
-        </form-group>
-    </div>
-</div>
-
+                                                    <label for="cvv">CVV:</label>
+                                                    <input type="text" id="cvv" name="cvv" maxlength="3"><br>
+                                                </div>
+                                            </form-group>
+                                        </div>
+                                    </div>
                                 </div>
                                 <!--/ End Order Widget -->
                                 <!-- Payment Method Widget -->
@@ -588,18 +592,25 @@
 		}
 	</script>
 	<script>
-		$(document).ready(function(){
-			$('.shipping select[name=shipping]').change(function(){
-				let cost = parseFloat( $(this).find('option:selected').data('price') ) || 0;
-				let subtotal = parseFloat( $('.order_subtotal').data('price') );
-				let coupon = parseFloat( $('.coupon_price').data('price') ) || 0;
-				// alert(coupon);
-				$('#order_total_price span').text('$'+(subtotal + cost-coupon).toFixed(2));
-			});
+        $(document).ready(function() {
+            $('.shipping select[name=shipping]').change(function() {
+                let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
+                let subtotal = parseFloat($('.order_subtotal').data('price'));
+                let coupon = parseFloat($('.coupon_price').data('price')) || 0;
 
-		});
+                // Tính tổng cộng
+                let total = subtotal + cost - coupon;
 
-	</script>
+                // Hàm định dạng số tiền về dạng VNĐ
+                function formatVNDCurrency(amount) {
+                    return amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + 'đ';
+                }
+
+                // Cập nhật giá trị tổng cộng đã định dạng
+                $('#order_total_price span').text(formatVNDCurrency(total));
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {

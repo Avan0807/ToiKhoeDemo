@@ -1,227 +1,264 @@
 @extends('frontend.layouts.master')
-
-@section('title','Trang Thanh Toán')
-
+@section('title','TRANG GIỎ HÀNG')
 @section('main-content')
+	<!-- Breadcrumbs -->
+	<div class="breadcrumbs">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="bread-inner">
+						<ul class="bread-list">
+							<li><a href="{{('home')}}">Trang chủ<i class="ti-arrow-right"></i></a></li>
+							<li class="active"><a href="">Giỏ hàng</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Breadcrumbs -->
 
-    <!-- Breadcrumbs -->
-    <div class="breadcrumbs">
-        <div class="container">
+	<!-- Shopping Cart -->
+	<div class="shopping-cart section">
+		<div class="container">
             <div class="row">
                 <div class="col-12">
-                    <div class="bread-inner">
-                        <ul class="bread-list">
-                            <li><a href="{{route('home')}}">Trang chủ<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="javascript:void(0)">Thanh toán</a></li>
-                        </ul>
-                    </div>
+                    <!-- Tóm Tắt Giỏ Hàng -->
+                    <table class="table shopping-summery">
+                        <thead>
+                            <tr class="main-hading">
+                                <th class="text-center">SẢN PHẨM</th>
+                                <th class="text-center">TÊN</th>
+                                <th class="text-center">GIÁ ĐƠN VỊ</th>
+                                <th class="text-center">SỐ LƯỢNG</th>
+                                <th class="text-center">TỔNG</th>
+                                <th class="text-center"><i class="ti-trash remove-icon"></i></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart_item_list">
+                            <form action="{{route('cart.update')}}" method="POST">
+                                @csrf
+                                @if(Helper::getAllProductFromCart())
+                                    @foreach(Helper::getAllProductFromCart() as $key=>$cart)
+                                        <tr>
+                                            @php
+                                            $photo=explode(',',$cart->product['photo']);
+                                            @endphp
+                                            <td class="image" data-title="Số"><img src="{{$photo[0]}}" alt="{{$photo[0]}}"></td>
+                                            <td class="product-des" data-title="Mô tả">
+                                                <p class="product-name"><a href="{{route('product-detail',$cart->product['slug'])}}" target="_blank">{{$cart->product['title']}}</a></p>
+                                                <p class="product-des">{!!($cart['summary']) !!}</p>
+                                            </td>
+                                            <td class="total-amount cart_single_price" data-title="Tổng"><span class="money">{{number_format($cart['price'],0,',','.')}}đ</span></td>
+
+                                            <td class="qty" data-title="Số lượng"><!-- Input Đặt Hàng -->
+                                                <div class="input-group">
+                                                    <div class="button minus">
+                                                        <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[{{$key}}]">
+                                                            <i class="ti-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" name="quant[{{$key}}]" class="input-number" data-min="1" data-max="100" value="{{$cart->quantity}}">
+                                                    <input type="hidden" name="qty_id[]" value="{{$cart->id}}">
+                                                    <div class="button plus">
+                                                        <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[{{$key}}]">
+                                                            <i class="ti-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <!--/ Kết Thúc Input Đặt Hàng -->
+                                            </td>
+                                            <td class="price" data-title="Giá"><span>{{number_format($cart['amount'],0,',','.')}}đ</span></td>
+                                            <td class="action" data-title="Xóa"><a href="{{route('cart-delete',$cart->id)}}"><i class="ti-trash remove-icon"></i></a></td>
+                                        </tr>
+                                    @endforeach
+                                    <track>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="float-right">
+                                            <button class="btn float-right" type="submit">Cập nhật</button>
+                                        </td>
+                                    </track>
+                                @else
+                                    <tr>
+                                        <td class="text-center">
+                                            Hiện không có sản phẩm nào trong giỏ hàng. <a href="{{route('product-grids')}}" style="color:blue;">Tiếp tục mua sắm</a>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </form>
+                        </tbody>
+                    </table>
+                    <!--/ Kết Thúc Tóm Tắt Giỏ Hàng -->
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- Kết thúc Breadcrumbs -->
 
-    <!-- Bắt đầu Checkout -->
-    <section class="shop checkout section">
-        <div class="container">
-            <form class="form" method="POST" action="{{route('cart.order')}}">
-                @csrf
-                <div class="row">
-                    <div class="col-lg-8 col-12">
-                        <div class="checkout-form">
-                            <h2>Hoàn thành mua hàng</h2>
-                            <p>Chỉ cần vài bước nữa để hoàn tất đơn hàng một cách an toàn!</p>
-                            <!-- Biểu mẫu -->
-                            <div class="row">
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Họ<span>*</span></label>
-                                        <input type="text" name="first_name" placeholder="" value="{{old('first_name')}}" required>
-                                        @error('first_name')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Tên<span>*</span></label>
-                                        <input type="text" name="last_name" placeholder="" value="{{old('last_name')}}" required>
-                                        @error('last_name')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Email<span>*</span></label>
-                                        <input type="email" name="email" placeholder="" value="{{old('email')}}" required>
-                                        @error('email')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Số điện thoại<span>*</span></label>
-                                        <input type="number" name="phone" placeholder="" value="{{old('phone')}}" required>
-                                        @error('phone')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Địa chỉ 1<span>*</span></label>
-                                        <input type="text" name="address1" placeholder="" value="{{old('address1')}}" required>
-                                        @error('address1')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Địa chỉ 2</label>
-                                        <input type="text" name="address2" placeholder="" value="{{old('address2')}}">
-                                        @error('address2')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Mã bưu điện</label>
-                                        <input type="text" name="post_code" placeholder="" value="{{old('post_code')}}">
-                                        @error('post_code')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
+
+            <div class="row">
+                <div class="col-12">
+                    <!-- Tổng số tiền -->
+                    <div class="total-amount">
+                        <div class="row">
+                            <div class="col-lg-8 col-md-5 col-12">
+                                <div class="left">
+                                    <div class="coupon">
+                                        <form action="{{route('coupon-store')}}" method="POST">
+                                            @csrf
+                                            <input name="code" placeholder="Nhập mã giảm giá hợp lệ">
+                                            <button class="btn">Áp dụng mã</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                            <!--/ Kết thúc Biểu mẫu -->
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-12">
-                        <div class="order-details">
-                            <!-- Chi tiết Đơn hàng -->
-                            <div class="single-widget">
-                                <h2>Tổng giỏ hàng</h2>
-                                <div class="content">
+                            <div class="col-lg-4 col-md-7 col-12">
+                                <div class="right">
                                     <ul>
-                                        <li class="order_subtotal" data-price="{{Helper::totalCartPrice()}}">Tạm tính
-                                            <span>
-                                                {{number_format(Helper::totalCartPrice(),0, ',', '.')}}đ
-                                            </span>
-                                        </li>
-                                        <li class="shipping">
-                                            Phí vận chuyển
-                                            @if(count(Helper::shipping())>0 && Helper::cartCount()>0)
-                                                <select name="shipping" class="nice-select" required>
-                                                    <option value="">Chọn địa chỉ</option>
-                                                    @foreach(Helper::shipping() as $shipping)
-                                                    <option value="{{$shipping->id}}" class="shippingOption" data-price="{{$shipping->price}}">{{$shipping->type}}: ${{$shipping->price}}</option>
-                                                    @endforeach
-                                                </select>
-                                            @else
-                                                <span>Miễn phí</span>
-                                            @endif
-                                        </li>
-                                        @if(session('coupon'))
-                                        <li class="coupon_price" data-price="{{session('coupon')['value']}}">Giảm giá<span>{{number_format(session('coupon')['value'],0, ',', '.')}} đ </span></li>
-                                        @endif
                                         @php
                                             $total_amount=Helper::totalCartPrice();
-                                            if(session('coupon')){
-                                                $total_amount=$total_amount-session('coupon')['value'];
+                                            if(session()->has('coupon')){
+                                                $total_amount=$total_amount-Session::get('coupon')['value'];
                                             }
                                         @endphp
-                                        <li class="last"  id="order_total_price">Tổng cộng<span>{{number_format($total_amount,0, ',', '.')}} đ</span></li>
+                                        <li class="order_subtotal" data-price="">Tổng tiền giỏ hàng<span>{{number_format(Helper::totalCartPrice(),0,',','.')}}đ</span></li>
+
+                                        @if(session()->has('coupon'))
+                                        <li class="coupon_price" data-price="{{Session::get('coupon')['value']}}">Bạn tiết kiệm<span>{{number_format(Session::get('coupon')['value'],0,',','.')}}đ</span></li>
+                                        @endif
+                                        @if(session()->has('coupon'))
+                                            <li class="last" id="order_total_price">Số tiền bạn trả<span>{{number_format($total_amount,0,',','.')}}đ</span></li>
+                                        @else
+                                            <li class="last" id="order_total_price">Số tiền bạn trả<span>{{number_format($total_amount,0,',','.')}}đ</span></li>
+                                        @endif
                                     </ul>
-                                </div>
-                            </div>
-                            <!-- Kết thúc Chi tiết Đơn hàng -->
-                            <!-- Phương thức Thanh toán -->
-                            <div class="single-widget">
-                                <h2>Phương thức thanh toán</h2>
-                                <div class="content">
-                                    <div class="checkbox">
-                                        <form-group>
-                                            <input name="payment_method"  type="radio" value="cod" required> <label> Thanh toán khi nhận hàng</label><br>
-                                            <input name="payment_method"  type="radio" value="cardpay" required> <label> Thanh toán bằng thẻ</label><br>
-                                            <div id="creditCardDetails" style="display: none;">
-                                                <label for="cardNumber">Số thẻ:</label>
-                                                <input type="text" id="cardNumber" name="card_number" maxlength="16"><br>
-                                                <label for="cardName">Tên trên thẻ:</label>
-                                                <input type="text" id="cardName" name="card_name"><br>
-                                                <label for="expirationDate">Ngày hết hạn:</label>
-                                                <input type="text" id="expirationDate" name="expiration_date" maxlength="5"><br>
-                                                <label for="cvv">CVV:</label>
-                                                <input type="text" id="cvv" name="cvv" maxlength="3"><br>
-                                            </div>
-                                        </form-group>
+                                    <div class="button5">
+                                        <a href="{{route('checkout')}}" class="btn">Thanh toán</a>
+                                        <a href="{{route('product-grids')}}" class="btn">Tiếp tục mua sắm</a>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Kết thúc Phương thức Thanh toán -->
-                            <!-- Nút Thanh Toán -->
-                            <div class="single-widget get-button">
-                                <div class="content">
-                                    <div class="button">
-                                        <button type="submit" class="btn">Tiến hành thanh toán</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--/ Kết thúc Nút Thanh Toán -->
                         </div>
                     </div>
+                    <!--/ Kết thúc Tổng số tiền -->
                 </div>
-            </form>
-        </div>
-    </section>
-    <!--/ Kết thúc Checkout -->
+            </div>
 
-    <!-- Bắt đầu Khu vực Dịch vụ -->
-    <section class="shop-services section home">
+		</div>
+	</div>
+	<!--/ End Shopping Cart -->
+
+	<section class="shop-services section home">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Dịch vụ Đơn -->
+                    <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-rocket"></i>
                         <h4>Miễn phí vận chuyển</h4>
-                        <p>Đơn hàng trên $100</p>
+                        <p>Đơn hàng trên 100.000đ</p>
                     </div>
-                    <!-- Kết thúc Dịch vụ Đơn -->
+                    <!-- End Single Service -->
                 </div>
                 <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Dịch vụ Đơn -->
+                    <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-reload"></i>
-                        <h4>Miễn phí trả lại</h4>
-                        <p>Trong vòng 30 ngày</p>
+                        <h4>Trả lại miễn phí</h4>
+                        <p>Trả lại trong vòng 3 ngày</p>
                     </div>
-                    <!-- Kết thúc Dịch vụ Đơn -->
+                    <!-- End Single Service -->
                 </div>
                 <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Dịch vụ Đơn -->
+                    <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-lock"></i>
                         <h4>Thanh toán an toàn</h4>
-                        <p>100% bảo mật</p>
+                        <p>Thanh toán an toàn 100%</p>
                     </div>
-                    <!-- Kết thúc Dịch vụ Đơn -->
+                    <!-- End Single Service -->
                 </div>
                 <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Dịch vụ Đơn -->
+                    <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-tag"></i>
                         <h4>Giá tốt nhất</h4>
-                        <p>Đảm bảo giá tốt</p>
+                        <p>Giá đảm bảo</p>
                     </div>
-                    <!-- Kết thúc Dịch vụ Đơn -->
+                    <!-- End Single Service -->
                 </div>
             </div>
         </div>
     </section>
-    <!-- Kết thúc Khu vực Dịch vụ -->
+    <!-- End Shop Services -->
+
+	<!-- Start Shop Newsletter  -->
+	@include('frontend.layouts.newsletter')
+	<!-- End Shop Newsletter -->
 
 @endsection
+@push('styles')
+	<style>
+		li.shipping{
+			display: inline-flex;
+			width: 100%;
+			font-size: 14px;
+		}
+		li.shipping .input-group-icon {
+			width: 100%;
+			margin-left: 10px;
+		}
+		.input-group-icon .icon {
+			position: absolute;
+			left: 20px;
+			top: 0;
+			line-height: 40px;
+			z-index: 3;
+		}
+		.form-select {
+			height: 30px;
+			width: 100%;
+		}
+		.form-select .nice-select {
+			border: none;
+			border-radius: 0px;
+			height: 40px;
+			background: #f6f6f6 !important;
+			padding-left: 45px;
+			padding-right: 40px;
+			width: 100%;
+		}
+		.list li{
+			margin-bottom:0 !important;
+		}
+		.list li:hover{
+			background:#F7941D !important;
+			color:white !important;
+		}
+		.form-select .nice-select::after {
+			top: 14px;
+		}
+	</style>
+@endpush
+@push('scripts')
+	<script src="{{asset('frontend/js/nice-select/js/jquery.nice-select.min.js')}}"></script>
+	<script src="{{ asset('frontend/js/select2/js/select2.min.js') }}"></script>
+	<script>
+		$(document).ready(function() { $("select.select2").select2(); });
+  		$('select.nice-select').niceSelect();
+	</script>
+	<script>
+		$(document).ready(function(){
+			$('.shipping select[name=shipping]').change(function(){
+				let cost = parseFloat( $(this).find('option:selected').data('price') ) || 0;
+				let subtotal = parseFloat( $('.order_subtotal').data('price') );
+				let coupon = parseFloat( $('.coupon_price').data('price') ) || 0;
+				// alert(coupon);
+				$('#order_total_price span').text('$'+(subtotal + cost-coupon).toFixed(2));
+			});
+
+		});
+
+	</script>
+@endpush

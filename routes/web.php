@@ -187,7 +187,12 @@ Route::group(['prefix'=>'/user','middleware'=>['user']],function(){
 // Doctor section start
 Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
     Route::get('/','DoctorsController@index')->name('doctor');
-     // Profile
+    // Appointment
+    Route::get('/appointment', 'AppointmentController@index')->name('doctor.appointment.index');
+
+    // Patients
+    Route::resource('patients','PatientsController');
+    // Profile
      Route::get('/profile','DoctorsController@profile')->name('doctor-profile');
      Route::post('/profile/{id}','DoctorsController@profileUpdate')->name('doctor-profile-update');
     //  Order
@@ -230,4 +235,8 @@ Route::group(['prefix'=>'api',],function(){
     Route::get('products', 'ApiController@products')->name('productsapi.index');
 
     // thêm các thứ vào đây 
+
+   
+    Route::get('doctor/appointments', 'DoctorsController@getAppointments')->name('appointmentssapi.index');
+
 });

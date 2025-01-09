@@ -10,6 +10,8 @@ use App\Models\Order;
 use App\Models\ProductReview;
 use App\Models\PostComment;
 use Illuminate\Contracts\View\View as ViewContract;
+use App\Models\Appointment;
+use App\Rules\MatchOldPassword;
 
 
 class DoctorsController extends Controller
@@ -245,4 +247,21 @@ class DoctorsController extends Controller
    
         return redirect()->route('doctor')->with('success','Đổi mật khẩu thành công');
     }
+
+    public function getAppointments()
+    {
+        $appointments = Appointment::where('doctorID', 201)
+            ->get()
+            ->map(function ($appointment) {
+                return [
+                    'title' => $appointment->consultation_type . ' - ' . $appointment->note,
+                    'start' => $appointment->date . ' ' . $appointment->time,
+                    'color' => $appointment->status === 'Confirmed' ? 'green' : 'red',
+                ];
+            });
+    
+        return response()->json($appointments);
+    }
+    
+
 }

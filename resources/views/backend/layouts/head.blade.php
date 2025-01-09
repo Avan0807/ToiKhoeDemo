@@ -22,4 +22,5 @@
     <!-- js datatable-->
     <script src="{{ asset('backend/js/datatables-demo.js') }}"></script>
 
+
 </head>

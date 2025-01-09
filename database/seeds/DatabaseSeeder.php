@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Database\Seeders\PatientSeeder;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,7 +16,7 @@ class DatabaseSeeder extends Seeder
          $this->call(UsersTableSeeder::class);
          $this->call(SettingTableSeeder::class);
          $this->call(CouponSeeder::class);
-
+         $this->call(PatientSeeder::class);
 
     }
 }

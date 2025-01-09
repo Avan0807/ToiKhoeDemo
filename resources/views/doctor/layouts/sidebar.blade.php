@@ -18,10 +18,30 @@
           <span>Trang tổng quan</span></a>
     </li>
 
+
+      <div class="sidebar-heading">
+          Công việc 
+      </div>
+      
+    <!-- Heading -->
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('doctor.appointment.index')}}">
+            <i class="fas fa-calendar-plus"></i>
+              <span>Lịch làm việc</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{{route('patients.index')}}">
+            <i class="fas fa-calendar-plus"></i>
+              <span>Bệnh nhân</span>
+        </a>
+      </li>
+
     <!-- Divider -->
       <hr class="sidebar-divider">
 
-    <!-- Heading -->
+    <!-- Cửa hàng -->
       <div class="sidebar-heading">
           Cửa hàng
       </div>

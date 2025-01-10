@@ -39,6 +39,7 @@
 <!-- Jquery Ui -->
 <link rel="stylesheet" href="{{asset('frontend/css/jquery-ui.css')}}">
 
+
 <!-- CODY StyleSheet -->
 <link rel="stylesheet" href="{{asset('frontend/css/reset.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">

@@ -23,6 +23,8 @@
 	@yield('main-content')
 	
 	@include('frontend.layouts.footer')
+	
+	@include('frontend.layouts.contact-sidebar')
 
 </body>
 </html>

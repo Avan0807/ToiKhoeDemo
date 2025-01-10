@@ -4915,3 +4915,41 @@
 /*=============================
 	End Footer CSS
 ===============================*/
+
+
+/*
+contact bên phải
+*/
+
+.contact-sidebar {
+  position: fixed;
+  right: 20px;
+  top: 30%;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-item {
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.contact-item img {
+  width: 30px;
+  height: 30px;
+}
+
+.contact-item:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+

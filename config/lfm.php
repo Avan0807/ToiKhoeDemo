@@ -46,24 +46,26 @@ return [
     |--------------------------------------------------------------------------
      */
 
-    'folder_categories'        => [
-        'file'  => [
-            'folder_name'  => 'files',
+    'folder_categories' => [
+        'file' => [
+            'folder_name' => 'photos', // Sử dụng cùng folder
             'startup_view' => 'grid',
-            'max_size'     => 50000, // size in KB
-            'valid_mime'   => [
+            'max_size' => 50000, // size in KB
+            'valid_mime' => [
                 'image/jpeg',
                 'image/pjpeg',
                 'image/png',
                 'image/gif',
                 'image/svg+xml',
+                'application/pdf',
+                'text/plain',
             ],
         ],
         'image' => [
-            'folder_name'  => 'photos',
+            'folder_name' => 'photos', // Sử dụng cùng folder
             'startup_view' => 'list',
-            'max_size'     => 50000, // size in KB
-            'valid_mime'   => [
+            'max_size' => 50000, // size in KB
+            'valid_mime' => [
                 'image/jpeg',
                 'image/pjpeg',
                 'image/png',
@@ -74,6 +76,7 @@ return [
             ],
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------
@@ -115,7 +118,7 @@ return [
      */
 
     // If true, image thumbnails would be created during upload
-    'should_create_thumbnails' => true,
+    '   ' => true,
 
     'thumb_folder_name'        => 'thumbs',
 

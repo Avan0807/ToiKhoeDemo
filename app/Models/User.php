@@ -91,4 +91,8 @@ class User extends Authenticatable
     {
         return $query->where('phoneNumber', $phoneNumber);
     }
+    public function appointments()
+    {
+        return $this->hasMany(\App\Models\Appointment::class, 'userID', 'id');
+    }
 }

@@ -57,3 +57,4 @@ Route::get('/doctors/{doctorID}', [DoctorsController::class, 'getDoctorsByDoctor
 
 Route::get('/appointments', [AppointmentsController::class, 'getAllAppointments']);
 Route::get('/appointments/{userID}', [AppointmentsController::class, 'getAppointmentsByUser']);
+Route::post('/appointments/{userID}', [AppointmentsController::class, 'createAppointment']);

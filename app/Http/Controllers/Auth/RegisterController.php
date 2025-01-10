@@ -25,7 +25,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:15', 'unique:users'],
+            'phoneNumber' => ['required', 'string', 'max:15', 'unique:users'],
             'email' => ['nullable', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'province' => ['required', 'string', 'max:255'],
@@ -38,9 +38,9 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'phoneNumber' => $data['phoneNumber'],
-            'email' => $data['email'] ?? null, // Email không bắt buộc
+            'email' => $data['email'] ?? null,
             'password' => Hash::make($data['password']),
-            'province' => $data['province'], // Lưu tỉnh thành
+            'province' => $data['province'],
             'role' => 'user',
         ]);
     }

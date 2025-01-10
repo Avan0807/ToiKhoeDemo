@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Appointment extends Model
 {
+
     // Tên bảng trong cơ sở dữ liệu
     protected $table = 'Appointments';
 
@@ -26,4 +27,10 @@ class Appointment extends Model
         'note',
         'status',
     ];
+
+
+    public function user()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'userID', 'id');
+    }
 }

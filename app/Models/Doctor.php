@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Sanctum\HasApiTokens;
 
 class Doctor extends Model
 {
+    use HasFactory, HasApiTokens;
     // Tên bảng trong cơ sở dữ liệu (nếu khác tên mặc định của model)
     protected $table = 'Doctors';
 

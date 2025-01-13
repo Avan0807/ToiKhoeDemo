@@ -15,14 +15,12 @@ class AppointmentsController extends Controller
 
     public function createAppointment(Request $request, $userID)
     {
-        // Validate dữ liệu đầu vào
         $validator = Validator::make($request->all(), [
-            'doctorID' => 'required|exists:Doctors,doctorID',
+            'doctorID' => 'required|exists:Doctors,DoctorID',
             'date' => 'required|date|after_or_equal:today',
             'time' => 'required|date_format:H:i',
             'consultation_type' => 'required|in:Online,Offline',
             'note' => 'nullable|string',
-            'status' => 'nullable|in:Pending,Approved,Cancelled',
         ]);
 
         if ($validator->fails()) {
@@ -34,16 +32,6 @@ class AppointmentsController extends Controller
         }
 
         try {
-            // Kiểm tra userID có tồn tại không
-            $userExists = User::where('id', $userID)->exists();
-            if (!$userExists) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'User không tồn tại.',
-                ], 404);
-            }
-
-            // Tạo lịch khám
             $appointment = Appointment::create([
                 'userID' => $userID,
                 'doctorID' => $request->doctorID,
@@ -51,22 +39,26 @@ class AppointmentsController extends Controller
                 'time' => $request->time,
                 'consultation_type' => $request->consultation_type,
                 'note' => $request->note,
-                'status' => $request->status ?? 'Scheduled',
+                'status' => 'Scheduled',
+                'approval_status' => 'Pending',
+                'workflow_stage' => 'Requested',
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Lịch khám đã được tạo thành công.',
+                'message' => 'Yêu cầu đặt lịch khám đã được gửi.',
                 'appointment' => $appointment,
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Không thể tạo lịch khám.',
+                'message' => 'Không thể gửi yêu cầu đặt lịch khám.',
                 'error' => $e->getMessage(),
             ], 500);
         }
     }
+
+
     /**
      * Lấy danh sách tất cả các cuộc hẹn.
      *
@@ -111,6 +103,64 @@ class AppointmentsController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể lấy danh sách cuộc hẹn.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function doctorLogin(Request $request)
+    {
+        try {
+            // Step 1: Validate input
+            $validator = Validator::make($request->all(), [
+                'phone' => 'required|string',
+                'password' => 'required|string',
+            ], [
+                'phone.required' => 'Số điện thoại không được để trống.',
+                'password.required' => 'Mật khẩu không được để trống.',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            // Step 2: Tìm bác sĩ bằng số điện thoại
+            $doctor = Doctor::where('phone', $request->phone)->first();
+
+            if (!$doctor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số điện thoại không tồn tại.',
+                ], 404);
+            }
+
+            // Step 3: Xác minh mật khẩu
+            if (!Hash::check($request->password, $doctor->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mật khẩu không đúng.',
+                ], 401);
+            }
+
+            // Step 4: Tạo token nếu cần (Laravel Sanctum)
+            $token = $doctor->createToken('authToken')->plainTextToken;
+
+            // Step 5: Trả về phản hồi
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng nhập thành công.',
+                'doctor' => $doctor,
+                'token' => $token,
+                'token_type' => 'Bearer',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đăng nhập thất bại.',
                 'error' => $e->getMessage(),
             ], 500);
         }

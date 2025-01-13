@@ -28,6 +28,8 @@ Route::post('/register', [RegisterController::class, 'apiRegister']);
 
 // Login
 Route::post('/login', [LoginController::class, 'login']);
+// Doctor login
+Route::post('/login/doctor', [LoginController::class, 'doctorLogin']);
 
 // Logout
 Route::post('/logout', [LoginController::class, 'logout']);
@@ -58,3 +60,5 @@ Route::get('/doctors/{doctorID}', [DoctorsController::class, 'getDoctorsByDoctor
 Route::get('/appointments', [AppointmentsController::class, 'getAllAppointments']);
 Route::get('/appointments/{userID}', [AppointmentsController::class, 'getAppointmentsByUser']);
 Route::post('/appointments/{userID}', [AppointmentsController::class, 'createAppointment']);
+Route::get('/appointments/upcoming/{userID}', [AppointmentsController::class, 'getUpcomingAppointments']);
+// Route::get('/appointments/all/{userID}', [AppointmentsController::class, 'getAllAppointmentsByUser']);

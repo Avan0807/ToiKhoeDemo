@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Doctor;
+
 
 class LoginController extends Controller
 {
@@ -98,6 +100,70 @@ class LoginController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Đăng xuất thất bại',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function doctorLogin(Request $request)
+    {
+        try {
+            // Step 1: Validate input
+            $validator = Validator::make($request->all(), [
+                'phone' => 'required|string',
+                'password' => 'required|string',
+            ], [
+                'phone.required' => 'Số điện thoại không được để trống.',
+                'password.required' => 'Mật khẩu không được để trống.',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            // Step 2: Tìm bác sĩ bằng số điện thoại
+            $doctor = Doctor::where('phone', $request->phone)->first();
+
+            if (!$doctor) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số điện thoại không tồn tại.',
+                ], 404);
+            }
+
+            // Step 3: Xác minh mật khẩu
+            // if (!Hash::check($request->password, $doctor->password)) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Mật khẩu không đúng.',
+            //     ], 401);
+            // }
+            if ($request->password !== $doctor->password) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Mật khẩu không đúng.',
+                ], 401);
+            }
+
+            // Step 4: Tạo token nếu cần (Laravel Sanctum)
+            $token = $doctor->createToken('authToken')->plainTextToken;
+
+            // Step 5: Trả về phản hồi
+            return response()->json([
+                'success' => true,
+                'message' => 'Đăng nhập thành công.',
+                'doctor' => $doctor,
+                'token' => $token,
+                'token_type' => 'Bearer',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Đăng nhập thất bại.',
                 'error' => $e->getMessage(),
             ], 500);
         }

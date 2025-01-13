@@ -108,59 +108,33 @@ class AppointmentsController extends Controller
         }
     }
 
-    public function doctorLogin(Request $request)
+    public function getUpcomingAppointments($userID)
     {
         try {
-            // Step 1: Validate input
-            $validator = Validator::make($request->all(), [
-                'phone' => 'required|string',
-                'password' => 'required|string',
-            ], [
-                'phone.required' => 'Số điện thoại không được để trống.',
-                'password.required' => 'Mật khẩu không được để trống.',
-            ]);
+            // Lấy 5 lịch khám gần nhất, sắp xếp theo ngày và giờ
+            $appointments = Appointment::where('userID', $userID)
+                ->whereDate('date', '<=', now()->format('Y-m-d')) // Lọc lịch khám từ hôm nay
+                ->orderBy('date', 'asc') // Sắp xếp theo ngày tăng dần
+                ->orderBy('time', 'asc') // Sắp xếp theo giờ tăng dần nếu cùng ngày
+                ->limit(5) // Lấy tối đa 5 lịch khám
+                ->get();
 
-            if ($validator->fails()) {
+            if ($appointments->isEmpty()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Validation failed',
-                    'errors' => $validator->errors(),
-                ], 422);
-            }
-
-            // Step 2: Tìm bác sĩ bằng số điện thoại
-            $doctor = Doctor::where('phone', $request->phone)->first();
-
-            if (!$doctor) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số điện thoại không tồn tại.',
+                    'message' => 'Không tìm thấy lịch khám sắp tới nào cho user này.',
                 ], 404);
             }
 
-            // Step 3: Xác minh mật khẩu
-            if (!Hash::check($request->password, $doctor->password)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Mật khẩu không đúng.',
-                ], 401);
-            }
-
-            // Step 4: Tạo token nếu cần (Laravel Sanctum)
-            $token = $doctor->createToken('authToken')->plainTextToken;
-
-            // Step 5: Trả về phản hồi
             return response()->json([
                 'success' => true,
-                'message' => 'Đăng nhập thành công.',
-                'doctor' => $doctor,
-                'token' => $token,
-                'token_type' => 'Bearer',
+                'message' => 'Lấy danh sách lịch khám sắp tới thành công.',
+                'appointments' => $appointments,
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Đăng nhập thất bại.',
+                'message' => 'Không thể lấy danh sách lịch khám sắp tới.',
                 'error' => $e->getMessage(),
             ], 500);
         }

@@ -63,6 +63,7 @@ Route::get('/appointments/{userID}', [AppointmentsController::class, 'getAppoint
 Route::post('/appointments/{userID}', [AppointmentsController::class, 'createAppointment']);
 Route::get('/appointments/upcoming/{userID}', [AppointmentsController::class, 'getCurrentAppointments']);
 // Route::get('/appointments/all/{userID}', [AppointmentsController::class, 'getAllAppointmentsByUser']);
+Route::put('/appointments/cancel/{userID}/{appointmentID}', [AppointmentsController::class, 'cancelAppointment']);
 
 
 // Get Cart

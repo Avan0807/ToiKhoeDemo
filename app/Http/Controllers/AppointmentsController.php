@@ -139,4 +139,36 @@ class AppointmentsController extends Controller
             ], 500);
         }
     }
+    public function cancelAppointment(Request $request, $userID, $appointmentID)
+    {
+        try {
+            // Tìm lịch khám dựa trên userID và appointmentID
+            $appointment = Appointment::where('userID', $userID)
+                ->where('appointmentID', $appointmentID)
+                ->first();
+
+            if (!$appointment) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy lịch khám.',
+                ], 404);
+            }
+
+            // Cập nhật trạng thái thành "Cancelled"
+            $appointment->status = 'Cancelled';
+            $appointment->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lịch khám đã được hủy thành công.',
+                'appointment' => $appointment,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể hủy lịch khám.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

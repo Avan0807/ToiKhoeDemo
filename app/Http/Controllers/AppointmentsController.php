@@ -108,7 +108,7 @@ class AppointmentsController extends Controller
         }
     }
 
-    public function getUpcomingAppointments($userID)
+    public function getCurrentAppointments($userID)
     {
         try {
             // Lấy 5 lịch khám gần nhất, sắp xếp theo ngày và giờ

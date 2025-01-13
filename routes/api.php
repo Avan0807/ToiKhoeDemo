@@ -9,6 +9,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,5 +61,10 @@ Route::get('/doctors/{doctorID}', [DoctorsController::class, 'getDoctorsByDoctor
 Route::get('/appointments', [AppointmentsController::class, 'getAllAppointments']);
 Route::get('/appointments/{userID}', [AppointmentsController::class, 'getAppointmentsByUser']);
 Route::post('/appointments/{userID}', [AppointmentsController::class, 'createAppointment']);
-Route::get('/appointments/upcoming/{userID}', [AppointmentsController::class, 'getUpcomingAppointments']);
+Route::get('/appointments/upcoming/{userID}', [AppointmentsController::class, 'getCurrentAppointments']);
 // Route::get('/appointments/all/{userID}', [AppointmentsController::class, 'getAllAppointmentsByUser']);
+
+
+// Get Cart
+
+Route::get('/cart/{userID}', [CartController::class, 'getUserCart']);

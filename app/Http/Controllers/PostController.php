@@ -163,12 +163,66 @@ class PostController extends Controller
     {
         $post   = Post::findOrFail($id);
         $status = $post->delete();
-        
+
         if ($status) {
             request()->session()->flash('success', 'Bài viết đã được xóa');
         } else {
             request()->session()->flash('error', 'Có lỗi xảy ra khi xóa bài viết');
         }
         return redirect()->route('post.index');
+    }
+
+    //API
+    public function getAllPosts()
+    {
+        try {
+            // Lấy danh sách bài đăng với phân trang
+            $posts = Post::with(['cat_info', 'author_info'])->where('status', 'active')->orderBy('id', 'DESC')->paginate(10);
+
+            if ($posts->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không có bài đăng nào.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lấy danh sách bài đăng thành công.',
+                'posts' => $posts,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy danh sách bài đăng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    public function getPostBySlug($slug)
+    {
+        try {
+            // Lấy bài đăng theo slug
+            $post = Post::with(['tag_info', 'author_info'])->where('slug', $slug)->where('status', 'active')->first();
+
+            if (!$post) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy bài đăng.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lấy bài đăng thành công.',
+                'post' => $post,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy bài đăng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

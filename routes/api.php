@@ -10,6 +10,7 @@ use App\Http\Controllers\DoctorsController;
 use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +39,8 @@ Route::post('/logout', [LoginController::class, 'logout']);
 // Upload user avt
 Route::post('/user/{userID}/upload-avatar', [UsersController::class, 'uploadAvatar']);
 Route::get('/user/{userID}/get-avatar', [UsersController::class, 'getAvatarByUserId']);
-
+// Add address
+Route::put('/users/{userID}/address', [UsersController::class, 'updateAddress']);
 
 
 // Get list doctor
@@ -69,3 +71,8 @@ Route::put('/appointments/cancel/{userID}/{appointmentID}', [AppointmentsControl
 // Get Cart
 
 Route::get('/cart/{userID}', [CartController::class, 'getUserCart']);
+
+
+// Get post
+Route::get('/posts', [PostController::class, 'getAllPosts']);
+Route::get('/posts/{slug}', [PostController::class, 'getPostBySlug']);

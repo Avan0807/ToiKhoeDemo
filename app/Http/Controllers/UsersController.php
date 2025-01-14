@@ -234,4 +234,43 @@ class UsersController extends Controller
             ], 500);
         }
     }
+    public function updateAddress(Request $request, $id)
+    {
+        try {
+            // Xác thực dữ liệu
+            $request->validate([
+                'address' => 'required|string|max:255',
+            ], [
+                'address.required' => 'Địa chỉ không được để trống.',
+                'address.string' => 'Địa chỉ phải là chuỗi ký tự.',
+                'address.max' => 'Địa chỉ không được vượt quá 255 ký tự.',
+            ]);
+
+            // Tìm user theo userID
+            $user = User::find($id);
+
+            if (!$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy người dùng.',
+                ], 404);
+            }
+
+            // Cập nhật địa chỉ
+            $user->address = $request->address;
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật địa chỉ thành công.',
+                'user' => $user,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể cập nhật địa chỉ.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

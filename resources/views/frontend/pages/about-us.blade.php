@@ -53,48 +53,48 @@
 
 
 	<!-- Start Shop Services Area -->
-	<section class="shop-services section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-rocket"></i>
-						<h4>Miễn phí vận chuyển</h4>
-						<p>Đơn hàng trên 100.000đ</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-reload"></i>
-						<h4>Trả lại miễn phí</h4>
-						<p>Trả lại trong vòng 3 ngày</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-lock"></i>
-						<h4>Thanh toán an toàn</h4>
-						<p>Thanh toán an toàn 100%</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-tag"></i>
-						<h4>Giá tốt nhất</h4>
-						<p>Giá đảm bảo</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-			</div>
-		</div>
-	</section>
+	<section class="shop-services section home">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-package"></i>
+                    <h4>SP CHÍNH HÃNG</h4>
+                    <p>Đa dạng và chuyên sâu</p>
+                </div>
+                <!-- End Single Service -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-reload"></i>
+                    <h4>ĐỔI TRẢ TRONG 30 NGÀY</h4>
+                    <p>Kể từ ngày mua hàng</p>
+                </div>
+                <!-- End Single Service -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-shield"></i>
+                    <h4>CAM KẾT 100%</h4>
+                    <p>Chất lượng sản phẩm</p>
+                </div>
+                <!-- End Single Service -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-truck"></i>
+                    <h4>MIỄN PHÍ VẬN CHUYỂN</h4>
+                    <p>Theo chính sách giao hàng</p>
+                </div>
+                <!-- End Single Service -->
+            </div>
+        </div>
+    </div>
+	</section>	
 	<!-- End Shop Services Area -->
 
 	@include('frontend.layouts.newsletter')

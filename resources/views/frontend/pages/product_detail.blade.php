@@ -345,7 +345,7 @@
                                             <div class="product-action">
                                                 <a data-toggle="modal" data-target="#modelExample" title="Quick View" href="#"><i class=" ti-eye"></i><span>Mua sắm nhanh</span></a>
                                                 <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Thêm vào danh sách mong muốn</span></a>
-                                                <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Thêm vào so sánh</span></a>
+                                                {{--<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Thêm vào so sánh</span></a>--}}
                                             </div>
                                             <div class="product-action-2">
                                                 <a title="Add to cart" href="#">Thêm vào giỏ hàng</a>
@@ -578,5 +578,5 @@
             })
         });
     </script> --}}
-
+		
 @endpush

@@ -150,24 +150,40 @@ class CouponController extends Controller
     public function couponStore(Request $request)
     {
         $coupon = Coupon::where('code', $request->code)->first();
-
-        if(!$coupon){
-            request()->session()->flash('error','Mã giảm giá không hợp lệ, vui lòng thử lại!');
+    
+        if (!$coupon) {
+            request()->session()->flash('error', 'Mã giảm giá không hợp lệ, vui lòng thử lại!');
             return redirect()->back();
         }
-
-            $total_price = Cart::where('user_id', auth()->user()->id)
-                               ->where('order_id', null)
-                               ->sum('price');
-
-            session()->put('coupon', [
-                'id'    => $coupon->id,
-                'code'  => $coupon->code,
-                'value' => $coupon->discount($total_price),
-            ]);
-
-            request()->session()->flash('success','Áp dụng mã giảm giá thành công');
-            return redirect()->back();
+    
+        $total_price = Cart::where('user_id', auth()->user()->id)
+                           ->where('order_id', null)
+                           ->sum('price');
+    
+        // Kiểm tra giá trị giảm giá so với tổng giỏ hàng
+        if ($coupon->discount($total_price) >= $total_price) {
+            if ($total_price <= 1000) {
+                // Nếu tổng giỏ hàng nhỏ hơn hoặc bằng 1.000đ, không áp dụng mã giảm giá
+                request()->session()->flash('error', 'Tổng giỏ hàng không đủ điều kiện để áp dụng mã giảm giá.');
+                return redirect()->back();
+            }
+    
+            // Nếu giá trị giảm lớn hơn hoặc bằng tổng giá trị, giảm để còn lại 1.000đ
+            $discount_value = $total_price - 1000;
+        } else {
+            // Áp dụng giảm giá bình thường
+            $discount_value = $coupon->discount($total_price);
         }
+    
+        session()->put('coupon', [
+            'id'    => $coupon->id,
+            'code'  => $coupon->code,
+            'value' => $discount_value,
+        ]);
+    
+        request()->session()->flash('success', 'Áp dụng mã giảm giá thành công');
+        return redirect()->back();
+    }
+    
     
 }

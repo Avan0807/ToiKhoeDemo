@@ -4,7 +4,7 @@
 <div class="container-fluid">
     @include('backend.layouts.notification')
     <!-- Page Heading -->
-    <!-- Visit 'yaemiko' for more projects -->
+
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Trang tổng quan</h1>
     </div>
@@ -206,8 +206,9 @@
       </div>
     </div>
     <!-- Content Row -->
-    <!-- Visit 'codeastro' for more projects -->
   </div>
+</div> 
+
 @endsection
 
 @push('scripts')
@@ -350,7 +351,7 @@
                       callbacks: {
                         label: function(tooltipItem, chart) {
                           var datasetLabel = chart.datasets[tooltipItem.datasetIndex].label || '';
-                          return datasetLabel + ': $' + number_format(tooltipItem.yLabel);
+                          return datasetLabel + ':' + number_format(tooltipItem.yLabel) +'đ';
                         }
                       }
                     }

@@ -108,10 +108,6 @@
                         </td>
 
                     </tr>
-                    <!-- <tr>
-                        <td>Payment Status</td>
-                        <td> : {{$order->payment_status}}</td>
-                    </tr> -->
                     <tr>
                       <td>Trạng thái thanh toán</td>
                       <td> :

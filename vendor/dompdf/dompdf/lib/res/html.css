@@ -48,13 +48,11 @@ summary {
 
 body {
   page-break-before: avoid;
-  display: block;
+  display: block !important;
   counter-increment: page;
 }
 
-p,
-dl,
-multicol {
+p, dl, multicol {
   display: block;
   margin: 1em 0;
 }
@@ -64,8 +62,7 @@ dd {
   margin-left: 40px;
 }
 
-blockquote,
-figure {
+blockquote, figure {
   display: block;
   margin: 1em 40px;
 }
@@ -80,7 +77,7 @@ center {
   text-align: center;
 }
 
-blockquote[type='cite'] {
+blockquote[type=cite] {
   display: block;
   margin: 1em 0;
   padding-left: 1em;
@@ -89,24 +86,19 @@ blockquote[type='cite'] {
   border-width: thin;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   display: block;
   font-weight: bold;
 }
 
 h1 {
   font-size: 2em;
-  margin: 0.67em 0;
+  margin: .67em 0;
 }
 
 h2 {
   font-size: 1.5em;
-  margin: 0.83em 0;
+  margin: .83em 0;
 }
 
 h3 {
@@ -136,9 +128,7 @@ listing {
   margin: 1em 0;
 }
 
-plaintext,
-pre,
-xmp {
+plaintext, pre, xmp {
   display: block;
   font-family: fixed;
   white-space: pre;
@@ -158,21 +148,21 @@ table {
 }
 
 table[border] {
-  border-style: outset;
-  border-color: gray;
+  border: outset gray;
 }
 
-/* This won't work (???) */
-/*
 table[border] td,
 table[border] th {
-  border: 1pt solid grey;
-}*/
+  border: 1px inset gray;
+}
+
+table[border="0"] td,
+table[border="0"] th {
+  border-width: 0;
+}
 
 /* make sure backgrounds are inherited in tables  -- see bug 4510 */
-td,
-th,
-tr {
+td, th, tr {
   background: inherit;
 }
 
@@ -225,14 +215,12 @@ td {
 th {
   display: table-cell;
   vertical-align: inherit;
+  text-align: center;
   font-weight: bold;
   padding: 1px;
 }
 
 /* inlines */
-q {
-  quotes: '"' '"' "'" "'"; /* FIXME only the first level is used */
-}
 
 q:before {
   content: open-quote;
@@ -247,34 +235,23 @@ q:after {
   text-decoration: underline;
 }
 
-b,
-strong {
+b, strong {
   font-weight: bolder;
 }
 
-i,
-cite,
-em,
-var,
-dfn {
+i, cite, em, var, dfn {
   font-style: italic;
 }
 
-tt,
-code,
-kbd,
-samp {
+tt, code, kbd, samp {
   font-family: fixed;
 }
 
-u,
-ins {
+u, ins {
   text-decoration: underline;
 }
 
-s,
-strike,
-del {
+s, strike, del {
   text-decoration: line-through;
 }
 
@@ -309,16 +286,13 @@ mark {
 
 /* titles */
 
-abbr[title],
-acronym[title] {
+abbr[title], acronym[title] {
   text-decoration: dotted underline;
 }
 
 /* lists */
 
-ul,
-menu,
-dir {
+ul, menu, dir {
   display: block;
   list-style-type: disc;
   margin: 1em 0;
@@ -373,86 +347,84 @@ form {
   display: block;
 }
 
-input,
-button,
-select {
+input, button, select {
   display: inline-block;
   font-family: sans-serif;
 }
 
-input[type='text'],
-input[type='password'],
+input[type=text],
+input[type=password],
 select {
   width: 12em;
 }
 
-input[type='text'],
-input[type='password'],
-input[type='button'],
-input[type='submit'],
-input[type='reset'],
-input[type='file'],
+input[type=text],
+input[type=password],
+input[type=button],
+input[type=submit],
+input[type=reset],
+input[type=file],
 button,
 textarea,
 select {
-  background: #fff;
+  background: #FFF;
   border: 1px solid #999;
   padding: 2px;
   margin: 2px;
 }
 
-input[type='button'],
-input[type='submit'],
-input[type='reset'],
-input[type='file'],
+input[type=button],
+input[type=submit],
+input[type=reset],
+input[type=file],
 button {
-  background: #ccc;
+  background: #CCC;
   text-align: center;
 }
 
-input[type='file'] {
+input[type=file] {
   width: 8em;
 }
 
-input[type='text']:before,
-input[type='button']:before,
-input[type='submit']:before,
-input[type='reset']:before {
+input[type=text]:before,
+input[type=button]:before,
+input[type=submit]:before,
+input[type=reset]:before {
   content: attr(value);
 }
 
-input[type='file']:before {
-  content: 'Choose a file';
+input[type=file]:before {
+  content: "Choose a file";
 }
 
-input[type='password'][value]:before {
-  font-family: 'DejaVu Sans' !important;
-  content: '\2022\2022\2022\2022\2022\2022\2022\2022';
+input[type=password][value]:before {
+  font-family: "DejaVu Sans" !important;
+  content: "\2022\2022\2022\2022\2022\2022\2022\2022";
   line-height: 1em;
 }
 
-input[type='checkbox'],
-input[type='radio'],
+input[type=checkbox],
+input[type=radio],
 select:after {
-  font-family: 'DejaVu Sans' !important;
+  font-family: "DejaVu Sans" !important;
   font-size: 18px;
   line-height: 1;
 }
 
-input[type='checkbox']:before {
-  content: '\2610';
+input[type=checkbox]:before {
+  content: "\2610";
 }
 
-input[type='checkbox'][checked]:before {
-  content: '\2611';
+input[type=checkbox][checked]:before {
+  content: "\2611";
 }
 
-input[type='radio']:before {
-  content: '\25CB';
+input[type=radio]:before {
+  content: "\25CB";
 }
 
-input[type='radio'][checked]:before {
-  content: '\25C9';
+input[type=radio][checked]:before {
+  content: "\25C9";
 }
 
 textarea {
@@ -465,8 +437,8 @@ textarea {
 }
 
 select {
-  position: relative !important;
-  overflow: hidden !important;
+  position: relative!important;
+  overflow: hidden!important;
 }
 
 select:after {
@@ -476,8 +448,8 @@ select:after {
   height: 5em;
   width: 1.4em;
   text-align: center;
-  background: #ccc;
-  content: '\25BE';
+  background: #CCC;
+  content: "\25BE";
 }
 
 select option {
@@ -517,7 +489,7 @@ hr {
   margin: 0.5em auto 0.5em auto;
 }
 
-hr[size='1'] {
+hr[size="1"] {
   border-style: solid none none none;
 }
 
@@ -533,8 +505,7 @@ br {
   display: -dompdf-br;
 }
 
-img,
-img_generated {
+img, img_generated {
   display: -dompdf-image !important;
 }
 
@@ -543,16 +514,8 @@ dompdf_generated {
 }
 
 /* hidden elements */
-area,
-base,
-basefont,
-head,
-meta,
-script,
-style,
-title,
-noembed,
-param {
+area, base, basefont, head, meta, script, style, title,
+noembed, param {
   display: none;
   -dompdf-keep: yes;
 }

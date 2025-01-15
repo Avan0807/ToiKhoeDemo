@@ -13,6 +13,7 @@ use Helper;
 use Illuminate\Support\Str;
 use App\Notifications\StatusNotification;
 use Illuminate\Http\RedirectResponse;
+use Dompdf\Options;
 
 class OrderController extends Controller
 {
@@ -257,11 +258,20 @@ class OrderController extends Controller
     /**
      * Xuất hóa đơn PDF (phía admin).
      */
-    public function pdf(Request $request){
-        $order = Order::getAllOrder($request->id);
-        $file_name = $order->order_number.'-'.$order->first_name.'.pdf';
+    public function pdf(Request $request, $id)
+    {
+        $options = new Options();
+        $options->set('isRemoteEnabled', true); // Bật isRemoteEnabled
+        // Lấy dữ liệu đơn hàng
+        $order = Order::findOrFail($id);
 
-        $pdf = PDF::loadview('backend.order.pdf', compact('order'));
+        // Tạo tên file
+        $file_name = $order->order_number . '-' . $order->first_name . '.pdf';
+
+        // Tải view và xuất PDF
+        $pdf = PDF::loadView('backend.order.pdf', compact('order'));
+
+        // Xuất file PDF
         return $pdf->download($file_name);
     }
 

@@ -72,7 +72,7 @@
                                                 @endphp
                                                 <div id="slider-range" data-min="0" data-max="{{$max}}"></div>
                                                 <div class="product_filter">
-                                                <button type="submit" class="filter_button">Filter</button>
+                                                <button type="submit" class="filter_button">Lọc</button>
                                                 <div class="label-input">
                                                     <span>Phạm vi:</span>
                                                     <input style="" type="text" id="amount" readonly/>
@@ -181,6 +181,7 @@
                                                     <div class="product-action">
                                                         <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Mua sắm nhanh</span></a>
                                                         <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" class="wishlist" data-id="{{$product->id}}"><i class=" ti-heart "></i><span>Thêm vào danh sách mong muốn</span></a>
+                                                        <a title="Mua ngay" href="{{route('checkout-now', ['product_id' => $product->id])}}"><i class="ti-shopping-cart"></i><span>Mua ngay</span></a>
                                                     </div>
                                                     <div class="product-action-2">
                                                         <a title="Add to cart" href="{{route('add-to-cart',$product->slug)}}">Thêm vào giỏ hàng</a>
@@ -255,11 +256,6 @@
                                             <div class="quickview-ratting-review">
                                                 <div class="quickview-ratting-wrap">
                                                     <div class="quickview-ratting">
-                                                        {{-- <i class="yellow fa fa-star"></i>
-                                                        <i class="yellow fa fa-star"></i>
-                                                        <i class="yellow fa fa-star"></i>
-                                                        <i class="yellow fa fa-star"></i>
-                                                        <i class="fa fa-star"></i> --}}
                                                         @php
                                                             $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
                                                             $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
@@ -289,24 +285,10 @@
                                             <div class="quickview-peragraph">
                                                 <p>{!! html_entity_decode($product->summary) !!}</p>
                                             </div>
-                                            @if($product->size)
-                                                <div class="size">
-                                                    <h4>Đơn vị</h4>
-                                                    <ul>
-                                                        @php
-                                                            $sizes=explode(',',$product->size);
-                                                            // dd($sizes);
-                                                        @endphp
-                                                        @foreach($sizes as $size)
-                                                        <li><a href="#" class="one">{{$size}}</a></li>
-                                                        @endforeach
-                                                    </ul>
-                                                </div>
-                                            @endif
                                             <div class="size">
                                                 <div class="row">
                                                     <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Đơn vị</h5>
+                                                        <h3 class="title">Loại</h3>
                                                         <select>
                                                             @php
                                                             $sizes=explode(',',$product->size);
@@ -317,15 +299,6 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    {{-- <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Color</h5>
-                                                        <select>
-                                                            <option selected="selected">orange</option>
-                                                            <option>purple</option>
-                                                            <option>black</option>
-                                                            <option>pink</option>
-                                                        </select>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                             <form action="{{route('single-add-to-cart')}}" method="POST">
@@ -350,6 +323,7 @@
                                                 </div>
                                                 <div class="add-to-cart">
                                                     <button type="submit" class="btn">Thêm vào giỏ hàng</button>
+                                                    <a href="{{ route('checkout-now', ['product_id' => $product->id]) }}" class="btn btn-primary">Mua ngay</a>
                                                     <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i class="ti-heart"></i></a>
                                                 </div>
                                             </form>
@@ -385,37 +359,145 @@
 @endpush
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=1;
-            var pro_id=$(this).data('id');
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-                    else{
-                        swal('error',response.msg,'error').then(function(){
-							// document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
+    <script>
+
+        /*==================================================================
+        [ Isotope ]*/
+        var $topeContainer = $('.isotope-grid');
+        var $filter = $('.filter-tope-group');
+
+        // filter items on button click
+        $filter.each(function () {
+            $filter.on('click', 'button', function () {
+                var filterValue = $(this).attr('data-filter');
+                $topeContainer.isotope({filter: filterValue});
+            });
+
         });
-    </script> --}}
+
+        // init Isotope
+        $(window).on('load', function () {
+            var $grid = $topeContainer.each(function () {
+                $(this).isotope({
+                    itemSelector: '.isotope-item',
+                    layoutMode: 'fitRows',
+                    percentPosition: true,
+                    animationEngine : 'best-available',
+                    masonry: {
+                        columnWidth: '.isotope-item'
+                    }
+                });
+            });
+        });
+
+        var isotopeButton = $('.filter-tope-group button');
+
+        $(isotopeButton).each(function(){
+            $(this).on('click', function(){
+                for(var i=0; i<isotopeButton.length; i++) {
+                    $(isotopeButton[i]).removeClass('how-active1');
+                }
+
+                $(this).addClass('how-active1');
+            });
+        });
+    </script>
+    <script>
+         function cancelFullScreen(el) {
+            var requestMethod = el.cancelFullScreen||el.webkitCancelFullScreen||el.mozCancelFullScreen||el.exitFullscreen;
+            if (requestMethod) { // cancel full screen.
+                requestMethod.call(el);
+            } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+                var wscript = new ActiveXObject("WScript.Shell");
+                if (wscript !== null) {
+                    wscript.SendKeys("{F11}");
+                }
+            }
+        }
+
+        function requestFullScreen(el) {
+            // Supports most browsers and their versions.
+            var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+
+            if (requestMethod) { // Native full screen.
+                requestMethod.call(el);
+            } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+                var wscript = new ActiveXObject("WScript.Shell");
+                if (wscript !== null) {
+                    wscript.SendKeys("{F11}");
+                }
+            }
+            return false    
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+            // Xử lý sự kiện click cho nút "Mua ngay!"
+            $('.cart').click(function(){
+                var quantity = 1;
+                var pro_id = $(this).data('id');
+                var slug = $(this).data('slug');  // Lấy giá trị slug từ data attribute
+
+                $.ajax({
+                    url: "{{ url('add-to-cart') }}/" + slug,  // Gửi slug vào URL
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",  // Token CSRF
+                        quantity: quantity,
+                        pro_id: pro_id
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (typeof(response) != 'object') {
+                            response = $.parseJSON(response);
+                        }
+                        if (response.status) {
+                            // Hiển thị thông báo thành công
+                            swal('Success', response.msg, 'success').then(function() {
+                                document.location.href = document.location.href; // Reload trang
+                            });
+                        } else {
+                            // Hiển thị thông báo lỗi
+                            swal('Error', response.msg, 'error').then(function() {
+                                // Có thể thêm hành động nào đó nếu cần
+                            });
+                        }
+                    }
+                })
+            });
+
+            /*----------------------------------------------------*/
+            /*  Jquery Ui slider js
+            /*----------------------------------------------------*/
+            if ($("#slider-range").length > 0) {
+                const max_value = parseInt($("#slider-range").data('max')) || 500;
+                const min_value = parseInt($("#slider-range").data('min')) || 0;
+                const currency = $("#slider-range").data('currency') || '';
+                let price_range = min_value + '-' + max_value;
+                if ($("#price_range").length > 0 && $("#price_range").val()) {
+                    price_range = $("#price_range").val().trim();
+                }
+                
+                let price = price_range.split('-');
+                $("#slider-range").slider({
+                    range: true,
+                    min: min_value,
+                    max: max_value,
+                    values: price,
+                    slide: function(event, ui) {
+                        $("#amount").val(currency + ui.values[0] + " - " + currency + ui.values[1]);
+                        $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+                    }
+                });
+            }
+
+            if ($("#amount").length > 0) {
+                const m_currency = $("#slider-range").data('currency') || '';
+                $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
+                    " - " + m_currency + $("#slider-range").slider("values", 1));
+            }
+        });
+    </script>
     <script>
         $(document).ready(function(){
         /*----------------------------------------------------*/
@@ -449,4 +531,21 @@
             }
         })
     </script>
+
+    <script>
+        // Reset trạng thái button-head khi modal được đóng
+        $(document).on('hidden.bs.modal', function (e) {
+            $('.button-head').css('display', 'none'); // Đảm bảo button-head bị ẩn
+        });
+
+        // Đảm bảo button-head chỉ hiển thị khi hover vào .product-img
+        $(document).ready(function () {
+            $('.product-img').hover(function () {
+                $(this).find('.button-head').css('display', 'block');
+            }, function () {
+                $(this).find('.button-head').css('display', 'none');
+            });
+        });
+    </script>
+
 @endpush

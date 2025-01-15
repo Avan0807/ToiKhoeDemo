@@ -378,7 +378,7 @@
                                                 Chi phí vận chuyển
                                                 @if(!empty(Helper::shipping()) && Helper::cartCount() > 0)
                                                     <select name="shipping" class="nice-select" required>
-                                                        <option value="">Chọn địa chỉ của bạn</option>
+                                                        <option value="">Chọn phương thức vận chuyển</option>
                                                         @foreach(Helper::shipping() as $shipping)
                                                             <option value="{{ $shipping->id }}" class="shippingOption" data-price="{{ $shipping->price }}">
                                                                 {{ $shipping->type }}: {{ number_format($shipping->price, 0, ',', '.') }}đ
@@ -461,46 +461,46 @@
 
     <!-- Start Shop Services Area  -->
     <section class="shop-services section home">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-rocket"></i>
-                        <h4>Miễn phí vận chuyển</h4>
-                        <p>Đơn hàng trên 100.000đ</p>
-                    </div>
-                    <!-- End Single Service -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-package"></i>
+                    <h4>SP CHÍNH HÃNG</h4>
+                    <p>Đa dạng và chuyên sâu</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-reload"></i>
-                        <h4>Trả lại miễn phí</h4>
-                        <p>Trả lại trong vòng 3 ngày</p>
-                    </div>
-                    <!-- End Single Service -->
+                <!-- End Single Service -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-reload"></i>
+                    <h4>ĐỔI TRẢ TRONG 30 NGÀY</h4>
+                    <p>Kể từ ngày mua hàng</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-lock"></i>
-                        <h4>Thanh toán an toàn</h4>
-                        <p>Thanh toán an toàn 100%</p>
-                    </div>
-                    <!-- End Single Service -->
+                <!-- End Single Service -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-shield"></i>
+                    <h4>CAM KẾT 100%</h4>
+                    <p>Chất lượng sản phẩm</p>
                 </div>
-                <div class="col-lg-3 col-md-6 col-12">
-                    <!-- Start Single Service -->
-                    <div class="single-service">
-                        <i class="ti-tag"></i>
-                        <h4>Giá tốt nhất</h4>
-                        <p>Giá đảm bảo</p>
-                    </div>
-                    <!-- End Single Service -->
+                <!-- End Single Service -->
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+                <!-- Start Single Service -->
+                <div class="single-service">
+                    <i class="ti-truck"></i>
+                    <h4>MIỄN PHÍ VẬN CHUYỂN</h4>
+                    <p>Theo chính sách giao hàng</p>
                 </div>
+                <!-- End Single Service -->
             </div>
         </div>
+    </div>
     </section>
     <!-- End Shop Services -->
 
@@ -591,8 +591,28 @@
 			document.getElementById(box).style.display=vis;
 		}
 	</script>
-	<script>
+    <script>
         $(document).ready(function() {
+            // Kiểm tra khi form được submit
+            $('button[type="submit"]').click(function(e) {
+                let shippingMethod = $('select[name="shipping"]').val();
+                
+                // Nếu không chọn phương thức vận chuyển, hiển thị cảnh báo
+                if (!shippingMethod) {
+                    e.preventDefault(); // Ngăn không cho form submit
+                    
+                    // Hiển thị thông báo lỗi
+                    if ($('#shippingAlert').length === 0) {
+                        $('.shipping').append('<p id="shippingAlert" style="color: red; margin-top: 5px;">Vui lòng chọn phương thức vận chuyển.</p>');
+                    }
+                    return false;
+                } else {
+                    // Xóa thông báo nếu người dùng đã chọn phương thức vận chuyển
+                    $('#shippingAlert').remove();
+                }
+            });
+
+            // Xử lý thay đổi phương thức vận chuyển
             $('.shipping select[name=shipping]').change(function() {
                 let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
                 let subtotal = parseFloat($('.order_subtotal').data('price'));
@@ -608,9 +628,22 @@
 
                 // Cập nhật giá trị tổng cộng đã định dạng
                 $('#order_total_price span').text(formatVNDCurrency(total));
+
+                // Xóa cảnh báo nếu chọn phương thức vận chuyển
+                $('#shippingAlert').remove();
+            });
+
+            // Hiển thị thông tin thanh toán bằng thẻ
+            $('input[name="payment_method"]').change(function() {
+                if ($(this).val() === 'cardpay') {
+                    $('#creditCardDetails').show();
+                } else {
+                    $('#creditCardDetails').hide();
+                }
             });
         });
     </script>
+
 
     <script>
         $(document).ready(function() {
@@ -623,5 +656,5 @@
             });
         });
     </script>
-
+    
 @endpush

@@ -193,7 +193,7 @@
                                             <li class="@if(Request::path()=='product-grids'||Request::path()=='product-lists')  active  @endif"><a href="{{route('product-grids')}}">Sản Phẩm</a><span class="new">Mới</span></li>
                                                 {{Helper::getHeaderCategory()}}
                                             <li class="{{Request::path()=='bookdoctor' ? 'active' : ''}}"><a href="{{route('bookdoctor')}}">Đặt khám</a></li> 
-                                            <li class="{{Request::path()=='blog' ? 'active' : ''}}"><a href="{{route('blog')}}">Bài viết</a></li>
+                                            <li class="{{Request::path()=='blog' ? 'active' : ''}}"><a href="{{route('blog')}}">Góc sức khỏe</a></li>
                                             <li class="{{Request::path()=='contact' ? 'active' : ''}}"><a href="{{route('contact')}}">Liên Hệ</a></li>
                                         </ul>
                                     </div>

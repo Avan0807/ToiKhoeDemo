@@ -183,4 +183,50 @@ class CartController extends Controller
     public function checkout(Request $request){
         return view('frontend.pages.checkout');
     }
+
+    public function checkoutNow($product_id)
+    {
+        // Lấy thông tin sản phẩm từ DB
+        $product = Product::findOrFail($product_id);
+
+        // Kiểm tra nếu sản phẩm không tồn tại
+        if (!$product) {
+            request()->session()->flash('error', 'Sản phẩm không hợp lệ');
+            return back();
+        }
+
+        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+        $already_cart = Cart::where('user_id', auth()->user()->id)
+                            ->where('order_id', null)
+                            ->where('product_id', $product->id)
+                            ->first();
+
+        if ($already_cart) {
+            // Tăng thêm số lượng
+            $already_cart->quantity = $already_cart->quantity + 1;
+            $already_cart->amount = $product->price * $already_cart->quantity;
+
+            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
+                return back()->with('error', 'Số lượng tồn kho không đủ!');
+            }
+            $already_cart->save();
+        } else {
+            // Tạo mới giỏ hàng
+            $cart = new Cart;
+            $cart->user_id = auth()->user()->id;
+            $cart->product_id = $product->id;
+            $cart->price = $product->price - ($product->price * $product->discount) / 100;
+            $cart->quantity = 1; // Mặc định là 1 sản phẩm
+            $cart->amount = $cart->price * $cart->quantity;
+
+            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
+                return back()->with('error', 'Số lượng tồn kho không đủ!');
+            }
+            $cart->save();
+        }
+
+        // Chuyển hướng đến trang thanh toán
+        return redirect()->route('checkout');
+    }
+
 }

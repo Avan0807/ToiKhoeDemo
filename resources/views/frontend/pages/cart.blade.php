@@ -117,47 +117,73 @@
                                 <div class="right">
                                     <ul>
                                         @php
-                                            $total_amount=Helper::totalCartPrice();
-                                            if(session()->has('coupon')){
-                                                $total_amount=$total_amount-Session::get('coupon')['value'];
+                                            $total_amount = Helper::totalCartPrice();
+                                            $discount = 0;
+
+                                            // Kiểm tra mã giảm giá từ session
+                                            if (session()->has('coupon')) {
+                                                $discount = session('coupon')['value'];
+                                                
+                                                // Nếu giá trị giảm >= tổng giá trị giỏ hàng
+                                                if ($discount >= $total_amount) {
+                                                    if ($total_amount > 1000) {
+                                                        // Chỉ giảm để còn lại 1.000đ
+                                                        $discount = $total_amount - 1000;
+                                                    } else {
+                                                        // Không áp dụng mã giảm giá
+                                                        $discount = 0;
+                                                        session()->forget('coupon');
+                                                    }
+                                                }
+
+                                                $total_amount -= $discount;
                                             }
                                         @endphp
-                                        <li class="order_subtotal" data-price="">Tổng tiền giỏ hàng<span>{{number_format(Helper::totalCartPrice(),0,',','.')}}đ</span></li>
 
-                                        @if(session()->has('coupon'))
-                                        <li class="coupon_price" data-price="{{Session::get('coupon')['value']}}">Bạn tiết kiệm<span>{{number_format(Session::get('coupon')['value'],0,',','.')}}đ</span></li>
+                                        <!-- Hiển thị tổng tiền giỏ hàng -->
+                                        <li class="order_subtotal" data-price="{{ Helper::totalCartPrice() }}">
+                                            Tổng tiền giỏ hàng<span>{{ number_format(Helper::totalCartPrice(), 0, ',', '.') }}đ</span>
+                                        </li>
+
+                                        <!-- Hiển thị giá trị giảm giá (nếu có) -->
+                                        @if($discount > 0)
+                                            <li class="coupon_price" data-price="{{ $discount }}">
+                                                Bạn tiết kiệm<span>{{ number_format($discount, 0, ',', '.') }}đ</span>
+                                            </li>
                                         @endif
-                                        @if(session()->has('coupon'))
-                                            <li class="last" id="order_total_price">Số tiền bạn trả<span>{{number_format($total_amount,0,',','.')}}đ</span></li>
-                                        @else
-                                            <li class="last" id="order_total_price">Số tiền bạn trả<span>{{number_format($total_amount,0,',','.')}}đ</span></li>
-                                        @endif
+
+                                        <!-- Hiển thị tổng tiền sau khi áp dụng giảm giá -->
+                                        <li class="last" id="order_total_price">
+                                            Số tiền bạn trả<span>{{ number_format($total_amount, 0, ',', '.') }}đ</span>
+                                        </li>
                                     </ul>
+
                                     <div class="button5">
-                                        <a href="{{route('checkout')}}" class="btn">Thanh toán</a>
-                                        <a href="{{route('product-grids')}}" class="btn">Tiếp tục mua sắm</a>
+                                        <a href="{{ route('checkout') }}" class="btn">Thanh toán</a>
+                                        <a href="{{ route('product-grids') }}" class="btn">Tiếp tục mua sắm</a>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <!--/ Kết thúc Tổng số tiền -->
                 </div>
             </div>
-
+                                            
 		</div>
 	</div>
 	<!--/ End Shopping Cart -->
 
-	<section class="shop-services section home">
+    <section class="shop-services section home">
         <div class="container">
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-12">
                     <!-- Start Single Service -->
                     <div class="single-service">
-                        <i class="ti-rocket"></i>
-                        <h4>Miễn phí vận chuyển</h4>
-                        <p>Đơn hàng trên 100.000đ</p>
+                        <i class="ti-package"></i>
+                        <h4>SP CHÍNH HÃNG</h4>
+                        <p>Đa dạng và chuyên sâu</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
@@ -165,26 +191,26 @@
                     <!-- Start Single Service -->
                     <div class="single-service">
                         <i class="ti-reload"></i>
-                        <h4>Trả lại miễn phí</h4>
-                        <p>Trả lại trong vòng 3 ngày</p>
+                        <h4>ĐỔI TRẢ TRONG 30 NGÀY</h4>
+                        <p>Kể từ ngày mua hàng</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
                 <div class="col-lg-3 col-md-6 col-12">
                     <!-- Start Single Service -->
                     <div class="single-service">
-                        <i class="ti-lock"></i>
-                        <h4>Thanh toán an toàn</h4>
-                        <p>Thanh toán an toàn 100%</p>
+                        <i class="ti-shield"></i>
+                        <h4>CAM KẾT 100%</h4>
+                        <p>Chất lượng sản phẩm</p>
                     </div>
                     <!-- End Single Service -->
                 </div>
                 <div class="col-lg-3 col-md-6 col-12">
                     <!-- Start Single Service -->
                     <div class="single-service">
-                        <i class="ti-tag"></i>
-                        <h4>Giá tốt nhất</h4>
-                        <p>Giá đảm bảo</p>
+                        <i class="ti-truck"></i>
+                        <h4>MIỄN PHÍ VẬN CHUYỂN</h4>
+                        <p>Theo chính sách giao hàng</p>
                     </div>
                     <!-- End Single Service -->
                 </div>

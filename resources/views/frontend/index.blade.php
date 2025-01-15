@@ -162,59 +162,61 @@
                             </ul>
                             <!--/ End Tab Nav -->
                         </div>
+                        
                         <div class="tab-content isotope-grid" id="myTabContent">
-    @php
-        $recentlyAddedProducts = DB::table('products')
-            ->where('status', 'active')
-            ->orderBy('created_at', 'desc')
-            ->take(8) // Get the 8 most recently added products
-            ->get();
-    @endphp
+                            @php
+                                $recentlyAddedProducts = DB::table('products')
+                                    ->where('status', 'active')
+                                    ->orderBy('created_at', 'desc')
+                                    ->take(8) // Get the 8 most recently added products
+                                    ->get();
+                            @endphp
 
-    @foreach($recentlyAddedProducts as $key => $product)
-        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->cat_id}}">
-            <div class="single-product">
-                <div class="product-img">
-                    <a href="{{route('product-detail', $product->slug)}}">
-                        @php
-                            $photos = explode(',', $product->photo);
-                        @endphp
-                        <img class="default-img" src="{{$photos[0]}}" alt="{{$photos[0]}}">
-                        <img class="hover-img" src="{{$photos[0]}}" alt="{{$photos[0]}}">
-                        @if($product->stock <= 0)
-                            <span class="out-of-stock">Bán hết</span>
-                        @elseif($product->condition == 'new')
-                            <span class="new">Mới</span>
-                        @elseif($product->condition == 'hot')
-                            <span class="hot">Nổi Bật</span>
-                        @else
-                            <span class="price-dec">{{$product->discount}}Giảm giá %</span>
-                        @endif
-                    </a>
-                    <div class="button-head">
-                        <div class="product-action">
-                            <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class="ti-eye"></i><span>Mua sắm nhanh</span></a>
-                            <a title="Wishlist" href="{{route('add-to-wishlist', $product->slug)}}"><i class="ti-heart"></i><span>Thêm vào danh sách mong muốn</span></a>
+                            @foreach($recentlyAddedProducts as $key => $product)
+                                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item {{$product->cat_id}}">
+                                    <div class="single-product">
+                                        <div class="product-img">
+                                            <a href="{{route('product-detail', $product->slug)}}">
+                                                @php
+                                                    $photos = explode(',', $product->photo);
+                                                @endphp
+                                                <img class="default-img" src="{{$photos[0]}}" alt="{{$photos[0]}}">
+                                                <img class="hover-img" src="{{$photos[0]}}" alt="{{$photos[0]}}">
+                                                @if($product->stock <= 0)
+                                                    <span class="out-of-stock">Bán hết</span>
+                                                @elseif($product->condition == 'new')
+                                                    <span class="new">Mới</span>
+                                                @elseif($product->condition == 'hot')
+                                                    <span class="hot">Nổi Bật</span>
+                                                @else
+                                                    <span class="price-dec">{{$product->discount}}Giảm giá %</span>
+                                                @endif
+                                            </a>
+                                            <div class="button-head">
+                                            <div class="product-action">
+                                                <a data-toggle="modal" data-target="#{{$product->id}}" title="Xem nhanh" href="#"><i class="ti-eye"></i><span>Mua sắm nhanh</span></a>
+                                                <a title="Danh sách mong muốn" href="{{route('add-to-wishlist', $product->slug)}}"><i class="ti-heart"></i><span>Thêm vào danh sách mong muốn</span></a>
+                                                <a title="Mua ngay" href="{{route('checkout-now', ['product_id' => $product->id])}}"><i class="ti-shopping-cart"></i><span>Mua ngay</span></a>
+                                            </div>
+                                            <div class="product-action-2">
+                                                <a title="Thêm vào giỏ hàng" href="{{route('add-to-cart', $product->slug)}}">Thêm vào giỏ hàng</a>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="product-content">
+                                            <h3><a href="{{route('product-detail', $product->slug)}}">{{$product->title}}</a></h3>
+                                            @php
+                                                $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+                                            @endphp
+                                            <div class="product-price">
+                                                <span>{{number_format($after_discount, 0, ',', '.')}}đ</span>
+                                                <del style="padding-left: 4%;">{{number_format($product->price, 0, ',', '.')}}đ</del>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="product-action-2">
-                            <a title="Add to cart" href="{{route('add-to-cart', $product->slug)}}">Thêm vào giỏ hàng</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="product-content">
-                    <h3><a href="{{route('product-detail', $product->slug)}}">{{$product->title}}</a></h3>
-                    @php
-                        $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-                    @endphp
-                    <div class="product-price">
-                        <span>{{number_format($after_discount, 0, ',', '.')}} đ</span>
-                        <del style="padding-left: 4%;">{{number_format($product->price, 0, ',', '.')}} đ</del>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
                     </div>
                 </div>
             </div>
@@ -255,7 +257,6 @@
 <!-- End Midium Banner -->
 --}}
 
-<!-- Start Most Popular -->
 <div class="product-area most-popular section">
     <div class="container">
         <div class="row">
@@ -268,43 +269,49 @@
         <div class="row">
             <div class="col-12">
                 <div class="owl-carousel popular-slider">
-                    @foreach($product_lists as $product)
-                        @if($product->condition=='hot')
-                            <!-- Start Single Product -->
+                    @php
+                        // Truy vấn sản phẩm nổi bật
+                        $popular_products = DB::table('products')
+                            ->where('status', 'active')
+                            ->where('condition', 'hot')
+                            ->orderBy('id', 'DESC')
+                            ->limit(8)
+                            ->get();
+                    @endphp
+                    @foreach($popular_products as $product)
+                        <!-- Start Single Product -->
                         <div class="single-product">
                             <div class="product-img">
-                                <a href="{{route('product-detail',$product->slug)}}">
+                                <a href="{{ route('product-detail', $product->slug) }}">
                                     @php
-                                        $photo=explode(',',$product->photo);
-                                    // dd($photo);
+                                        $photo = explode(',', $product->photo);
                                     @endphp
-                                    <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                    <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                    {{-- <span class="out-of-stock">Hot</span> --}}
+                                    <img class="default-img" src="{{ $photo[0] }}" alt="{{ $product->title }}">
+                                    <img class="hover-img" src="{{ $photo[0] }}" alt="{{ $product->title }}">
                                 </a>
-                                <div class="button-head">
-                                    <div class="product-action">
-                                        <a data-toggle="modal" data-target="#{{$product->id}}" title="Quick View" href="#"><i class=" ti-eye"></i><span>Mua Ngay</span></a>
-                                        <a title="Wishlist" href="{{route('add-to-wishlist',$product->slug)}}" ><i class=" ti-heart "></i><span>Thêm vào danh sách mong muốn</span></a>
-                                    </div>
-                                    <div class="product-action-2">
-                                        <a href="{{route('add-to-cart',$product->slug)}}">Thêm vào giỏ hàng</a>
-                                    </div>
-                                </div>
+                                    <div class="button-head">
+                                            <div class="product-action">
+                                                <a data-toggle="modal" data-target="#{{$product->id}}" title="Xem nhanh" href="#"><i class="ti-eye"></i><span>Mua sắm nhanh</span></a>
+                                                <a title="Danh sách mong muốn" href="{{route('add-to-wishlist', $product->slug)}}"><i class="ti-heart"></i><span>Thêm vào danh sách mong muốn</span></a>
+                                                <a title="Mua ngay" href="{{route('checkout-now', ['product_id' => $product->id])}}"><i class="ti-shopping-cart"></i><span>Mua ngay</span></a>
+                                            </div>
+                                            <div class="product-action-2">
+                                                <a title="Thêm vào giỏ hàng" href="{{route('add-to-cart', $product->slug)}}">Thêm vào giỏ hàng</a>
+                                            </div>
+                                        </div>
                             </div>
                             <div class="product-content">
-                                <h3><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h3>
+                                <h3><a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a></h3>
+                                @php
+                                    $after_discount = $product->price - ($product->price * $product->discount / 100);
+                                @endphp
                                 <div class="product-price">
-                                    <span class="old">{{number_format($product->price,0, ',', '.')}} đ</span>
-                                    @php
-                                    $after_discount=($product->price-($product->price*$product->discount)/100)
-                                    @endphp
-                                    <span>{{number_format($after_discount,0, ',', '.')}} đ</span>
+                                    <span class="old">{{ number_format($product->price, 0, ',', '.') }}đ</span>
+                                    <span>{{ number_format($after_discount, 0, ',', '.') }}đ</span>
                                 </div>
                             </div>
                         </div>
                         <!-- End Single Product -->
-                        @endif
                     @endforeach
                 </div>
             </div>
@@ -313,7 +320,55 @@
 </div>
 <!-- End Most Popular Area -->
 
-<!-- Start Shop Home List  -->
+<!-- Modal cho Quick View -->
+@foreach($popular_products as $product)
+<div class="modal fade" id="quick-view-{{ $product->id }}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ $product->title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <!-- Hình ảnh sản phẩm -->
+                    <div class="col-lg-6">
+                        <img src="{{ explode(',', $product->photo)[0] }}" alt="{{ $product->title }}" class="img-fluid">
+                    </div>
+                    <!-- Thông tin sản phẩm -->
+                    <div class="col-lg-6">
+                        <div class="quickview-ratting-review mb-3">
+                            <div class="quickview-ratting-wrap">
+                                <div class="quickview-ratting">
+                                    @php
+                                        $rate = DB::table('product_reviews')->where('product_id', $product->id)->avg('rate') ?? 0;
+                                        $rate_count = DB::table('product_reviews')->where('product_id', $product->id)->count();
+                                    @endphp
+                                    @for($i = 1; $i <= 5; $i++)
+                                        @if($rate >= $i)
+                                            <i class="yellow fa fa-star"></i>
+                                        @else
+                                            <i class="fa fa-star"></i>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <a href="#">({{ $rate_count }} đánh giá của khách hàng)</a>
+                            </div>
+                        </div>
+                        <p>{!! strip_tags($product->summary, '<p><br>') !!}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+
+
+<!-- Start Shop Home List -->
 <section class="shop-home-list section">
     <div class="container">
         <div class="row">
@@ -327,41 +382,45 @@
                 </div>
                 <div class="row">
                     @php
-                        $product_lists=DB::table('products')->where('status','active')->orderBy('id','DESC')->limit(6)->get();
+                        // Truy vấn sản phẩm mới nhất
+                        $recent_products = DB::table('products')
+                            ->where('status', 'active')
+                            ->orderBy('id', 'DESC')
+                            ->limit(6)
+                            ->get();
                     @endphp
-                    @foreach($product_lists as $product)
+                    @foreach($recent_products as $product)
                         <div class="col-md-4">
-                            <!-- Start Single List  -->
+                            <!-- Start Single List -->
                             <div class="single-list">
                                 <div class="row">
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="list-image overlay">
-                                        @php
-                                            $photo=explode(',',$product->photo);
-                                            // dd($photo);
-                                        @endphp
-                                        <img src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                        <a href="{{route('add-to-cart',$product->slug)}}" class="buy"><i class="fa fa-shopping-bag"></i></a>
+                                    <div class="col-lg-6 col-md-6 col-12">
+                                        <div class="list-image overlay">
+                                            @php
+                                                $photo = explode(',', $product->photo);
+                                            @endphp
+                                            <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
+                                            <a href="{{ route('add-to-cart', $product->slug) }}" class="buy"><i class="fa fa-shopping-bag"></i></a>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-12 no-padding">
-                                    <div class="content">
-                                        <h4 class="title"><a href="{{route('product-detail',$product->slug)}}">{{$product->title}}</a></h4>
-                                        <p class="price with-discount">giảm {{number_format($product->discount,)}}%</p>
+                                    <div class="col-lg-6 col-md-6 col-12 no-padding">
+                                        <div class="content">
+                                            <h4 class="title"><a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a></h4>
+                                            <p class="price with-discount">Giảm {{ $product->discount }}%</p>
+                                        </div>
                                     </div>
-                                </div>
                                 </div>
                             </div>
-                            <!-- End Single List  -->
+                            <!-- End Single List -->
                         </div>
                     @endforeach
-
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- End Shop Home List  -->
+<!-- End Shop Home List -->
+
 
 <!-- Start Shop Blog  -->
 <section class="shop-blog section">
@@ -369,7 +428,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="section-title">
-                    <h2>Bài viết của chúng tôi</h2>
+                    <h2>Góc sức khỏe</h2>
                 </div>
             </div>
         </div>
@@ -403,9 +462,9 @@
             <div class="col-lg-3 col-md-6 col-12">
                 <!-- Start Single Service -->
                 <div class="single-service">
-                    <i class="ti-rocket"></i>
-                    <h4>Miễn phí vận chuyển</h4>
-                    <p>Đơn hàng trên 100.000</p>
+                    <i class="ti-package"></i>
+                    <h4>SP CHÍNH HÃNG</h4>
+                    <p>Đa dạng và chuyên sâu</p>
                 </div>
                 <!-- End Single Service -->
             </div>
@@ -413,32 +472,33 @@
                 <!-- Start Single Service -->
                 <div class="single-service">
                     <i class="ti-reload"></i>
-                    <h4>Trả lại miễn phí</h4>
-                    <p>Trả lại trong vòng 3 ngày</p>
+                    <h4>ĐỔI TRẢ TRONG 30 NGÀY</h4>
+                    <p>Kể từ ngày mua hàng</p>
                 </div>
                 <!-- End Single Service -->
             </div>
             <div class="col-lg-3 col-md-6 col-12">
                 <!-- Start Single Service -->
                 <div class="single-service">
-                    <i class="ti-lock"></i>
-                    <h4>Thanh toán an toàn</h4>
-                    <p>Thanh toán an toàn 100%</p>
+                    <i class="ti-shield"></i>
+                    <h4>CAM KẾT 100%</h4>
+                    <p>Chất lượng sản phẩm</p>
                 </div>
                 <!-- End Single Service -->
             </div>
             <div class="col-lg-3 col-md-6 col-12">
                 <!-- Start Single Service -->
                 <div class="single-service">
-                    <i class="ti-tag"></i>
-                    <h4>Giá tốt nhất</h4>
-                    <p>Giá đảm bảo</p>
+                    <i class="ti-truck"></i>
+                    <h4>MIỄN PHÍ VẬN CHUYỂN</h4>
+                    <p>Theo chính sách giao hàng</p>
                 </div>
                 <!-- End Single Service -->
             </div>
         </div>
     </div>
 </section>
+
 <!-- End Shop Services Area -->
 
 @include('frontend.layouts.newsletter')
@@ -477,11 +537,6 @@
                                         <div class="quickview-ratting-review">
                                             <div class="quickview-ratting-wrap">
                                                 <div class="quickview-ratting">
-                                                    {{-- <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="fa fa-star"></i> --}}
                                                     @php
                                                         $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
                                                         $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
@@ -507,7 +562,7 @@
                                         @php
                                             $after_discount=($product->price-($product->price*$product->discount)/100);
                                         @endphp
-                                        <h3><small><del class="text-muted">{{number_format($product->price,0, ',', '.')}} đ</del></small>{{number_format($after_discount, 0, ',', '.')}} đ</h3>
+                                        <h3><small><del class="text-muted">{{number_format($product->price,0, ',', '.')}}đ</del></small>{{number_format($after_discount, 0, ',', '.')}}đ</h3>
                                         <div class="quickview-peragraph">
                                             <p>{!! html_entity_decode($product->summary) !!}</p>
                                         </div>
@@ -515,7 +570,7 @@
                                             <div class="size">
                                                 <div class="row">
                                                     <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Loại</h5>
+                                                        <h3 class="title">Loại</h3>
                                                         <select>
                                                             @php
                                                             $sizes=explode(',',$product->size);
@@ -526,15 +581,6 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                    {{-- <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Color</h5>
-                                                        <select>
-                                                            <option selected="selected">orange</option>
-                                                            <option>purple</option>
-                                                            <option>black</option>
-                                                            <option>pink</option>
-                                                        </select>
-                                                    </div> --}}
                                                 </div>
                                             </div>
                                         @endif
@@ -560,7 +606,8 @@
                                             </div>
                                             <div class="add-to-cart">
                                                 <button type="submit" class="btn">Thêm vào giỏ hàng</button>
-                                                <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i class="ti-heart"></i></a>
+                                                <a href="{{ route('checkout-now', ['product_id' => $product->id]) }}" class="btn btn-primary">Mua ngay</a>
+                                                <a href="{{ route('add-to-wishlist',$product->slug) }}" class="btn min"><i class="ti-heart"></i></a>
                                             </div>
                                         </form>
                                         <div class="default-social">
@@ -689,6 +736,91 @@
             }
             return false    
         }
+    </script>
+
+    <script>
+        $(document).ready(function(){
+            // Xử lý sự kiện click cho nút "Mua ngay!"
+            $('.cart').click(function(){
+                var quantity = 1;
+                var pro_id = $(this).data('id');
+                var slug = $(this).data('slug');  // Lấy giá trị slug từ data attribute
+
+                $.ajax({
+                    url: "{{ url('add-to-cart') }}/" + slug,  // Gửi slug vào URL
+                    type: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}",  // Token CSRF
+                        quantity: quantity,
+                        pro_id: pro_id
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (typeof(response) != 'object') {
+                            response = $.parseJSON(response);
+                        }
+                        if (response.status) {
+                            // Hiển thị thông báo thành công
+                            swal('Success', response.msg, 'success').then(function() {
+                                document.location.href = document.location.href; // Reload trang
+                            });
+                        } else {
+                            // Hiển thị thông báo lỗi
+                            swal('Error', response.msg, 'error').then(function() {
+                                // Có thể thêm hành động nào đó nếu cần
+                            });
+                        }
+                    }
+                })
+            });
+
+            /*----------------------------------------------------*/
+            /*  Jquery Ui slider js
+            /*----------------------------------------------------*/
+            if ($("#slider-range").length > 0) {
+                const max_value = parseInt($("#slider-range").data('max')) || 500;
+                const min_value = parseInt($("#slider-range").data('min')) || 0;
+                const currency = $("#slider-range").data('currency') || '';
+                let price_range = min_value + '-' + max_value;
+                if ($("#price_range").length > 0 && $("#price_range").val()) {
+                    price_range = $("#price_range").val().trim();
+                }
+                
+                let price = price_range.split('-');
+                $("#slider-range").slider({
+                    range: true,
+                    min: min_value,
+                    max: max_value,
+                    values: price,
+                    slide: function(event, ui) {
+                        $("#amount").val(currency + ui.values[0] + " - " + currency + ui.values[1]);
+                        $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+                    }
+                });
+            }
+
+            if ($("#amount").length > 0) {
+                const m_currency = $("#slider-range").data('currency') || '';
+                $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
+                    " - " + m_currency + $("#slider-range").slider("values", 1));
+            }
+        });
+    </script>
+
+    <script>
+        // Reset trạng thái button-head khi modal được đóng
+        $(document).on('hidden.bs.modal', function (e) {
+            $('.button-head').css('display', 'none'); // Đảm bảo button-head bị ẩn
+        });
+
+        // Đảm bảo button-head chỉ hiển thị khi hover vào .product-img
+        $(document).ready(function () {
+            $('.product-img').hover(function () {
+                $(this).find('.button-head').css('display', 'block');
+            }, function () {
+                $(this).find('.button-head').css('display', 'none');
+            });
+        });
     </script>
 
 @endpush

@@ -79,6 +79,10 @@ Route::post('/blog/filter','FrontendController@blogFilter')->name('blog.filter')
 Route::get('blog-cat/{slug}','FrontendController@blogByCategory')->name('blog.category');
 Route::get('blog-tag/{slug}','FrontendController@blogByTag')->name('blog.tag');
 
+//Checkoutnow
+Route::get('/checkout-now/{product_id}', 'CartController@checkoutNow')->name('checkout-now');
+
+
 // NewsLetter
 Route::post('/subscribe','FrontendController@subscribe')->name('subscribe');
 
@@ -189,6 +193,8 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
     Route::get('/','DoctorsController@index')->name('doctor');
     // Appointment
     Route::get('/appointment', 'AppointmentController@index')->name('doctor.appointment.index');
+    // Listdoctor
+  
 
     // Patients
     Route::resource('patients','PatientsController');

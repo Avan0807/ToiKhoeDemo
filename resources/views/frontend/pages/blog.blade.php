@@ -11,7 +11,7 @@
                     <div class="bread-inner">
                         <ul class="bread-list">
                             <li><a href="{{route('home')}}">Trang chủ<i class="ti-arrow-right"></i></a></li>
-                            <li class="active"><a href="javascript:void(0);">Danh sách Bài viết với Sidebar</a></li>
+                            <li class="active"><a href="javascript:void(0);">Danh sách bài viết</a></li>
                         </ul>
                     </div>
                 </div>

@@ -12,7 +12,7 @@ use App\Models\PostComment;
 use Illuminate\Contracts\View\View as ViewContract;
 use App\Models\Appointment;
 use App\Rules\MatchOldPassword;
-
+use App\Models\Doctor;
 
 class DoctorsController extends Controller
 {
@@ -262,6 +262,8 @@ class DoctorsController extends Controller
     
         return response()->json($appointments);
     }
+    
+    
     
 
 }

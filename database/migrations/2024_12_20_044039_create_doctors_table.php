@@ -14,14 +14,20 @@ class CreateDoctorsTable extends Migration
     public function up()
     {
         Schema::create('doctors', function (Blueprint $table) {
-            $table->id();
-            $table->string('name'); // Tên bác sĩ
-            $table->string('specialty'); // Chuyên môn
-            $table->string('email')->unique(); // Email
-            $table->string('phone'); // Số điện thoại
-            $table->string('address')->nullable(); // Địa chỉ
+            $table->id('doctorID'); // ID bác sĩ
+            $table->string('name', 30); // Tên bác sĩ (giới hạn 30 ký tự)
+            $table->string('specialization', 100); // Chuyên môn (giới hạn 100 ký tự)
+            $table->integer('experience'); // Kinh nghiệm (năm)
+            $table->string('working_hours', 255); // Giờ làm việc
+            $table->text('location')->nullable(); // Địa điểm
+            $table->string('phone', 255); // Số điện thoại
+            $table->string('email', 255)->unique(); // Email (phải duy nhất)
+            $table->string('photo', 255)->nullable(); // Ảnh đại diện
             $table->enum('status', ['active', 'inactive'])->default('active'); // Trạng thái
-            $table->timestamps();
+            $table->tinyInteger('rating')->nullable(); // Đánh giá
+            $table->text('bio')->nullable(); // Tiểu sử
+            $table->string('password', 255); // Mật khẩu
+            $table->timestamps(); // Thời gian tạo và cập nhật
         });
     }
 
@@ -35,4 +41,3 @@ class CreateDoctorsTable extends Migration
         Schema::dropIfExists('doctors');
     }
 }
-

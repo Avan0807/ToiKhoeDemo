@@ -14,6 +14,7 @@ use App\Models\Appointment;
 use App\Rules\MatchOldPassword;
 use App\Models\Doctor;
 
+
 class DoctorsController extends Controller
 {
     /**
@@ -247,23 +248,54 @@ class DoctorsController extends Controller
    
         return redirect()->route('doctor')->with('success','Đổi mật khẩu thành công');
     }
+    
 
-    public function getAppointments()
+
+
+    //Get doctors API
+    public function apigetAllDoctors(Request $request)
     {
-        $appointments = Appointment::where('doctorID', 201)
-            ->get()
-            ->map(function ($appointment) {
-                return [
-                    'title' => $appointment->consultation_type . ' - ' . $appointment->note,
-                    'start' => $appointment->date . ' ' . $appointment->time,
-                    'color' => $appointment->status === 'Confirmed' ? 'green' : 'red',
-                ];
-            });
-    
-        return response()->json($appointments);
+        try {
+            $doctors = Doctor::all(); // Lấy tất cả bác sĩ
+
+            return response()->json([
+                'success' => true,
+                'doctors' => $doctors,
+            ], 200);
+        } catch (\Exception $e) {
+            \Log::error('Error in fetching doctors: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy danh sách bác sĩ.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-    
-    
+    public function apigetDoctorsByDoctorId($doctorID)
+    {
+        try {
+            $doctors = Doctor::where('doctorID', $doctorID)->get();
+
+            if ($doctors->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Không tìm thấy bác sĩ nào cho ID {$doctorID}.",
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'doctors' => $doctors,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy thông tin bác sĩ.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
     
 
 }

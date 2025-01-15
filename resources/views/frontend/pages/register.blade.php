@@ -34,7 +34,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Tên của bạn<span>*</span></label>
-                                        <input type="text" name="name" placeholder="" required="required" value="{{old('name')}}">
+                                        <input type="text" name="name" placeholder="Nhập tên của bạn" required="required" value="{{old('name')}}">
                                         @error('name')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror
@@ -42,10 +42,12 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label>Email của bạn<span>*</span></label>
-                                        <input type="email" name="email" placeholder="" required="required" value="{{old('email')}}">
-                                        @error('email')
-                                            <span class="text-danger">{{$message}}</span>
+                                        <label>Số điện thoại của bạn<span>*</span></label>
+                                        <input type="text" name="phoneNumber" placeholder="Nhập số điện thoại"
+                                            required="required"
+                                            value="{{ old('phoneNumber') }}">
+                                        @error('phoneNumber')
+                                            <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>

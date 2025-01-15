@@ -2,28 +2,75 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Doctor extends Model
 {
-    // Tên bảng trong cơ sở dữ liệu (nếu khác tên mặc định của model)
-    protected $table = 'Doctors'; // Viết hoa như trong database
+    use HasFactory;
 
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'Doctors';
 
-    // Cột khóa chính trong bảng (nếu khác 'id')
+    /**
+     * The primary key associated with the table.
+     *
+     * @var string
+     */
     protected $primaryKey = 'doctorID';
 
-    // Tắt timestamps
-    public $timestamps = false;
+    /**
+     * Indicates if the IDs are auto-incrementing.
+     *
+     * @var bool
+     */
+    public $incrementing = true;
 
-    // Các cột cho phép "mass assignment"
-    protected $fillable = ['name', 'specialty', 'email', 'phone', 'address', 'status'];
+    /**
+     * The "type" of the auto-incrementing ID.
+     *
+     * @var string
+     */
+    protected $keyType = 'int';
 
-    // Định nghĩa quan hệ "One-to-Many" với Booking
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class, 'doctorID', 'doctorID');
-    }
+    /**
+     * Indicates if the model should be timestamped.
+     *
+     * @var bool
+     */
+    public $timestamps = true;
 
-    
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'specialization',
+        'experience',
+        'working_hours',
+        'location',
+        'phone',
+        'email',
+        'photo',
+        'status',
+        'rating',
+        'bio',
+        'password',
+    ];
+
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+    ];
+
 }

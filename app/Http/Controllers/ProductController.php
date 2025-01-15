@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\View\View as ViewContract;
+use Exception;
 
 class ProductController extends Controller
 {
@@ -166,5 +167,23 @@ class ProductController extends Controller
             request()->session()->flash('error','Đã xảy ra lỗi khi xóa sản phẩm');
         }
         return redirect()->route('product.index');
+    }
+
+    public function apigetAllProducts(Request $request)
+    {
+        try {
+            $products = Product::getAllProduct();
+            return response()->json([
+                'success' => true,
+                'products' => $products,
+            ], 200);
+        } catch (Exception $e) {
+            \Log::error('Error in fetching products: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể lấy danh sách sản phẩm.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

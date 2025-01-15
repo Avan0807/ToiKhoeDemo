@@ -26,18 +26,18 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Đăng nhập quản trị</h1>
                   </div>
-                  <form class="user"  method="POST" action="{{ route('login') }}">
+                  <form class="user" method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
-                      <input type="email" class="form-control form-control-user @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Nhập địa chỉ email..."  required autocomplete="email">
-                        @error('email')
+                      <input type="text" class="form-control form-control-user @error('phoneNumber') is-invalid @enderror" name="phoneNumber" value="{{ old('phoneNumber') }}" id="exampleInputPhone" placeholder="Nhập số điện thoại..." required autocomplete="phoneNumber" autofocus>
+                        @error('phoneNumber')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                             </span>
                         @enderror
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="Mật khẩu"  name="password" required autocomplete="current-password">
+                      <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" id="exampleInputPassword" placeholder="Mật khẩu" name="password" required autocomplete="current-password">
                          @error('password')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>

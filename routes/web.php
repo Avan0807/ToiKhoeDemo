@@ -193,8 +193,8 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
     Route::get('/','DoctorsController@index')->name('doctor');
     // Appointment
     Route::get('/appointment', 'AppointmentController@index')->name('doctor.appointment.index');
+
     // Listdoctor
-  
 
     // Patients
     Route::resource('patients','PatientsController');
@@ -223,26 +223,11 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
 
 });
 
+    // BookAppointment
+    Route::post('/bookappointment', 'AppointmentController@store')->name('appointment.store');
+
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
-
-// Api 
-Route::group(['prefix'=>'api',],function(){
-
-    // user
-    Route::get('users','ApiController@users')->name('usersapi.index');
-    Route::post('updateusers', 'ApiController@updateusers')->name('usersapi.updateusers');
-
-    
-    //products
-    Route::get('products', 'ApiController@products')->name('productsapi.index');
-
-    // thêm các thứ vào đây 
-
-   
-    Route::get('doctor/appointments', 'DoctorsController@getAppointments')->name('appointmentssapi.index');
-
-});

@@ -347,60 +347,61 @@ class FrontendController extends Controller
     }
 
     // Login
+
     public function login(){
         return view('frontend.pages.login');
     }
+    
     public function loginSubmit(Request $request){
-        $data= $request->all();
-        if(Auth::attempt(['email' => $data['email'], 'password' => $data['password'],'status'=>'active'])){
-            Session::put('user',$data['email']);
-            request()->session()->flash('success','Đã đăng nhập thành công!');
+        $data = $request->all();
+        if(Auth::attempt(['phoneNumber' => $data['phoneNumber'], 'password' => $data['password'], 'status' => 'active'])){
+            Session::put('user', $data['phoneNumber']);
+            request()->session()->flash('success', 'Đã đăng nhập thành công!');
             return redirect()->route('home');
-        }
-        else{
-            request()->session()->flash('error','Email và mật khẩu không hợp lệ, vui lòng thử lại!');
+        } else {
+            request()->session()->flash('error', 'Số điện thoại và mật khẩu không hợp lệ, vui lòng thử lại!');
             return redirect()->back();
         }
     }
-
+    
     public function logout(){
         Session::forget('user');
         Auth::logout();
-        request()->session()->flash('success','Đã đăng xuất thành công');
+        request()->session()->flash('success', 'Đã đăng xuất thành công');
         return back();
     }
-
+    
     public function register(){
         return view('frontend.pages.register');
     }
+    
     public function registerSubmit(Request $request){
-        // return $request->all();
-        $this->validate($request,[
-            'name'=>'string|required|min:2',
-            'email'=>'string|required|unique:email',
-            'password'=>'required|min:6|confirmed',
+        $this->validate($request, [
+            'name' => 'string|required|min:2',
+            'phoneNumber' => 'required|numeric|digits_between:10,15|unique:users,phoneNumber',
+            'password' => 'required|min:6|confirmed',
         ]);
-        $data=$request->all();
-        // dd($data);
-        $check=$this->create($data);
-        Session::put('user',$data['email']);
+        $data = $request->all();
+        $check = $this->create($data);
+        Session::put('user', $data['phoneNumber']);
         if($check){
-            request()->session()->flash('success','Đã đăng ký thành công');
+            request()->session()->flash('success', 'Đã đăng ký thành công');
             return redirect()->route('home');
-        }
-        else{
-            request()->session()->flash('error','Vui lòng thử lại!');
+        } else {
+            request()->session()->flash('error', 'Vui lòng thử lại!');
             return back();
         }
     }
+    
     public function create(array $data){
         return User::create([
-            'name'=>$data['name'],
-            'email'=>$data['email'],
-            'password'=>Hash::make($data['password']),
-            'status'=>'active'
-            ]);
+            'name' => $data['name'],
+            'phoneNumber' => $data['phoneNumber'],
+            'password' => Hash::make($data['password']),
+            'status' => 'active'
+        ]);
     }
+    
     // Reset password
     public function showResetForm(){
         return view('auth.passwords.old-reset');
@@ -451,7 +452,5 @@ class FrontendController extends Controller
 
         return redirect()->route('bookdoctor')->with('success', 'Đặt khám thành công!');
     }
-    
-
     
 }

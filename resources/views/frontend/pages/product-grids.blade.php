@@ -202,9 +202,6 @@
                             @else
                                     <h4 class="text-warning" style="margin:100px auto;">Không có sản phẩm nào.</h4>
                             @endif
-
-
-
                         </div>
                         <div class="row">
                             <div class="col-md-12 justify-content-center d-flex">

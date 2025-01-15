@@ -33,17 +33,19 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="form-group">
-                                        <label>Email của bạn<span>*</span></label>
-                                        <input type="email" name="email" placeholder="" required="required" value="{{old('email')}}">
-                                        @error('email')
-                                            <span class="text-danger">{{$message}}</span>
+                                        <label>Số điện thoại của bạn<span>*</span></label>
+                                        <input type="text" name="phoneNumber" placeholder="Nhập số điện thoại"
+                                            required="required"
+                                            value="{{ old('phoneNumber') }}">
+                                        @error('phoneNumber')
+                                            <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Mật khẩu của bạn<span>*</span></label>
-                                        <input type="password" name="password" placeholder="" required="required" value="{{old('password')}}">
+                                        <input type="password" name="password" placeholder="Nhập mật khẩu" required="required" value="{{old('password')}}">
                                         @error('password')
                                             <span class="text-danger">{{$message}}</span>
                                         @enderror

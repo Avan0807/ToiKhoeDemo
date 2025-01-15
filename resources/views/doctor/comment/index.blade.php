@@ -33,7 +33,7 @@
                     <td>{{$comment->user_info['name']}}</td>
                     <td>{{$comment->post->title}}</td>
                     <td>{{$comment->comment}}</td>
-                    <td>{{$comment->created_at->setTimezone('Asia/Ho_Chi_Minh')->format('F d, Y h:i A'))}}</td>
+                    <td>{{$comment->created_at->setTimezone('Asia/Ho_Chi_Minh')->format('F d, Y h:i A')}}</td>
                     <td>
                         @if($comment->status=='active')
                           <span class="badge badge-success">{{$comment->status}}</span>

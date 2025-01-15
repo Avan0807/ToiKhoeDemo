@@ -91,6 +91,15 @@
 @endsection
 
 <style>
+    .sidebar {
+        background-color: #0924ec !important;
+        background-image: linear-gradient(113deg, #314aff 10%, #60616f 100%) !important;
+        background-size: cover !important;
+    }
+    .chart-area, .chart-pie, .chart-bar {
+        position: relative;
+        height: 300px;
+    }   
     .breadcrumbs{
         list-style: none;
     }

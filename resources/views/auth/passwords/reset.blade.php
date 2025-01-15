@@ -14,12 +14,12 @@
                         <input type="hidden" name="token" value="{{ $token }}">
 
                         <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('địa chỉ E-Mail ') }}</label>
+                            <label for="phoneNumber" class="col-md-4 col-form-label text-md-right">{{ __('Số điện thoại') }}</label>
 
                             <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+                                <input id="phoneNumber" type="text" class="form-control @error('phoneNumber') is-invalid @enderror" name="phoneNumber" value="{{ $phoneNumber ?? old('phoneNumber') }}" required autocomplete="phoneNumber" autofocus>
 
-                                @error('email')
+                                @error('phoneNumber')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

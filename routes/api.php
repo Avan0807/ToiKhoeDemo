@@ -39,7 +39,7 @@ Route::post('/logout', [LoginController::class, 'logout']);
 // Upload user avt
 Route::post('/user/{userID}/upload-avatar', [UsersController::class, 'uploadAvatar']);
 Route::get('/user/{userID}/get-avatar', [UsersController::class, 'getAvatarByUserId']);
-// Add address
+// Add user address
 Route::put('/users/{userID}/address', [UsersController::class, 'updateAddress']);
 
 
@@ -71,8 +71,11 @@ Route::put('/appointments/cancel/{userID}/{appointmentID}', [AppointmentsControl
 // Get Cart
 
 Route::get('/cart/{userID}', [CartController::class, 'getUserCart']);
-
-
+// Add more product to cart
+// Route::post('/cart/add', [CartController::class, 'addMoreToCart']);
+Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'addProductToCart']);
+Route::delete('/cart/{userId}/{productId}', [CartController::class, 'removeFromCartByUser']);
+Route::put('/cart/{userId}/{productId}', [CartController::class, 'updateUserCartQuantity']);
 // Get post
 Route::get('/posts', [PostController::class, 'getAllPosts']);
 Route::get('/posts/{slug}', [PostController::class, 'getPostBySlug']);

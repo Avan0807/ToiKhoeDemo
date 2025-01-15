@@ -221,4 +221,209 @@ class CartController extends Controller
             ], 500);
         }
     }
+
+
+    public function addProductToCart(Request $request)
+    {
+        try {
+            // Xác thực dữ liệu đầu vào
+            $request->validate([
+                'user_id' => 'required|exists:users,id',
+                'product_id' => 'required|exists:products,id',
+                'quantity' => 'required|integer|min:1',
+            ], [
+                'user_id.required' => 'User ID không được để trống.',
+                'user_id.exists' => 'User không tồn tại.',
+                'product_id.required' => 'Product ID không được để trống.',
+                'product_id.exists' => 'Sản phẩm không tồn tại.',
+                'quantity.required' => 'Số lượng không được để trống.',
+                'quantity.integer' => 'Số lượng phải là số nguyên.',
+                'quantity.min' => 'Số lượng phải ít nhất là 1.',
+            ]);
+
+            // Lấy thông tin sản phẩm
+            $product = Product::find($request->product_id);
+
+            // Kiểm tra tồn kho
+            if (!$product || $product->stock < $request->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm không đủ trong kho.',
+                ], 400);
+            }
+
+            // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+            $cartItem = Cart::where('user_id', $request->user_id)
+                ->where('product_id', $request->product_id)
+                ->whereNull('order_id') // Chỉ lấy các mục chưa đặt hàng
+                ->first();
+
+            if ($cartItem) {
+                // Nếu đã tồn tại, tăng số lượng
+                $cartItem->quantity += $request->quantity;
+                $cartItem->amount = $cartItem->quantity * $product->price;
+                $cartItem->save();
+            } else {
+                // Nếu chưa tồn tại, tạo mới
+                $cartItem = Cart::create([
+                    'user_id' => $request->user_id,
+                    'product_id' => $request->product_id,
+                    'quantity' => $request->quantity,
+                    'amount' => $request->quantity * $product->price,
+                    'price' => $product->price,
+                    'status' => 'progress',
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Thêm sản phẩm vào giỏ hàng thành công.',
+                'cart' => $cartItem,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể thêm sản phẩm vào giỏ hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function removeFromCartByUser(Request $request, $userId, $productId)
+    {
+        try {
+            // Tìm sản phẩm trong giỏ hàng dựa trên user_id và product_id
+            $cartItem = Cart::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->whereNull('order_id') // Chỉ xóa các sản phẩm chưa đặt hàng
+                ->first();
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy sản phẩm trong giỏ hàng.',
+                ], 404);
+            }
+
+            // Xóa sản phẩm khỏi giỏ hàng
+            $cartItem->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sản phẩm đã được xóa khỏi giỏ hàng thành công.',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể xóa sản phẩm khỏi giỏ hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function updateCartQuantity(Request $request, $cartItemId)
+    {
+        try {
+            // Xác thực dữ liệu đầu vào
+            $request->validate([
+                'quantity' => 'required|integer|min:1',
+            ], [
+                'quantity.required' => 'Số lượng không được để trống.',
+                'quantity.integer' => 'Số lượng phải là số nguyên.',
+                'quantity.min' => 'Số lượng phải ít nhất là 1.',
+            ]);
+
+            // Tìm sản phẩm trong giỏ hàng
+            $cartItem = Cart::find($cartItemId);
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy sản phẩm trong giỏ hàng.',
+                ], 404);
+            }
+
+            // Lấy thông tin sản phẩm liên quan
+            $product = $cartItem->product;
+
+            if (!$product || $product->stock < $request->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm không đủ trong kho.',
+                ], 400);
+            }
+
+            // Cập nhật số lượng và tổng tiền
+            $cartItem->quantity = $request->quantity;
+            $cartItem->amount = $request->quantity * $product->price;
+            $cartItem->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật số lượng sản phẩm thành công.',
+                'cart' => $cartItem,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể cập nhật số lượng sản phẩm.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateUserCartQuantity(Request $request, $userId, $productId)
+    {
+        try {
+            // Xác thực dữ liệu đầu vào
+            $request->validate([
+                'quantity' => 'required|integer|min:1',
+            ], [
+                'quantity.required' => 'Số lượng không được để trống.',
+                'quantity.integer' => 'Số lượng phải là số nguyên.',
+                'quantity.min' => 'Số lượng phải ít nhất là 1.',
+            ]);
+
+            // Tìm sản phẩm trong giỏ hàng của user
+            $cartItem = Cart::where('user_id', $userId)
+                ->where('product_id', $productId)
+                ->whereNull('order_id') // Chỉ cập nhật mục chưa đặt hàng
+                ->first();
+
+            if (!$cartItem) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy sản phẩm trong giỏ hàng của user này.',
+                ], 404);
+            }
+
+            // Lấy thông tin sản phẩm liên quan
+            $product = $cartItem->product;
+
+            if (!$product || $product->stock < $request->quantity) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Số lượng sản phẩm không đủ trong kho.',
+                ], 400);
+            }
+
+            // Cập nhật số lượng và tổng tiền
+            $cartItem->quantity = $request->quantity;
+            $cartItem->amount = $request->quantity * $product->price;
+            $cartItem->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cập nhật số lượng sản phẩm trong giỏ hàng thành công.',
+                'cart' => $cartItem,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể cập nhật số lượng sản phẩm.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

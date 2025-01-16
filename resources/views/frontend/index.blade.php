@@ -56,7 +56,7 @@
                                                 <h1 class="wow fadeInDown">{{ $banner->title }}</h1>
                                                 <p>{!! html_entity_decode($banner->description) !!}</p>
                                                 <a class="btn btn-lg ws-btn wow fadeInUpBig" href="{{ route('product-grids') }}"
-                                                    role="button">Shop Now<i class="far fa-arrow-alt-circle-right"></i></i></a>
+                                                    role="button">Mua Ngay<i class="far fa-arrow-alt-circle-right"></i></i></a>
                                             </div>
                                         </div>
                                     @endforeach
@@ -606,9 +606,16 @@
                                             </div>
                                             <div class="add-to-cart">
                                                 <button type="submit" class="btn">Thêm vào giỏ hàng</button>
-                                                <a href="{{ route('checkout-now', ['product_id' => $product->id]) }}" class="btn btn-primary">Mua ngay</a>
-                                                <a href="{{ route('add-to-wishlist',$product->slug) }}" class="btn min"><i class="ti-heart"></i></a>
+
+                                                <a href="{{ route('checkout-now', ['product_id' => $product->id]) }}" class="btn btn-primary">
+                                                    Mua ngay
+                                                </a>
+
+                                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn min">
+                                                    <i class="ti-heart"></i>
+                                                </a>
                                             </div>
+
                                         </form>
                                         <div class="default-social">
                                         </div>

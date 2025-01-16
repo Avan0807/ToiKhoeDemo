@@ -2,6 +2,8 @@
 
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\DoctorsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,8 +82,7 @@ Route::get('blog-cat/{slug}','FrontendController@blogByCategory')->name('blog.ca
 Route::get('blog-tag/{slug}','FrontendController@blogByTag')->name('blog.tag');
 
 //Checkoutnow
-Route::get('/checkout-now/{product_id}', 'CartController@checkoutNow')->name('checkout-now');
-
+Route::get('/checkout-now/{product_id}', 'CartController@checkoutNow')->name('checkout-now')->middleware('user');
 
 // NewsLetter
 Route::post('/subscribe','FrontendController@subscribe')->name('subscribe');
@@ -223,8 +224,12 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
 
 });
 
-    // BookAppointment
-    Route::post('/bookappointment', 'AppointmentController@store')->name('appointment.store');
+    // Route hiển thị chi tiết bác sĩ
+    Route::get('/doctor/{id}', [DoctorsController::class, 'show'])->name('doctor.detail');
+
+    // Route đặt lịch hẹn (ID là bắt buộc)
+    Route::get('/appointment/{id}', [AppointmentController::class, 'create'])->name('appointment.form');
+
 
 
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {

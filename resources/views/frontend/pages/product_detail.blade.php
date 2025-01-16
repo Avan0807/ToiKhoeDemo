@@ -1,10 +1,8 @@
 @extends('frontend.layouts.master')
-
 @section('meta')
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name='copyright' content=''>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="keywords" content="cửa hàng trực tuyến, mua sắm, giỏ hàng, trang thương mại điện tử, mua sắm online tốt nhất">
 	<meta name="description" content="{{$product_detail->summary}}">
@@ -46,15 +44,16 @@
 											<!-- Images slider -->
 											<div class="flexslider-thumbnails">
 												<ul class="slides">
-													@php 
-														$photo=explode(',',$product_detail->photo);
-													// dd($photo);
-													@endphp
-													@foreach($photo as $data)
-														<li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-															<img src="{{$data}}" alt="{{$data}}">
+												@php 
+													$photos = !empty($product_detail->photo) ? explode(',', $product_detail->photo) : [];
+												@endphp
+												@if(!empty($photos))
+													@foreach($photos as $photo)
+														<li data-thumb="{{ $photo }}" rel="adjustX:10, adjustY:">
+															<img src="{{ $photo }}" alt="Hình ảnh sản phẩm">
 														</li>
 													@endforeach
+												@endif
 												</ul>
 											</div>
 											<!-- End Images slider -->
@@ -68,8 +67,8 @@
 												<h4>{{$product_detail->title}}</h4>
 												<div class="rating-main">
 													<ul class="rating">
-													@php
-															$rate=ceil($product_detail->getReview->avg('rate'))
+														@php
+															$rate = $product_detail->getReview->count() > 0 ? ceil($product_detail->getReview->avg('rate')) : 0;
 														@endphp
 															@for($i=1; $i<=5; $i++)
 																@if($rate>=$i)
@@ -84,21 +83,10 @@
                                                 @php 
                                                     $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
                                                 @endphp
-												<p class="price"><span class="discount">{{number_format($after_discount,0,',','.')}}</span><s>đ{{number_format($product_detail->price,0,',','.')}}đ</s> </p>
+												<p class="price"><span class="discount">{{number_format($after_discount,0,',','.')}}đ</span><s>{{number_format($product_detail->price,0,',','.')}}đ</s> </p>
 												<p class="description">{!!($product_detail->summary)!!}</p>
 											</div>
 											<!--/ End Description -->
-											<!-- Color -->
-											{{-- <div class="color">
-												<h4>Available Options <span>Color</span></h4>
-												<ul>
-													<li><a href="#" class="one"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="two"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="three"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="four"><i class="ti-check"></i></a></li>
-												</ul>
-											</div> --}}
-											<!--/ End Color -->
 											<!-- Size -->
 											@if($product_detail->size)
 												<div class="size mt-4">
@@ -139,7 +127,8 @@
 													</div>
 													<div class="add-to-cart mt-4">
 														<button type="submit" class="btn">Thêm vào giỏ hàng</button>
-														<a href="{{route('add-to-wishlist',$product_detail->slug)}}" class="btn min"><i class="ti-heart"></i></a>
+														<a href="{{ route('checkout-now', ['product_id' => $product_detail->id]) }}" class="btn btn-primary">Mua Ngay</a>
+														<a href="{{route('add-to-wishlist', $product_detail->slug)}}" class="btn min"><i class="ti-heart"></i></a>
 													</div>
 												</form>
 
@@ -147,21 +136,21 @@
 													@if($product_detail->sub_cat_info)
 														<p class="cat mt-1">Danh mục con: <a href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a></p>
 													@endif
-												<!-- <p class="availability">Stock : @if($product_detail->stock>0)<span class="badge badge-success">{{$product_detail->stock}}</span>@else <span class="badge badge-danger">{{$product_detail->stock}}</span>  @endif</p> -->
-												<p class="availability"> Tình trạng: 
-													@if($product_detail->stock > 0)
-														@if($product_detail->stock < 5)
-															<span class="badge badge-warning">Hàng gần hết</span>
+													<p class="availability">Tình trạng:
+														@if($product_detail->stock > 0)
+															@if($product_detail->stock < 5)
+																<span class="badge badge-warning">Hàng gần hết</span>
+															@else
+																<span class="badge badge-success">Còn hàng</span>
+															@endif
 														@else
-															<span class="badge badge-success">Còn hàng</span>
+															<span class="badge badge-danger">Hết hàng</span>
 														@endif
-													@else
-														<span class="badge badge-danger">Hết hàng</span>
-													@endif
+													</p>
 												</p>
 											</div>
 											<!--/ End Product Buy -->
-											<!-- Visit 'codeastro' for more projects -->
+											
 										</div>
 									</div>
 								</div>
@@ -196,7 +185,6 @@
 													<div class="tab-single review-panel">
 														<div class="row">
 															<div class="col-12">
-																
 																<!-- Review -->
 																<div class="comment-review">
 																	<div class="add-review">
@@ -255,12 +243,6 @@
 															
 																<div class="ratting-main">
 																	<div class="avg-ratting">
-																		{{-- @php 
-																			$rate=0;
-																			foreach($product_detail->rate as $key=>$rate){
-																				$rate +=$rate
-																			}
-																		@endphp --}}
 																		<h4>{{ceil($product_detail->getReview->avg('rate'))}} <span>(Trung bình)</span></h4>
 																		<span>Dựa trên {{$product_detail->getReview->count()}} bình luận</span>
 																	</div>
@@ -295,9 +277,7 @@
 																	<!--/ End Single Rating -->
 																	@endforeach
 																</div>
-																
 																<!--/ End Review -->
-																
 															</div>
 														</div>
 													</div>
@@ -312,7 +292,7 @@
 					</div>
 		</section>
 		<!--/ End Shop Single -->
-		<!-- Visit 'codeastro' for more projects -->
+
 		<!-- Start Most Popular -->
 	<div class="product-area most-popular related-product section">
         <div class="container">
@@ -343,9 +323,9 @@
                                         </a>
                                         <div class="button-head">
                                             <div class="product-action">
-                                                <a data-toggle="modal" data-target="#modelExample" title="Quick View" href="#"><i class=" ti-eye"></i><span>Mua sắm nhanh</span></a>
-                                                <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Thêm vào danh sách mong muốn</span></a>
-                                                {{--<a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Thêm vào so sánh</span></a>--}}
+												<a data-toggle="modal" data-target="#quickViewModal" title="Xem nhanh" href="#"><i class="ti-eye"></i><span>Mua sắm nhanh</span></a>
+                                                <a title="Danh sách mong muốn" href="{{route('add-to-wishlist', $product_detail->slug)}}"><i class="ti-heart"></i><span>Thêm vào danh sách mong muốn</span></a>
+                                                <a title="Mua ngay" href="{{route('checkout-now', ['product_id' => $product_detail->id])}}"><i class="ti-shopping-cart"></i><span>Mua ngay</span></a>
                                             </div>
                                             <div class="product-action-2">
                                                 <a title="Add to cart" href="#">Thêm vào giỏ hàng</a>
@@ -365,7 +345,6 @@
                                     </div>
                                 </div>
                                 <!-- End Single Product -->
-                                	
                             @endif
                         @endforeach
                     </div>
@@ -374,209 +353,192 @@
         </div>
     </div>
 	<!-- End Most Popular Area -->
-	
 
 	<!-- Modal -->
-	<div class="modal fade" id="modelExample" tabindex="-1" role="dialog">
-		<div class="modal-dialog" role="document">
+	<div class="modal fade" id="quickViewModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
+					<h5 class="modal-title">Thông tin sản phẩm</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
-						<span class="ti-close" aria-hidden="true"></span>
+						<span>&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="row no-gutters">
-						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-							<!-- Product Slider -->
+					<div class="row">
+						<!-- Hình ảnh sản phẩm -->
+						<div class="col-lg-6 col-md-6 col-sm-12">
 							<div class="product-gallery">
 								<div class="quickview-slider-active">
-									<div class="single-slider">
-										<img src="images/medicine1.png" alt="Thuốc 1">
-									</div>
-									<div class="single-slider">
-										<img src="images/medicine2.png" alt="Thuốc 2">
-									</div>
-									<div class="single-slider">
-										<img src="images/medicine3.png" alt="Thuốc 3">
-									</div>
-									<div class="single-slider">
-										<img src="images/medicine4.png" alt="Thuốc 4">
-									</div>
+									@php
+										$photos = explode(',', $product_detail->photo);
+									@endphp
+									@foreach($photos as $photo)
+										<div class="single-slider">
+											<img src="{{$data}}" alt="{{$data}}">
+										</div>
+									@endforeach
 								</div>
 							</div>
-							<!-- End Product slider -->
 						</div>
-						<div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+
+						<!-- Thông tin sản phẩm -->
+						<div class="col-lg-6 col-md-6 col-sm-12">
 							<div class="quickview-content">
-								<h2>Thuốc Giảm Đau ABC</h2>
+								<h2>{{ $product_detail->title }}</h2>
 								<div class="quickview-ratting-review">
-									<div class="quickview-ratting-wrap">
-										<div class="quickview-ratting">
-											<i class="yellow fa fa-star"></i>
-											<i class="yellow fa fa-star"></i>
-											<i class="yellow fa fa-star"></i>
-											<i class="yellow fa fa-star"></i>
-											<i class="fa fa-star"></i>
-										</div>
-										<a href="#"> (1 đánh giá của khách hàng)</a>
+									<div class="quickview-ratting">
+										@php
+											$rate = ceil($product_detail->getReview->avg('rate'));
+										@endphp
+										@for($i = 1; $i <= 5; $i++)
+											@if($rate >= $i)
+												<i class="yellow fa fa-star"></i>
+											@else
+												<i class="fa fa-star"></i>
+											@endif
+										@endfor
 									</div>
-									<div class="quickview-stock">
-										<span><i class="fa fa-check-circle-o"></i> Còn hàng</span>
-									</div>
+									<span>({{ $product_detail->getReview->count() }} đánh giá)</span>
 								</div>
-								<h3>150.000 VNĐ</h3>
-								<div class="quickview-peragraph">
-									<p>Sản phẩm này giúp giảm đau nhanh chóng, hiệu quả cho những người bị đau đầu, đau cơ, và đau khớp.</p>
-								</div>
-								<div class="size">
-									<div class="row">
-										<div class="col-lg-6 col-12">
-											<h5 class="title">Số lượng viên</h5>
-											<select>
-												<option selected="selected">10 viên</option>
-												<option>20 viên</option>
-												<option>30 viên</option>
-												<option>50 viên</option>
-											</select>
-										</div>
-										<div class="col-lg-6 col-12">
-											<h5 class="title">Loại</h5>
-											<select>
-												<option selected="selected">Viên nén</option>
-												<option>Viên nang</option>
-												<option>Dạng bột</option>
-												<option>Siro</option>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="quantity">
-									<!-- Input Order -->
-									<div class="input-group">
-										<div class="button minus">
-											<button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
-												<i class="ti-minus"></i>
-											</button>
-										</div>
-										<input type="text" name="qty" class="input-number" data-min="1" data-max="1000" value="1">
-										<div class="button plus">
-											<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
-												<i class="ti-plus"></i>
-											</button>
+
+								@php
+									$after_discount = $product_detail->price - (($product_detail->price * $product_detail->discount) / 100);
+								@endphp
+								<h3>
+									@if($product_detail->discount > 0)
+										<small><del class="text-muted">{{ number_format($product_detail->price, 0, ',', '.') }} đ</del></small>
+									@endif
+									{{ number_format($after_discount, 0, ',', '.') }} đ
+								</h3>
+
+								<p>{!! html_entity_decode($product_detail->summary) !!}</p>
+
+								<form action="{{ route('single-add-to-cart') }}" method="POST">
+									@csrf
+									<div class="quantity">
+										<div class="input-group">
+											<div class="button minus">
+												<button type="button" class="btn btn-primary btn-number" data-type="minus" data-field="quantity">
+													<i class="ti-minus"></i>
+												</button>
+											</div>
+											<input type="text" name="quantity" class="input-number" data-min="1" data-max="1000" value="1">
+											<div class="button plus">
+												<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quantity">
+													<i class="ti-plus"></i>
+												</button>
+											</div>
 										</div>
 									</div>
-									<!--/ End Input Order -->
-								</div>
-								<div class="add-to-cart">
-									<a href="#" class="btn">Thêm vào giỏ hàng</a>
-									<a href="#" class="btn min"><i class="ti-heart"></i></a>
-									<a href="#" class="btn min"><i class="fa fa-compress"></i></a>
-								</div>
-								<div class="default-social">
-									<h4 class="share-now">Chia sẻ:</h4>
-									<ul>
-										<li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-										<li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-										<li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-										<li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
-									</ul>
-								</div>
+
+									<div class="add-to-cart mt-3">
+										<button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+										<a href="{{ route('checkout-now', ['product_id' => $product_detail->id]) }}" class="btn btn-success">Mua Ngay</a>
+										<a href="{{route('add-to-wishlist', $product_detail->slug)}}" class="btn btn-outline-dark">
+											<i class="ti-heart"></i>
+										</a>
+									</div>
+								</form>
 							</div>
 						</div>
-					</div>
-				</div>
+					</div> <!-- End row -->
+				</div> <!-- End modal-body -->
 			</div>
 		</div>
 	</div>
 	<!-- Kết thúc Modal -->
 
 
+
 @endsection
 
 @push('styles')
 	<style>
-		/* Rating */
 		.rating_box {
-		display: inline-flex;
+			display: inline-flex;
 		}
 
 		.star-rating {
-		font-size: 0;
-		padding-left: 10px;
-		padding-right: 10px;
+			font-size: 0;
+			padding-left: 10px;
+			padding-right: 10px;
 		}
 
 		.star-rating__wrap {
-		display: inline-block;
-		font-size: 1rem;
-		}
-
-		.star-rating__wrap:after {
-		content: "";
-		display: table;
-		clear: both;
+			display: inline-block;
+			font-size: 1rem;
 		}
 
 		.star-rating__ico {
-		float: right;
-		padding-left: 2px;
-		cursor: pointer;
-		color: #F7941D;
-		font-size: 16px;
-		margin-top: 5px;
-		}
-
-		.star-rating__ico:last-child {
-		padding-left: 0;
+			float: right;
+			padding-left: 2px;
+			cursor: pointer;
+			color: #F7941D;
+			font-size: 16px;
+			margin-top: 5px;
 		}
 
 		.star-rating__input {
-		display: none;
+			display: none;
 		}
 
 		.star-rating__ico:hover:before,
 		.star-rating__ico:hover ~ .star-rating__ico:before,
 		.star-rating__input:checked ~ .star-rating__ico:before {
-		content: "\F005";
+			content: "\F005";
+		}
+		.product-gallery img {
+			max-width: 100%;
+			height: auto;
+			object-fit: contain;
+			display: block;
+			margin: 0 auto;
+		}
+		.quickview-slider-active .single-slider {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background: #f9f9f9;
 		}
 
+		.input-group {
+			display: flex;
+			align-items: center;
+		}
 	</style>
 @endpush
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    {{-- <script>
-        $('.cart').click(function(){
-            var quantity=$('#quantity').val();
-            var pro_id=$(this).data('id');
-            // alert(quantity);
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-                type:"POST",
-                data:{
-                    _token:"{{csrf_token()}}",
-                    quantity:quantity,
-                    pro_id:pro_id
-                },
-                success:function(response){
-                    console.log(response);
-					if(typeof(response)!='object'){
-						response=$.parseJSON(response);
-					}
-					if(response.status){
-						swal('success',response.msg,'success').then(function(){
-							document.location.href=document.location.href;
-						});
-					}
-					else{
-                        swal('error',response.msg,'error').then(function(){
-							document.location.href=document.location.href;
-						});
-                    }
-                }
-            })
-        });
-    </script> --}}
+<script>
+	$(document).on('click', '.btn-number', function(e) {
+		e.preventDefault();
+		var fieldName = $(this).attr('data-field');
+		var type = $(this).attr('data-type');
+		var input = $("input[name='" + fieldName + "']");
+		var currentVal = parseInt(input.val());
+
+		if (!isNaN(currentVal)) {
+			if (type == 'minus' && currentVal > 1) {
+				input.val(currentVal - 1);
+			} else if (type == 'plus') {
+				input.val(currentVal + 1);
+			}
+		} else {
+			input.val(1);
+		}
+	});
+
+	$(document).ready(function() {
+		$('.btn-quick-view').on('click', function(e) {
+			e.preventDefault();
+			$('#quickViewModal').modal('show');
+		});
+	});
+
+</script>
 		
 @endpush

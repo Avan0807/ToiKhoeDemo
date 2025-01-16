@@ -345,11 +345,18 @@
                                                     </div>
                                                     <!--/ End Input Order -->
                                                 </div>
-                                                <div class="add-to-cart">
-                                                    <button type="submit" class="btn">Thêm vào giỏ hàng</button>
-                                                    <a href="{{ route('checkout-now', ['product_id' => $product->id]) }}" class="btn btn-primary">Mua ngay</a>
-                                                    <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i class="ti-heart"></i></a>
-                                                </div>
+												<div class="add-to-cart">
+													<button type="submit" class="btn">Thêm vào giỏ hàng</button>
+
+													<a href="{{ route('checkout-now', ['product_id' => $product->id]) }}" class="btn btn-primary">
+														Mua ngay
+													</a>
+
+													<a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn min">
+														<i class="ti-heart"></i>
+													</a>
+												</div>
+
                                             </form>
                                             <div class="default-social">
                                             <!-- ShareThis BEGIN --><div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
@@ -362,8 +369,8 @@
                     </div>
             </div>
         @endforeach
-    @endif
-			<!-- Modal end -->
+   		@endif
+		<!-- Modal end -->
 @endsection
 @push ('styles')
 <style>

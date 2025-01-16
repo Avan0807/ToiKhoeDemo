@@ -32,6 +32,14 @@ class DoctorsController extends Controller
         return view('doctor.index');
     }
 
+    public function show($id)
+    {
+        $doctor = Doctor::findOrFail($id);
+        return view('frontend.pages.doctor_detail', compact('doctor'));
+    }
+    
+
+
     /**
      * Trang hồ sơ (profile) của bác sĩ
      */

@@ -55,5 +55,10 @@ class AppointmentController extends Controller
         }
     }
     
-
+    public function create($id)
+    {
+        $doctor = Doctor::where('doctorID', $id)->firstOrFail();
+        return view('frontend.pages.appointment_form', compact('doctor'));
+    }
+    
 }

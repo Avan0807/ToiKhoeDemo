@@ -70,7 +70,7 @@
                 </div>
                 <div class="card-footer text-center">
                     <a href="{{ route('doctor.detail', $doctor->doctorID) }}" class="btn btn-primary">
-                        Đặt lịch hẹn
+                        Xem chi tiết
                     </a>
                 </div>
             </div>

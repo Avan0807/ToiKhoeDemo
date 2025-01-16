@@ -27,6 +27,11 @@ class CreateDoctorsTable extends Migration
             $table->tinyInteger('rating')->nullable(); // Đánh giá
             $table->text('bio')->nullable(); // Tiểu sử
             $table->string('password', 255); // Mật khẩu
+            $table->text('services')->nullable(); // Dịch vụ
+            $table->string('workplace')->nullable(); // Nơi công tác
+            $table->text('education')->nullable(); // Quá trình đào tạo
+            $table->decimal('consultation_fee', 10, 2)->default(0); // Giá tư vấn
+
             $table->timestamps(); // Thời gian tạo và cập nhật
         });
     }

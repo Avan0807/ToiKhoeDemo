@@ -34,12 +34,15 @@ class DoctorsController extends Controller
 
     public function show($id)
     {
-        $doctor = Doctor::findOrFail($id);
-        return view('frontend.pages.doctor_detail', compact('doctor'));
-    }
+        $doctor = Doctor::where('doctorID', $id)->first();
     
-
-
+        if (empty($doctor)) {
+            return redirect()->route('home')->with('error', 'Không tìm thấy bác sĩ.');
+        }
+    
+        return view('frontend.pages.doctor_detail', compact('doctor'));
+    }    
+    
     /**
      * Trang hồ sơ (profile) của bác sĩ
      */

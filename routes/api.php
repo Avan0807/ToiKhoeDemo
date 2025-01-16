@@ -46,6 +46,7 @@ Route::group(['prefix' => 'api/appointments'], function () {
     //Update status
     // Route::put('/{appointmentID}/confirm', 'AppointmentsController@apiConfirmAppointment');
 });
+Route::post('appointments/{userID}/create', [AppointmentsController::class, 'apicreateAppointment']);
 //Update status
 Route::put('/appointments/{appointmentID}/confirm', [AppointmentsController::class, 'apiConfirmAppointment']);
 Route::put('/appointments/{appointmentID}/complete', [AppointmentsController::class, 'apiCompleteAppointment']);

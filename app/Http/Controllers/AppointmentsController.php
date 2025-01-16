@@ -39,8 +39,8 @@ class AppointmentsController extends Controller
                 'time' => $request->time,
                 'consultation_type' => $request->consultation_type,
                 'note' => $request->note,
-                'status' => 'Scheduled',
-                'approval_status' => 'Pending',
+                'status' => 'Chờ duyệt',
+                'approval_status' => 'Chờ duyệt',
                 'workflow_stage' => 'Requested',
             ]);
 

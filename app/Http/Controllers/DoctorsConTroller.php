@@ -13,6 +13,7 @@ use Illuminate\Contracts\View\View as ViewContract;
 use App\Models\Appointment;
 use App\Rules\MatchOldPassword;
 use App\Models\Doctor;
+use Illuminate\Support\Facades\Log;
 
 
 class DoctorsController extends Controller
@@ -28,14 +29,16 @@ class DoctorsController extends Controller
     /**
      * Trang index cho bác sĩ
      */
-    public function index(){
+    public function index()
+    {
         return view('doctor.index');
     }
 
     /**
      * Trang hồ sơ (profile) của bác sĩ
      */
-    public function profile(){
+    public function profile()
+    {
         $profile = auth()->user();
         return view('doctor.users.profile')->with('profile', $profile);
     }
@@ -43,15 +46,15 @@ class DoctorsController extends Controller
     /**
      * Cập nhật hồ sơ (profile) của bác sĩ
      */
-    public function profileUpdate(Request $request, $id){
+    public function profileUpdate(Request $request, $id)
+    {
         $user   = User::findOrFail($id);
         $data   = $request->all();
         $status = $user->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Cập nhật thông tin thành công');
-        }
-        else{
-            request()->session()->flash('error','Vui lòng thử lại!');
+        if ($status) {
+            request()->session()->flash('success', 'Cập nhật thông tin thành công');
+        } else {
+            request()->session()->flash('error', 'Vui lòng thử lại!');
         }
         return redirect()->back();
     }
@@ -59,11 +62,12 @@ class DoctorsController extends Controller
     /**
      * Danh sách đơn hàng của bác sĩ (orderIndex)
      */
-    public function orderIndex(){
-        $orders = Order::orderBy('id','DESC')
-                       ->where('user_id', auth()->user()->id)
-                       ->paginate(10);
-        return view('doctor.order.index')->with('orders',$orders);
+    public function orderIndex()
+    {
+        $orders = Order::orderBy('id', 'DESC')
+            ->where('user_id', auth()->user()->id)
+            ->paginate(10);
+        return view('doctor.order.index')->with('orders', $orders);
     }
 
     /**
@@ -72,23 +76,20 @@ class DoctorsController extends Controller
     public function doctorOrderDelete($id)
     {
         $order = Order::find($id);
-        if($order){
-           if($order->status == "process" || $order->status == 'delivered' || $order->status == 'cancel'){
-                return redirect()->back()->with('error','Bạn không thể xóa đơn hàng này vào lúc này');
-           }
-           else{
+        if ($order) {
+            if ($order->status == "process" || $order->status == 'delivered' || $order->status == 'cancel') {
+                return redirect()->back()->with('error', 'Bạn không thể xóa đơn hàng này vào lúc này');
+            } else {
                 $status = $order->delete();
-                if($status){
-                    request()->session()->flash('success','Đã xóa đơn hàng thành công');
-                }
-                else{
-                    request()->session()->flash('error','Không thể xóa đơn hàng, vui lòng thử lại');
+                if ($status) {
+                    request()->session()->flash('success', 'Đã xóa đơn hàng thành công');
+                } else {
+                    request()->session()->flash('error', 'Không thể xóa đơn hàng, vui lòng thử lại');
                 }
                 return redirect()->route('doctor.order.index');
-           }
-        }
-        else{
-            request()->session()->flash('error','Không tìm thấy đơn hàng');
+            }
+        } else {
+            request()->session()->flash('error', 'Không tìm thấy đơn hàng');
             return redirect()->back();
         }
     }
@@ -105,7 +106,8 @@ class DoctorsController extends Controller
     /**
      * Danh sách đánh giá sản phẩm (productReviewIndex)
      */
-    public function productReviewIndex(){
+    public function productReviewIndex()
+    {
         $reviews = ProductReview::getAllUserReview();
         return view('doctor.review.index')->with('reviews', $reviews);
     }
@@ -125,18 +127,16 @@ class DoctorsController extends Controller
     public function productReviewUpdate(Request $request, $id)
     {
         $review = ProductReview::find($id);
-        if($review){
+        if ($review) {
             $data   = $request->all();
             $status = $review->fill($data)->update();
-            if($status){
-                request()->session()->flash('success','Cập nhật đánh giá thành công');
+            if ($status) {
+                request()->session()->flash('success', 'Cập nhật đánh giá thành công');
+            } else {
+                request()->session()->flash('error', 'Đã xảy ra lỗi! Vui lòng thử lại!');
             }
-            else{
-                request()->session()->flash('error','Đã xảy ra lỗi! Vui lòng thử lại!');
-            }
-        }
-        else{
-            request()->session()->flash('error','Không tìm thấy đánh giá!');
+        } else {
+            request()->session()->flash('error', 'Không tìm thấy đánh giá!');
         }
 
         return redirect()->route('doctor.productreview.index');
@@ -149,11 +149,10 @@ class DoctorsController extends Controller
     {
         $review = ProductReview::find($id);
         $status = $review->delete();
-        if($status){
-            request()->session()->flash('success','Xóa đánh giá thành công');
-        }
-        else{
-            request()->session()->flash('error','Đã xảy ra lỗi! Vui lòng thử lại');
+        if ($status) {
+            request()->session()->flash('success', 'Xóa đánh giá thành công');
+        } else {
+            request()->session()->flash('error', 'Đã xảy ra lỗi! Vui lòng thử lại');
         }
         return redirect()->route('doctor.productreview.index');
     }
@@ -170,20 +169,19 @@ class DoctorsController extends Controller
     /**
      * Xóa bình luận bài viết (doctorCommentDelete)
      */
-    public function doctorCommentDelete($id){
+    public function doctorCommentDelete($id)
+    {
         $comment = PostComment::find($id);
-        if($comment){
+        if ($comment) {
             $status = $comment->delete();
-            if($status){
-                request()->session()->flash('success','Đã xóa bình luận bài viết');
-            }
-            else{
-                request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
+            if ($status) {
+                request()->session()->flash('success', 'Đã xóa bình luận bài viết');
+            } else {
+                request()->session()->flash('error', 'Đã xảy ra lỗi, vui lòng thử lại');
             }
             return back();
-        }
-        else{
-            request()->session()->flash('error','Không tìm thấy bình luận bài viết');
+        } else {
+            request()->session()->flash('error', 'Không tìm thấy bình luận bài viết');
             return redirect()->back();
         }
     }
@@ -194,11 +192,10 @@ class DoctorsController extends Controller
     public function doctorCommentEdit($id)
     {
         $comments = PostComment::find($id);
-        if($comments){
+        if ($comments) {
             return view('doctor.comment.edit')->with('comment', $comments);
-        }
-        else{
-            request()->session()->flash('error','Không tìm thấy bình luận');
+        } else {
+            request()->session()->flash('error', 'Không tìm thấy bình luận');
             return redirect()->back();
         }
     }
@@ -209,19 +206,17 @@ class DoctorsController extends Controller
     public function doctorCommentUpdate(Request $request, $id)
     {
         $comment = PostComment::find($id);
-        if($comment){
+        if ($comment) {
             $data   = $request->all();
             $status = $comment->fill($data)->update();
-            if($status){
-                request()->session()->flash('success','Cập nhật bình luận thành công');
-            }
-            else{
-                request()->session()->flash('error','Đã xảy ra lỗi! Vui lòng thử lại!');
+            if ($status) {
+                request()->session()->flash('success', 'Cập nhật bình luận thành công');
+            } else {
+                request()->session()->flash('error', 'Đã xảy ra lỗi! Vui lòng thử lại!');
             }
             return redirect()->route('doctor.post-comment.index');
-        }
-        else{
-            request()->session()->flash('error','Không tìm thấy bình luận');
+        } else {
+            request()->session()->flash('error', 'Không tìm thấy bình luận');
             return redirect()->back();
         }
     }
@@ -229,7 +224,8 @@ class DoctorsController extends Controller
     /**
      * Trang đổi mật khẩu cho bác sĩ
      */
-    public function changePassword(){
+    public function changePassword()
+    {
         return view('doctor.layouts.doctorPasswordChange');
     }
 
@@ -243,12 +239,12 @@ class DoctorsController extends Controller
             'new_password'         => ['required'],
             'new_confirm_password' => ['same:new_password'],
         ]);
-   
+
         User::find(auth()->user()->id)->update(['password' => Hash::make($request->new_password)]);
-   
-        return redirect()->route('doctor')->with('success','Đổi mật khẩu thành công');
+
+        return redirect()->route('doctor')->with('success', 'Đổi mật khẩu thành công');
     }
-    
+
 
 
 
@@ -296,6 +292,4 @@ class DoctorsController extends Controller
             ], 500);
         }
     }
-    
-
 }

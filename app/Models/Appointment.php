@@ -13,6 +13,12 @@ class Appointment extends Model
     // Đặt tên bảng, nếu không Laravel sẽ mặc định lấy tên số nhiều của model (appointments)
     protected $table = 'Appointments';
 
+    protected $primaryKey = 'appointmentID';
+    protected $keyType = 'int';
+    public $incrementing = true;
+    public $timestamps = false;
+
+
     // Các cột có thể được gán giá trị trực tiếp
     protected $fillable = [
         'userID',              // ID người dùng đặt lịch

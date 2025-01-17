@@ -2,7 +2,7 @@
 @section('title', "Bác sĩ $doctor->name")
 
 @section('main-content')
-<div class="container mt-5 border">
+    <div class="container mt-5 border">
         <!-- Doctor Info Section -->
         <div class="row align-items-center">
             <!-- Phần hình ảnh và đánh giá -->
@@ -61,9 +61,11 @@
                 <div class="row mt-3">
                     <div class="col-md-12 text-center">
                         <button class="btn btn-primary me-2">Liên Hệ</button>
-                        <a href="{{ route('appointment.form', ['id' => $doctor->doctorID ]) }}" class="btn btn-primary me-2">
+                        <button class="btn btn-success me-2" id="openBookingModal"
+                            data-doctor-id="{{ $doctor->doctorID }}"
+                            data-doctor-name="{{ $doctor->name }}">
                             Đặt Lịch Khám
-                        </a>
+                        </button>
                         <button class="btn btn-warning">Chat</button>
                     </div>
                 </div>
@@ -109,5 +111,116 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Đặt Lịch Khám -->
+        <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="bookingModalLabel">Đặt lịch hẹn</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="bookingForm">
+                            <!-- Đảm bảo doctorID được lấy ngay khi tải trang -->
+                            <input type="hidden" id="doctorID" name="doctorID" value="{{ $doctor->doctorID }}">
+                            <input type="hidden" id="userID" value="{{ auth()->id() }}">
+
+                            <div class="mb-3">
+                                <label for="doctorName" class="form-label">Bác sĩ</label>
+                                <input type="text" class="form-control" id="doctorName" value="{{ $doctor->name }}"
+                                    readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Ngày khám</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="time" class="form-label">Giờ khám</label>
+                                <input type="time" class="form-control" id="time" name="time" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="consultation_type" class="form-label">Hình thức khám</label>
+                                <select class="form-control" id="consultation_type" name="consultation_type" required>
+                                    <option value="Online">Online</option>
+                                    <option value="Offline">Offline</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="note" class="form-label">Ghi chú</label>
+                                <textarea class="form-control" id="note" name="note" rows="3">Lịch khám định kỳ</textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Xác nhận đặt lịch</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Khi nhấn nút "Đặt lịch hẹn"
+            document.getElementById("openBookingModal").addEventListener("click", function() {
+                let modal = new bootstrap.Modal(document.getElementById("bookingModal"));
+                modal.show();
+            });
+
+            // Xử lý sự kiện khi form được submit
+            document.getElementById("bookingForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                let doctorID = document.getElementById("doctorID").value;
+                let userID = document.getElementById("userID").value;
+                let date = document.getElementById("date").value;
+                let time = document.getElementById("time").value;
+                let consultationType = document.getElementById("consultation_type").value;
+                let note = document.getElementById("note").value;
+
+                let formData = {
+                    doctorID: doctorID,
+                    date: date,
+                    time: time,
+                    consultation_type: consultationType,
+                    note: note
+                };
+
+                console.log("DEBUG: SENDING DATA:", formData);
+
+                fetch(`/api/appointments/${userID}/create`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content')
+                        },
+                        body: JSON.stringify(formData)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("RESPONSE:", data);
+                        if (data.success) {
+                            alert("Đặt lịch thành công!");
+                            window.location.reload();
+                        } else {
+                            alert("Lỗi: " + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("LỖI:", error);
+                        alert("Không thể đặt lịch, vui lòng thử lại.");
+                    });
+            });
+        });
+    </script>
+@endpush

@@ -28,7 +28,6 @@ return array(
     'App\\Http\\Controllers\\CategoryController' => $baseDir . '/app/Http/Controllers/CategoryController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\CouponController' => $baseDir . '/app/Http/Controllers/CouponController.php',
-    'App\\Http\\Controllers\\DoctorsController' => $baseDir . '/app/Http/Controllers/DoctorsController.php',
     'App\\Http\\Controllers\\FrontendController' => $baseDir . '/app/Http/Controllers/FrontendController.php',
     'App\\Http\\Controllers\\GetdoctorsController' => $baseDir . '/app/Http/Controllers/GetdoctorsController.php',
     'App\\Http\\Controllers\\HomeController' => $baseDir . '/app/Http/Controllers/HomeController.php',

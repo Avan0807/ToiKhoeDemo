@@ -85,8 +85,7 @@
         <div class="faq-section mt-5">
             <h3 class="mb-3">Những câu hỏi thường gặp</h3>
             <ul class="faq-list bg-light rounded p-3">
-                <li><i class="fa fa-question-circle"></i> Các thông tin bệnh nhân mà tôi đưa lên hệ thống có bị lộ không?
-                </li>
+                <li><i class="fa fa-question-circle"></i> Các thông tin bệnh nhân mà tôi đưa lên hệ thống có bị lộ không?</li>
                 <li><i class="fa fa-question-circle"></i> Hướng dẫn bác sĩ chỉ định lấy mẫu tại nhà</li>
                 <li><i class="fa fa-question-circle"></i> Hướng dẫn bác sĩ chia sẻ mã khuyến mãi</li>
             </ul>

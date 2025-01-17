@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Settings;
-use App\User;
+use App\Models\User;
 use App\Rules\MatchOldPassword;
 use Hash;
 use Carbon\Carbon;

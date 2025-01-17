@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\User;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\ProductReview;
 use App\Models\PostComment;
@@ -34,16 +34,17 @@ class DoctorsController extends Controller
         return view('doctor.index');
     }
 
-    public function show($id)
+    public function showDoctorDetail($id)
     {
-        $doctor = Doctor::where('doctorID', $id)->first();
+        $doctor = Doctor::find($id);
     
-        if (empty($doctor)) {
-            return redirect()->route('home')->with('error', 'Không tìm thấy bác sĩ.');
+        if (!$doctor) {
+            return redirect()->back()->with('error', 'Bác sĩ không tồn tại.');
         }
     
         return view('frontend.pages.doctor_detail', compact('doctor'));
-    }    
+    }
+    
     
     /**
      * Trang hồ sơ (profile) của bác sĩ

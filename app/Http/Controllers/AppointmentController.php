@@ -9,6 +9,13 @@ use App\Models\Doctor;
 
 class AppointmentController extends Controller
 {
+    public function index()
+    {
+        $appointments = Appointment::where('doctorID', Auth::id())->get();
+        return view('doctor.appointment.index', compact('appointments'));
+    }
+
+    
     /**
      * Xử lý đặt lịch hẹn và lưu vào bảng appointments
      */
@@ -25,11 +32,10 @@ class AppointmentController extends Controller
                 'doctorID' => 'required|exists:doctors,doctorID',
                 'date' => 'required|date|after_or_equal:today',
                 'time' => 'required',
-                'consultation_type' => 'required|in:Online,Offline',
+                'consultation_type' => 'required|in:Online,Offline,Home',
                 'note' => 'nullable|string|max:255',
             ]);
             
-            dd($request->all()); // Debug xem dữ liệu có đúng không
             
     
             \Log::info('Dữ liệu nhận được:', $request->all());

@@ -42,8 +42,8 @@
                     <td>{{$order->first_name}} {{$order->last_name}}</td>
                     <td>{{$order->email}}</td>
                     <td>{{$order->quantity}}</td>
-                    <td>@foreach($shipping_charge as $data)  {{number_format($data,)}} đ @endforeach</td>
-                    <td>{{number_format($order->total_amount,)}}đ</td>
+                    <td>@foreach($shipping_charge as $data)  {{number_format($data,0,',','.')}} đ @endforeach</td>
+                    <td>{{number_format($order->total_amount,0,',','.')}}đ</td>
                     <td>
                         @if($order->status=='new')
                           <span class="badge badge-primary">MỚI</span>

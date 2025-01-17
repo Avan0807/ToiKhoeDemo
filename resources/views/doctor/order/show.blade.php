@@ -30,8 +30,8 @@
             <td>{{$order->first_name}} {{$order->last_name}}</td>
             <td>{{$order->email}}</td>
             <td>{{$order->quantity}}</td>
-            <td>${{$order->shipping ? $order->shipping->price : 'N/A'}}</td>
-            <td>${{number_format($order->total_amount,2)}}</td>
+            <td>{{number_forma($order->shipping ? $order->shipping->price : 'N/A')}}đ</td>
+            <td>{{number_format($order->total_amount,0,',','.')}}đ</td>
             <td>
                 @if($order->status=='new')
                   <span class="badge badge-primary">MỚI</span>

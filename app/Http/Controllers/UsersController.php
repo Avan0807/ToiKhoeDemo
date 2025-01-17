@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use App\User;
+use App\Models\User;
 use Illuminate\Contracts\View\View as ViewContract;
 
 class UsersController extends Controller

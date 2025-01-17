@@ -190,7 +190,7 @@ class ProductController extends Controller
         }
     }
 
-    public function getProductById($id)
+    public function apiGetProductById($id)
     {
         try {
             // Tìm sản phẩm theo ID

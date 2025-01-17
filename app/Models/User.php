@@ -11,7 +11,7 @@ use App\Models\Appointment;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, Notifiable, HasFactory; // ✅ Xóa Notifiable bị trùng
+    use HasApiTokens, Notifiable, HasFactory;
 
     /**
      * The attributes that are mass assignable.

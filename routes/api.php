@@ -4,8 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\AppointmentsController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Models\Appointment;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\OrderController;
 
 // Authentication Routes
 Route::group(['prefix' => 'api/auth'], function () {
@@ -14,7 +16,7 @@ Route::group(['prefix' => 'api/auth'], function () {
     Route::post('/login/doctor', 'Auth\LoginController@apidoctorLogin');
     Route::post('/logout', 'Auth\LoginController@apilogout');
 });
-
+Route::post('/login', [LoginController::class, 'apiLogin']);
 // User Routes
 Route::group(['prefix' => 'api/user'], function () {
     Route::post('/{userID}/upload-avatar', 'UsersController@apiuploadAvatar');
@@ -75,3 +77,11 @@ Route::group(['prefix' => 'api/posts'], function () {
 Route::middleware('auth:sanctum')->get('/api/user', function (Request $request) {
     return $request->user();
 });
+
+
+// Order Routes
+Route::middleware(['auth:sanctum'])->get('/orders', [OrderController::class, 'apiGetUserOrders']);
+Route::middleware(['auth:sanctum'])->post('/orders/create', [OrderController::class, 'apiCreateOrder']);
+// Order status 
+Route::middleware(['auth:sanctum'])->get('/orders/{order_id}/status', [OrderController::class, 'apiGetOrderStatus']);
+Route::middleware(['auth:sanctum'])->get('/orders/status', [OrderController::class, 'apiGetUserOrdersStatus']);

@@ -63,7 +63,7 @@ class LoginController extends Controller
             'role' => 'admin',
         ];
     }
-    
+
     protected function validateLogin(Request $request)
     {
         $request->validate([
@@ -73,13 +73,13 @@ class LoginController extends Controller
     }
 
 
-        /**
+    /**
      * Handle user login
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function apilogin(Request $request)
+    public function apiLogin(Request $request)
     {
         try {
             // Step 1: Validate input
@@ -229,6 +229,4 @@ class LoginController extends Controller
             ], 500);
         }
     }
-
-
 }

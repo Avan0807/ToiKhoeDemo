@@ -114,7 +114,7 @@
         <!-- Modal Đặt Lịch Khám -->
         <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content">
+                <div class="modal-content p-5">
                     <div class="modal-header">
                         <h5 class="modal-title" id="bookingModalLabel">Đặt lịch hẹn</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -146,6 +146,7 @@
                                 <select class="form-control" id="consultation_type" name="consultation_type" required>
                                     <option value="Online">Online</option>
                                     <option value="Offline">Offline</option>
+                                    <option value="Home">Home</option>
                                 </select>
                             </div>
 

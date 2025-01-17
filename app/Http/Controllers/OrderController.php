@@ -14,6 +14,11 @@ use Illuminate\Support\Str;
 use App\Notifications\StatusNotification;
 use Illuminate\Http\RedirectResponse;
 use Dompdf\Options;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+
+
 
 class OrderController extends Controller
 {
@@ -24,8 +29,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::orderBy('id','DESC')->paginate(10);
-        return view('backend.order.index')->with('orders',$orders);
+        $orders = Order::orderBy('id', 'DESC')->paginate(10);
+        return view('backend.order.index')->with('orders', $orders);
     }
 
     /**
@@ -56,40 +61,39 @@ class OrderController extends Controller
         ]);
 
         // Kiểm tra giỏ hàng có trống hay không
-        if(empty(Cart::where('user_id', auth()->user()->id)->where('order_id', null)->first())){
-            request()->session()->flash('error','Giỏ hàng đang trống!');
+        if (empty(Cart::where('user_id', auth()->user()->id)->where('order_id', null)->first())) {
+            request()->session()->flash('error', 'Giỏ hàng đang trống!');
             return redirect()->back();
         }
 
         // Tạo đơn hàng
         $order        = new Order();
         $order_data   = $request->all();
-        $order_data['order_number'] = 'ORD-'.strtoupper(Str::random(10));
+        $order_data['order_number'] = 'ORD-' . strtoupper(Str::random(10));
         $order_data['user_id']      = $request->user()->id;
         $order_data['shipping_id']  = $request->shipping;
 
         // Lấy giá ship
-        $shipping = Shipping::where('id',$order_data['shipping_id'])->pluck('price');
+        $shipping = Shipping::where('id', $order_data['shipping_id'])->pluck('price');
 
         // Tính sub_total, quantity, coupon,...
         $order_data['sub_total'] = Helper::totalCartPrice();
         $order_data['quantity']  = Helper::cartCount();
 
         // Nếu có áp dụng mã giảm giá
-        if(session('coupon')){
+        if (session('coupon')) {
             $order_data['coupon'] = session('coupon')['value'];
         }
 
         // Tính toán total_amount
-        if($request->shipping){
-            if(session('coupon')){
+        if ($request->shipping) {
+            if (session('coupon')) {
                 $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0] - session('coupon')['value'];
             } else {
                 $order_data['total_amount'] = Helper::totalCartPrice() + $shipping[0];
             }
-        }
-        else{
-            if(session('coupon')){
+        } else {
+            if (session('coupon')) {
                 $order_data['total_amount'] = Helper::totalCartPrice() - session('coupon')['value'];
             } else {
                 $order_data['total_amount'] = Helper::totalCartPrice();
@@ -112,9 +116,9 @@ class OrderController extends Controller
         $order->fill($order_data);
         $status = $order->save();
 
-        if($order) {
+        if ($order) {
             // Gửi thông báo cho admin
-            $users   = User::where('role','admin')->first();
+            $users   = User::where('role', 'admin')->first();
             $details = [
                 'title'     => 'Đơn hàng mới',
                 'actionURL' => route('order.show', $order->id),
@@ -124,10 +128,9 @@ class OrderController extends Controller
         }
 
         // Nếu thanh toán paypal, chuyển hướng sang trang thanh toán
-        if(request('payment_method')=='paypal'){
-            return redirect()->route('payment')->with(['id'=>$order->id]);
-        }
-        else{
+        if (request('payment_method') == 'paypal') {
+            return redirect()->route('payment')->with(['id' => $order->id]);
+        } else {
             // Xóa session giỏ hàng, coupon nếu có
             session()->forget('cart');
             session()->forget('coupon');
@@ -138,7 +141,7 @@ class OrderController extends Controller
             ->where('order_id', null)
             ->update(['order_id' => $order->id]);
 
-        request()->session()->flash('success','Đơn hàng của bạn đã được tạo. Cảm ơn bạn đã mua sắm!');
+        request()->session()->flash('success', 'Đơn hàng của bạn đã được tạo. Cảm ơn bạn đã mua sắm!');
         return redirect()->route('home');
     }
 
@@ -160,7 +163,7 @@ class OrderController extends Controller
     public function edit($id)
     {
         $order = Order::find($id);
-        return view('backend.order.edit')->with('order',$order);
+        return view('backend.order.edit')->with('order', $order);
     }
 
     /**
@@ -169,15 +172,15 @@ class OrderController extends Controller
     public function update(Request $request, $id)
     {
         $order = Order::find($id);
-        $this->validate($request,[
+        $this->validate($request, [
             'status' => 'required|in:new,process,delivered,cancel'
         ]);
         $data = $request->all();
 
         // Nếu đơn hàng được chuyển sang trạng thái 'delivered'
         // => Trừ stock của các sản phẩm liên quan
-        if($request->status=='delivered'){
-            foreach($order->cart as $cart){
+        if ($request->status == 'delivered') {
+            foreach ($order->cart as $cart) {
                 $product = $cart->product;
                 $product->stock -= $cart->quantity;
                 $product->save();
@@ -185,11 +188,10 @@ class OrderController extends Controller
         }
 
         $status = $order->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Cập nhật đơn hàng thành công');
-        }
-        else{
-            request()->session()->flash('error','Không thể cập nhật đơn hàng');
+        if ($status) {
+            request()->session()->flash('success', 'Cập nhật đơn hàng thành công');
+        } else {
+            request()->session()->flash('error', 'Không thể cập nhật đơn hàng');
         }
         return redirect()->route('order.index');
     }
@@ -200,18 +202,16 @@ class OrderController extends Controller
     public function destroy($id)
     {
         $order = Order::find($id);
-        if($order){
+        if ($order) {
             $status = $order->delete();
-            if($status){
-                request()->session()->flash('success','Đã xóa đơn hàng thành công');
-            }
-            else{
-                request()->session()->flash('error','Không thể xóa đơn hàng');
+            if ($status) {
+                request()->session()->flash('success', 'Đã xóa đơn hàng thành công');
+            } else {
+                request()->session()->flash('error', 'Không thể xóa đơn hàng');
             }
             return redirect()->route('order.index');
-        }
-        else{
-            request()->session()->flash('error','Không tìm thấy đơn hàng');
+        } else {
+            request()->session()->flash('error', 'Không tìm thấy đơn hàng');
             return redirect()->back();
         }
     }
@@ -219,38 +219,36 @@ class OrderController extends Controller
     /**
      * Trang theo dõi đơn hàng (phía frontend).
      */
-    public function orderTrack(){
+    public function orderTrack()
+    {
         return view('frontend.pages.order-track');
     }
 
     /**
      * Kiểm tra tình trạng đơn hàng (phía frontend).
      */
-    public function productTrackOrder(Request $request){
+    public function productTrackOrder(Request $request)
+    {
         $order = Order::where('user_id', auth()->user()->id)
-                      ->where('order_number', $request->order_number)
-                      ->first();
+            ->where('order_number', $request->order_number)
+            ->first();
 
-        if($order){
-            if($order->status == "new"){
-                request()->session()->flash('success','Đơn hàng của bạn đã được đặt.');
+        if ($order) {
+            if ($order->status == "new") {
+                request()->session()->flash('success', 'Đơn hàng của bạn đã được đặt.');
+                return redirect()->route('home');
+            } elseif ($order->status == "process") {
+                request()->session()->flash('success', 'Đơn hàng của bạn đang được xử lý.');
+                return redirect()->route('home');
+            } elseif ($order->status == "delivered") {
+                request()->session()->flash('success', 'Đơn hàng của bạn đã được giao. Cảm ơn bạn đã mua sắm!');
+                return redirect()->route('home');
+            } else {
+                request()->session()->flash('error', 'Rất tiếc, đơn hàng của bạn đã bị hủy.');
                 return redirect()->route('home');
             }
-            elseif($order->status == "process"){
-                request()->session()->flash('success','Đơn hàng của bạn đang được xử lý.');
-                return redirect()->route('home');
-            }
-            elseif($order->status == "delivered"){
-                request()->session()->flash('success','Đơn hàng của bạn đã được giao. Cảm ơn bạn đã mua sắm!');
-                return redirect()->route('home');
-            }
-            else{
-                request()->session()->flash('error','Rất tiếc, đơn hàng của bạn đã bị hủy.');
-                return redirect()->route('home');
-            }
-        }
-        else{
-            request()->session()->flash('error','Mã đơn hàng không hợp lệ. Vui lòng thử lại!');
+        } else {
+            request()->session()->flash('error', 'Mã đơn hàng không hợp lệ. Vui lòng thử lại!');
             return back();
         }
     }
@@ -278,19 +276,20 @@ class OrderController extends Controller
     /**
      * Lấy dữ liệu thống kê thu nhập theo tháng (phía admin).
      */
-    public function incomeChart(Request $request){
+    public function incomeChart(Request $request)
+    {
         $year = \Carbon\Carbon::now()->year;
         $items = Order::with(['cart_info'])
-                      ->whereYear('created_at', $year)
-                      ->where('status','delivered')
-                      ->get()
-                      ->groupBy(function($d){
-                          return \Carbon\Carbon::parse($d->created_at)->format('m');
-                      });
+            ->whereYear('created_at', $year)
+            ->where('status', 'delivered')
+            ->get()
+            ->groupBy(function ($d) {
+                return \Carbon\Carbon::parse($d->created_at)->format('m');
+            });
 
         $result = [];
-        foreach($items as $month => $item_collections){
-            foreach($item_collections as $item){
+        foreach ($items as $month => $item_collections) {
+            foreach ($item_collections as $item) {
                 $amount = $item->cart_info->sum('amount');
                 $m = intval($month);
                 isset($result[$m]) ? $result[$m] += $amount : $result[$m] = $amount;
@@ -298,7 +297,7 @@ class OrderController extends Controller
         }
 
         $data = [];
-        for($i = 1; $i <= 12; $i++){
+        for ($i = 1; $i <= 12; $i++) {
             $monthName = date('F', mktime(0, 0, 0, $i, 1));
             $data[$monthName] = (!empty($result[$i]))
                 ? number_format((float)($result[$i]), 2, '.', '')
@@ -306,5 +305,167 @@ class OrderController extends Controller
         }
 
         return $data;
+    }
+
+
+    //API section
+
+    public function apiGetUserOrders()
+    {
+        try {
+            // Lấy danh sách tất cả đơn hàng của user đang đăng nhập
+            $orders = Order::where('user_id', Auth::id())
+                ->with(['cart_info', 'shipping']) // Lấy cả thông tin giỏ hàng & vận chuyển
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            if ($orders->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy đơn hàng nào.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Danh sách đơn hàng của user.',
+                'orders' => $orders,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi khi lấy danh sách đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function apiCreateOrder(Request $request)
+    {
+        // Xác thực dữ liệu đầu vào
+        $validator = Validator::make($request->all(), [
+            'sub_total' => 'required|numeric|min:0',
+            'quantity' => 'required|integer|min:1',
+            'total_amount' => 'required|numeric|min:0',
+            'first_name' => 'required|string|max:191',
+            'last_name' => 'required|string|max:191',
+            'country' => 'required|string|max:191',
+            'post_code' => 'nullable|string|max:10',
+            'address1' => 'required|string',
+            'phone' => 'required|string|max:20',
+            'email' => 'required|email|max:191',
+            'payment_method' => 'required|in:cod,paypal',
+            'shipping_id' => 'nullable|exists:shippings,id',
+            'coupon' => 'nullable|numeric|min:0',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ.',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        try {
+            $order = Order::create([
+                'user_id' => Auth::id(),
+                'order_number' => Str::random(10),
+                'sub_total' => number_format($request->sub_total, 3, '.', ''), // Đảm bảo 3 số thập phân
+                'quantity' => $request->quantity,
+                'total_amount' => number_format($request->total_amount, 3, '.', ''),
+                'status' => 'new', // Trạng thái hợp lệ theo enum
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'country' => $request->country,
+                'post_code' => $request->post_code,
+                'address1' => $request->address1,
+                'phone' => $request->phone,
+                'email' => $request->email,
+                'payment_method' => $request->payment_method,
+                'payment_status' => 'unpaid',
+                'shipping_id' => $request->shipping_id,
+                'coupon' => $request->coupon ?? 0.000,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Đơn hàng đã được tạo thành công!',
+                'order' => $order,
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không thể tạo đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * API lấy trạng thái của một đơn hàng cụ thể
+     */
+    public function apiGetOrderStatus($order_id)
+    {
+        try {
+            // Kiểm tra đơn hàng có tồn tại không
+            $order = Order::where('id', $order_id)
+                ->where('user_id', Auth::id()) // Chỉ lấy đơn hàng của user đang đăng nhập
+                ->first();
+
+            if (!$order) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy đơn hàng.'
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Trạng thái đơn hàng.',
+                'order_id' => $order->id,
+                'status' => $order->status,
+                'payment_status' => $order->payment_status,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi khi lấy trạng thái đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * API lấy trạng thái tất cả đơn hàng của user
+     */
+    public function apiGetUserOrdersStatus()
+    {
+        try {
+            // Lấy tất cả đơn hàng của user hiện tại
+            $orders = Order::where('user_id', Auth::id())
+                ->select('id', 'order_number', 'status', 'payment_status', 'created_at')
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            if ($orders->isEmpty()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy đơn hàng nào.',
+                ], 404);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Danh sách trạng thái đơn hàng của user.',
+                'orders' => $orders,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi khi lấy danh sách trạng thái đơn hàng.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

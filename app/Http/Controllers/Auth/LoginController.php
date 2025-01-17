@@ -7,7 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Socialite;
-use App\User;
+use App\Models\User;
 use Auth;
 use Illuminate\Support\Str;
 use Session;
@@ -147,7 +147,7 @@ class LoginController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function apilogout(Request $request)
+    public function apiLogout(Request $request)
     {
         try {
             // Delete current access token
@@ -166,7 +166,7 @@ class LoginController extends Controller
         }
     }
 
-    public function apidoctorLogin(Request $request)
+    public function apiDoctorLogin(Request $request)
     {
         try {
             // Step 1: Validate input

@@ -2,8 +2,8 @@
 
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\DoctorsController;
+use App\Http\Controllers\AppointmentsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -197,8 +197,12 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
 
     // Listdoctor
 
-    // Patients
-    Route::resource('patients','PatientsController');
+    // Danh sách bệnh nhân 
+    Route::get('/patients', [AppointmentsController::class, 'getAllAppointmentsForDoctors'])->name('patients.index');
+    Route::patch('/appointments/{id}/updateStatus', [AppointmentsController::class, 'updateStatus'])->name('appointments.updateStatus');
+
+    // Danh sách đặt khám bệnh nhân 
+    Route::get('/patients/appointments', [AppointmentsController::class, 'getAllAppointmentsForDoctors'])->name('doctor.patients.appointments');
     // Profile
      Route::get('/profile','DoctorsController@profile')->name('doctor-profile');
      Route::post('/profile/{id}','DoctorsController@profileUpdate')->name('doctor-profile-update');
@@ -225,10 +229,12 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
 });
 
     // Route hiển thị chi tiết bác sĩ
-    Route::get('/doctor/{id}', [DoctorsController::class, 'show'])->name('doctor.detail');
+    Route::get('/doctor/{id}', [DoctorsController::class, 'showDoctorDetail'])->name('doctor.detail');
 
-    // Route đặt lịch hẹn (ID là bắt buộc)
-    Route::get('/appointment/{id}', [AppointmentController::class, 'create'])->name('appointment.form');
+    // login riêng bác sĩ
+    Route::get('/doctor/login', 'Auth\DoctorLoginController@showLoginForm')->name('doctor.login');
+    Route::post('/doctor/login', 'Auth\DoctorLoginController@login')->name('doctor.login.submit');
+    Route::post('/doctor/logout', 'Auth\DoctorLoginController@logout')->name('doctor.logout');
 
 
 

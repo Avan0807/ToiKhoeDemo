@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class Doctor extends Model
 {
+    use Notifiable;
     use HasFactory;
 
     /**
@@ -14,7 +17,7 @@ class Doctor extends Model
      *
      * @var string
      */
-    protected $table = 'Doctors';
+    protected $table = 'Doctors'; // Đảm bảo tên bảng đúng với schema (chữ thường)
 
     /**
      * The primary key associated with the table.
@@ -61,6 +64,10 @@ class Doctor extends Model
         'status',
         'rating',
         'bio',
+        'services',
+        'workplace',
+        'education',
+        'consultation_fee',
         'password',
     ];
 
@@ -72,5 +79,14 @@ class Doctor extends Model
     protected $hidden = [
         'password',
     ];
+
+    /**
+     * Get the appointments for the doctor.
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctorID', 'doctorID');
+    }
+
 
 }

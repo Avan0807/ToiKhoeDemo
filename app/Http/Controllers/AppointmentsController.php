@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class AppointmentsController extends Controller
 {
 
-    public function apicreateAppointment(Request $request, $userID)
+    public function apiCreateAppointment(Request $request, $userID)
     {
         $validator = Validator::make($request->all(), [
             'doctorID' => 'required|exists:Doctors,DoctorID',
@@ -64,7 +64,7 @@ class AppointmentsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function apigetAllAppointments()
+    public function apiGetAllAppointments()
     {
         try {
             // Lấy danh sách tất cả các cuộc hẹn
@@ -83,7 +83,7 @@ class AppointmentsController extends Controller
             ], 500);
         }
     }
-    public function apigetAppointmentsByUser($userID)
+    public function apiGetAppointmentsByUser($userID)
     {
         try {
             $appointments = Appointment::where('userID', $userID)->get();
@@ -108,7 +108,7 @@ class AppointmentsController extends Controller
         }
     }
 
-    public function apigetCurrentAppointments($userID)
+    public function apiGetCurrentAppointments($userID)
     {
         try {
             // Lấy 5 lịch khám gần nhất, sắp xếp theo ngày và giờ
@@ -139,7 +139,7 @@ class AppointmentsController extends Controller
             ], 500);
         }
     }
-    public function apicancelAppointment(Request $request, $userID, $appointmentID)
+    public function apiCancelAppointment(Request $request, $userID, $appointmentID)
     {
         try {
             // Tìm lịch khám dựa trên userID và appointmentID
@@ -172,64 +172,52 @@ class AppointmentsController extends Controller
         }
     }
 
+    // Xác nhận lịch hẹn
     public function apiConfirmAppointment($appointmentID, Request $request)
     {
         try {
-            // Tìm lịch hẹn theo appointmentID
             $appointment = Appointment::where('appointmentID', $appointmentID)->firstOrFail();
 
-            // Kiểm tra trạng thái hiện tại
             if ($appointment->status !== 'Chờ duyệt' || $appointment->approval_status !== 'Chờ duyệt') {
-                return response()->json([
-                    'message' => 'Appointment is not in a pending state.'
-                ], 400);
+                return response()->json(['message' => 'Lịch hẹn không ở trạng thái chờ duyệt.'], 400);
             }
 
-            // Cập nhật trạng thái thành "upcoming"
-            $appointment->status = 'Sắp tới';
-            $appointment->approval_status = 'Chấp nhận';
-            $appointment->save();
+            $appointment->update([
+                'status' => 'Sắp tới',
+                'approval_status' => 'Chấp nhận'
+            ]);
 
             return response()->json([
-                'message' => 'Appointment confirmed successfully.',
+                'message' => 'Lịch hẹn đã được xác nhận thành công.',
                 'appointment' => $appointment
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error confirming appointment.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Lỗi khi xác nhận lịch hẹn.', 'error' => $e->getMessage()], 500);
         }
     }
 
+    // Hoàn thành lịch hẹn
     public function apiCompleteAppointment($appointmentID, Request $request)
     {
         try {
-            // Tìm lịch hẹn theo appointmentID
             $appointment = Appointment::where('appointmentID', $appointmentID)->firstOrFail();
 
-            // Kiểm tra nếu trạng thái không phải 'Sắp tới'
             if ($appointment->status !== 'Sắp tới') {
-                return response()->json([
-                    'message' => 'Appointment is not in an upcoming state.'
-                ], 400);
+                return response()->json(['message' => 'Lịch hẹn không ở trạng thái sắp tới.'], 400);
             }
 
-            // Cập nhật trạng thái thành "Hoàn thành"
-            $appointment->status = 'Hoàn thành';
-            $appointment->save();
+            $appointment->update(['status' => 'Hoàn thành']);
 
             return response()->json([
-                'message' => 'Appointment marked as completed successfully.',
+                'message' => 'Lịch hẹn đã được hoàn thành.',
                 'appointment' => $appointment
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error completing appointment.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Lỗi khi hoàn thành lịch hẹn.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    // Lấy 5 lịch hẹn gần nhất của bác sĩ
     public function apiGetRecentAppointments($doctorID)
     {
         try {
@@ -240,16 +228,15 @@ class AppointmentsController extends Controller
                 ->get();
 
             return response()->json([
-                'message' => 'Successfully retrieved 5 recent appointments.',
+                'message' => 'Lấy 5 lịch hẹn gần nhất thành công.',
                 'appointments' => $appointments
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error retrieving appointments.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Lỗi khi lấy lịch hẹn.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    // Lấy toàn bộ lịch hẹn của bác sĩ
     public function apiGetAllAppointmentsByDoctor($doctorID)
     {
         try {
@@ -259,41 +246,65 @@ class AppointmentsController extends Controller
                 ->get();
 
             return response()->json([
-                'message' => 'Successfully retrieved all appointments.',
+                'message' => 'Lấy tất cả lịch hẹn thành công.',
                 'appointments' => $appointments
             ], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error retrieving appointments.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Lỗi khi lấy lịch hẹn.', 'error' => $e->getMessage()], 500);
         }
     }
 
+    // Xóa lịch hẹn
     public function apiDeleteAppointment($appointmentID)
     {
         try {
-            // Tìm lịch hẹn theo appointmentID
             $appointment = Appointment::where('appointmentID', $appointmentID)->first();
 
-            // Kiểm tra nếu lịch hẹn không tồn tại
             if (!$appointment) {
-                return response()->json([
-                    'message' => 'Appointment not found.'
-                ], 404);
+                return response()->json(['message' => 'Lịch hẹn không tồn tại.'], 404);
             }
 
-            // Xóa lịch hẹn
             $appointment->delete();
 
-            return response()->json([
-                'message' => 'Appointment deleted successfully.'
-            ], 200);
+            return response()->json(['message' => 'Lịch hẹn đã được xóa thành công.'], 200);
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error deleting appointment.',
-                'error' => $e->getMessage()
-            ], 500);
+            return response()->json(['message' => 'Lỗi khi xóa lịch hẹn.', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    // index ra danh sách bệnh nhân
+    public function getAllAppointmentsForDoctors()
+    {
+        try {
+            // Lấy ID của bác sĩ đang đăng nhập
+            $doctorID = auth()->user()->id;
+
+            // Lọc lịch hẹn chỉ dành cho bác sĩ này
+            $appointments = Appointment::where('doctorID', $doctorID)
+                ->with(['user', 'doctor']) // Load thêm thông tin bệnh nhân & bác sĩ
+                ->orderBy('date', 'asc') // Sắp xếp theo ngày
+                ->orderBy('time', 'asc')
+                ->paginate(10);
+
+            return view('doctor.patients.index', compact('appointments'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Không thể lấy danh sách lịch hẹn.');
+        }
+    }
+
+    public function apiUpdateStatus(Request $request, $id)
+    {
+        try {
+            $appointment = Appointment::findOrFail($id);
+
+            // Chỉ cập nhật approval_status
+            $appointment->update([
+                'approval_status' => $request->approval_status
+            ]);
+
+            return redirect()->back()->with('success', 'Trạng thái phê duyệt đã được cập nhật!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
         }
     }
 }

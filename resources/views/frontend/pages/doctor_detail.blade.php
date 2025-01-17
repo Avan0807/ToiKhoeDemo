@@ -69,6 +69,7 @@
                         <button class="btn btn-warning">Chat</button>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -184,7 +185,7 @@
                 let userID = document.getElementById("userID").value;
                 let date = document.getElementById("date").value;
                 let time = document.getElementById("time").value;
-                let consultationType = document.getElementById("consultation_type").value;
+                let consultationType = document.getElementById("consultation_type").value.trim();
                 let note = document.getElementById("note").value;
 
                 let formData = {

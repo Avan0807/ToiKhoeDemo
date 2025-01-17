@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use app\User;
+use App\Models\User;
 
 class Appointment extends Model
 {
@@ -39,14 +39,17 @@ class Appointment extends Model
     }
 
     // Relationship: Liên kết với người dùng (User)
+
+    // Trong App\Models\Appointment.php
     public function user()
     {
         return $this->belongsTo(User::class, 'userID', 'id');
     }
 
-    // Relationship: Liên kết với bác sĩ (Doctor)
     public function doctor()
     {
-        return $this->belongsTo(Doctor::class, 'doctorID', 'id');
+        return $this->belongsTo(Doctor::class, 'doctorID', 'doctorID');
     }
+    
+
 }

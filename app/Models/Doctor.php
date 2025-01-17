@@ -14,7 +14,7 @@ class Doctor extends Model
      *
      * @var string
      */
-    protected $table = 'Doctors';
+    protected $table = 'Doctors'; // Đảm bảo tên bảng đúng với schema (chữ thường)
 
     /**
      * The primary key associated with the table.
@@ -61,6 +61,10 @@ class Doctor extends Model
         'status',
         'rating',
         'bio',
+        'services',
+        'workplace',
+        'education',
+        'consultation_fee',
         'password',
     ];
 
@@ -73,4 +77,11 @@ class Doctor extends Model
         'password',
     ];
 
+    /**
+     * Get the appointments for the doctor.
+     */
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class, 'doctorID', 'doctorID');
+    }
 }

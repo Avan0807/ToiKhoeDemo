@@ -2,37 +2,37 @@
 @section('title', "Đặt lịch với $doctor->name")
 
 @section('main-content')
-<div class="container">
-    <h2 class="text-center">Đặt lịch với bác sĩ {{ $doctor->name }}</h2>
+<form action="{{ route('appointment.store') }}" method="POST">
+    @csrf
+    <input type="hidden" name="doctorID" value="{{ $doctor->doctorID }}">
 
-    <form action="{{ route('appointment.store') }}" method="POST">
-        @csrf
-        <input type="hidden" name="doctorID" value="{{ $doctor->doctorID }}">
+    <div class="mb-3">
+        <label class="form-label">Ngày khám</label>
+        <input type="date" name="date" class="form-control" required>
+    </div>
 
-        <div class="mb-3">
-            <label for="date" class="form-label">Chọn ngày</label>
-            <input type="date" class="form-control" name="date" required>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Giờ khám</label>
+        <input type="time" name="time" class="form-control" required>
+    </div>
 
-        <div class="mb-3">
-            <label for="time" class="form-label">Chọn giờ</label>
-            <input type="time" class="form-control" name="time" required>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Hình thức tư vấn</label>
+        <select name="consultation_type" class="form-control" required>
+            <option value="Online">Online</option>
+            <option value="Offline">Offline</option>
+            <option value="Home">Home</option>
+        </select>
+    </div>
 
-        <div class="mb-3">
-            <label for="consultation_type" class="form-label">Loại tư vấn</label>
-            <select class="form-select" name="consultation_type" required>
-                <option value="Online">Online</option>
-                <option value="Offline">Offline</option>
-            </select>
-        </div>
+    <div class="mb-3">
+        <label class="form-label">Ghi chú</label>
+        <textarea name="note" class="form-control"></textarea>
+    </div>
 
-        <div class="mb-3">
-            <label for="note" class="form-label">Ghi chú</label>
-            <textarea class="form-control" name="note" rows="3"></textarea>
-        </div>
+    <div class="text-center">
+        <button type="submit" class="btn btn-success">Xác Nhận Đặt Lịch</button>
+    </div>
+</form>
 
-        <button type="submit" class="btn btn-success">Xác nhận đặt lịch</button>
-    </form>
-</div>
 @endsection

@@ -14,23 +14,26 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-
-        // Kiểm tra nếu bác sĩ tồn tại trong bảng Doctors
-        $doctor = Doctor::find($request->doctorID);
+        // Kiểm tra nếu bác sĩ tồn tại
+        $doctor = Doctor::where('doctorID', $request->doctorID)->first();
         if (!$doctor) {
-            return response()->json(['error' => 'Bác sĩ không tồn tại'], 404);
+            return redirect()->back()->with('error', 'Bác sĩ không tồn tại.');
         }
-
+        
         try {
             $request->validate([
-                'doctorID' => 'required|exists:doctors,id',
+                'doctorID' => 'required|exists:doctors,doctorID',
                 'date' => 'required|date|after_or_equal:today',
                 'time' => 'required',
                 'consultation_type' => 'required|in:Online,Offline',
                 'note' => 'nullable|string|max:255',
             ]);
+            
+            dd($request->all()); // Debug xem dữ liệu có đúng không
+            
     
-            // Tạo mới lịch hẹn
+            \Log::info('Dữ liệu nhận được:', $request->all());
+
             $appointment = Appointment::create([
                 'userID' => Auth::id(),
                 'doctorID' => $request->doctorID,
@@ -42,18 +45,15 @@ class AppointmentController extends Controller
                 'approval_status' => 'Chờ duyệt',
                 'workflow_stage' => 'initial_review',
             ]);
-    
-            return response()->json([
-                'success' => 'Đặt lịch hẹn thành công!',
-                'appointment' => $appointment,
-            ]);
+
+            \Log::info('Đặt lịch thành công:', $appointment->toArray());
+            return redirect()->route('home')->with('success', 'Đặt lịch thành công!');
         } catch (\Exception $e) {
-            \Log::error('Error booking appointment: ' . $e->getMessage());  // Ghi lại lỗi chi tiết
-            return response()->json([
-                'error' => 'Đã xảy ra lỗi trong quá trình đặt lịch.',
-            ], 500);
+            \Log::error('Lỗi đặt lịch: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Đã xảy ra lỗi trong quá trình đặt lịch.');
         }
     }
+    
     
     public function create($id)
     {

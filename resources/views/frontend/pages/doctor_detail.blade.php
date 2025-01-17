@@ -61,10 +61,13 @@
                 <div class="row mt-3">
                     <div class="col-md-12 text-center">
                         <button class="btn btn-primary me-2">Liên Hệ</button>
-                        <button class="btn btn-success me-2">Đặt Lịch Khám</button>
+                        <a href="{{ route('appointment.form', ['id' => $doctor->doctorID ]) }}" class="btn btn-primary me-2">
+                            Đặt Lịch Khám
+                        </a>
                         <button class="btn btn-warning">Chat</button>
                     </div>
                 </div>
+
             </div>
         </div>
 

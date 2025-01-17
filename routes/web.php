@@ -227,8 +227,11 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
     // Route hiển thị chi tiết bác sĩ
     Route::get('/doctor/{id}', [DoctorsController::class, 'show'])->name('doctor.detail');
 
-    // Route đặt lịch hẹn (ID là bắt buộc)
+    // Hiển thị form đặt lịch
     Route::get('/appointment/{id}', [AppointmentController::class, 'create'])->name('appointment.form');
+
+    // Xử lý lưu lịch hẹn (đặt lịch khám)
+    Route::post('/appointment/store', [AppointmentController::class, 'store'])->name('appointment.store');
 
 
 

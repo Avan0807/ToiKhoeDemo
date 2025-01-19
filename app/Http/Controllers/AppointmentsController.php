@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 class AppointmentsController extends Controller
 {
 
-    public function apicreateAppointment(Request $request, $userID)
+    public function apiCreateAppointment(Request $request, $userID)
     {
         $validator = Validator::make($request->all(), [
             'doctorID' => 'required|exists:Doctors,DoctorID',
@@ -64,7 +64,7 @@ class AppointmentsController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function apigetAllAppointments()
+    public function apiGetAllAppointments()
     {
         try {
             // Lấy danh sách tất cả các cuộc hẹn
@@ -83,7 +83,7 @@ class AppointmentsController extends Controller
             ], 500);
         }
     }
-    public function apigetAppointmentsByUser($userID)
+    public function apiGetAppointmentsByUser($userID)
     {
         try {
             $appointments = Appointment::where('userID', $userID)->get();
@@ -108,7 +108,7 @@ class AppointmentsController extends Controller
         }
     }
 
-    public function apigetCurrentAppointments($userID)
+    public function apiGetCurrentAppointments($userID)
     {
         try {
             // Lấy 5 lịch khám gần nhất, sắp xếp theo ngày và giờ
@@ -139,7 +139,7 @@ class AppointmentsController extends Controller
             ], 500);
         }
     }
-    public function apicancelAppointment(Request $request, $userID, $appointmentID)
+    public function apiCancelAppointment(Request $request, $userID, $appointmentID)
     {
         try {
             // Tìm lịch khám dựa trên userID và appointmentID
@@ -277,38 +277,34 @@ class AppointmentsController extends Controller
     {
         try {
             // Lấy ID của bác sĩ đang đăng nhập
-            $doctorID = auth()->user()->id; 
-    
+            $doctorID = auth()->user()->id;
+
             // Lọc lịch hẹn chỉ dành cho bác sĩ này
             $appointments = Appointment::where('doctorID', $doctorID)
                 ->with(['user', 'doctor']) // Load thêm thông tin bệnh nhân & bác sĩ
                 ->orderBy('date', 'asc') // Sắp xếp theo ngày
                 ->orderBy('time', 'asc')
                 ->paginate(10);
-    
+
             return view('doctor.patients.index', compact('appointments'));
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Không thể lấy danh sách lịch hẹn.');
         }
     }
-    
-    public function updateStatus(Request $request, $id)
+
+    public function apiUpdateStatus(Request $request, $id)
     {
         try {
             $appointment = Appointment::findOrFail($id);
-    
+
             // Chỉ cập nhật approval_status
             $appointment->update([
                 'approval_status' => $request->approval_status
             ]);
-    
+
             return redirect()->back()->with('success', 'Trạng thái phê duyệt đã được cập nhật!');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi cập nhật trạng thái.');
         }
     }
-    
-    
-
-
 }

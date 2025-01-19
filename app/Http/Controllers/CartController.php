@@ -15,37 +15,39 @@ class CartController extends Controller
 {
     protected $product = null;
 
-    public function __construct(Product $product){
+    public function __construct(Product $product)
+    {
         $this->product = $product;
     }
 
     /**
      * Thêm sản phẩm vào giỏ hàng
      */
-    public function addToCart(Request $request){
+    public function addToCart(Request $request)
+    {
         if (empty($request->slug)) {
-            request()->session()->flash('error','Sản phẩm không hợp lệ');
+            request()->session()->flash('error', 'Sản phẩm không hợp lệ');
             return back();
         }
 
         $product = Product::where('slug', $request->slug)->first();
         if (empty($product)) {
-            request()->session()->flash('error','Sản phẩm không hợp lệ');
+            request()->session()->flash('error', 'Sản phẩm không hợp lệ');
             return back();
         }
 
         $already_cart = Cart::where('user_id', auth()->user()->id)
-                            ->where('order_id', null)
-                            ->where('product_id', $product->id)
-                            ->first();
+            ->where('order_id', null)
+            ->where('product_id', $product->id)
+            ->first();
 
-        if($already_cart) {
+        if ($already_cart) {
             // Tăng thêm số lượng
             $already_cart->quantity = $already_cart->quantity + 1;
             $already_cart->amount   = $product->price + $already_cart->amount;
 
-            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0){
-                return back()->with('error','Số lượng tồn kho không đủ!');
+            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
+                return back()->with('error', 'Số lượng tồn kho không đủ!');
             }
             $already_cart->save();
         } else {
@@ -53,56 +55,57 @@ class CartController extends Controller
             $cart              = new Cart;
             $cart->user_id     = auth()->user()->id;
             $cart->product_id  = $product->id;
-            $cart->price       = ($product->price - ($product->price*$product->discount)/100);
+            $cart->price       = ($product->price - ($product->price * $product->discount) / 100);
             $cart->quantity    = 1;
             $cart->amount      = $cart->price * $cart->quantity;
 
-            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0){
-                return back()->with('error','Số lượng tồn kho không đủ!');
+            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
+                return back()->with('error', 'Số lượng tồn kho không đủ!');
             }
             $cart->save();
 
             // Cập nhật wishlist (nếu có)
-            $wishlist = Wishlist::where('user_id',auth()->user()->id)
-                                ->where('cart_id',null)
-                                ->update(['cart_id'=>$cart->id]);
+            $wishlist = Wishlist::where('user_id', auth()->user()->id)
+                ->where('cart_id', null)
+                ->update(['cart_id' => $cart->id]);
         }
 
-        request()->session()->flash('success','Sản phẩm đã được thêm vào giỏ hàng');
+        request()->session()->flash('success', 'Sản phẩm đã được thêm vào giỏ hàng');
         return back();
     }
 
     /**
      * Thêm sản phẩm vào giỏ với số lượng xác định
      */
-    public function singleAddToCart(Request $request){
+    public function singleAddToCart(Request $request)
+    {
         $request->validate([
             'slug' => 'required',
             'quant' => 'required',
         ]);
 
         $product = Product::where('slug', $request->slug)->first();
-        if($product->stock < $request->quant[1]){
-            return back()->with('error','Hết hàng, bạn có thể thêm sản phẩm khác.');
+        if ($product->stock < $request->quant[1]) {
+            return back()->with('error', 'Hết hàng, bạn có thể thêm sản phẩm khác.');
         }
 
         if (($request->quant[1] < 1) || empty($product)) {
-            request()->session()->flash('error','Sản phẩm không hợp lệ');
+            request()->session()->flash('error', 'Sản phẩm không hợp lệ');
             return back();
         }
 
         $already_cart = Cart::where('user_id', auth()->user()->id)
-                            ->where('order_id', null)
-                            ->where('product_id', $product->id)
-                            ->first();
+            ->where('order_id', null)
+            ->where('product_id', $product->id)
+            ->first();
 
-        if($already_cart) {
+        if ($already_cart) {
             // Tăng thêm số lượng
             $already_cart->quantity = $already_cart->quantity + $request->quant[1];
             $already_cart->amount   = ($product->price * $request->quant[1]) + $already_cart->amount;
 
-            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0){
-                return back()->with('error','Số lượng tồn kho không đủ!');
+            if ($already_cart->product->stock < $already_cart->quantity || $already_cart->product->stock <= 0) {
+                return back()->with('error', 'Số lượng tồn kho không đủ!');
             }
             $already_cart->save();
         } else {
@@ -110,39 +113,41 @@ class CartController extends Controller
             $cart             = new Cart;
             $cart->user_id    = auth()->user()->id;
             $cart->product_id = $product->id;
-            $cart->price      = ($product->price - ($product->price*$product->discount)/100);
+            $cart->price      = ($product->price - ($product->price * $product->discount) / 100);
             $cart->quantity   = $request->quant[1];
             $cart->amount     = ($product->price * $request->quant[1]);
 
-            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0){
-                return back()->with('error','Số lượng tồn kho không đủ!');
+            if ($cart->product->stock < $cart->quantity || $cart->product->stock <= 0) {
+                return back()->with('error', 'Số lượng tồn kho không đủ!');
             }
             $cart->save();
         }
 
-        request()->session()->flash('success','Sản phẩm đã được thêm vào giỏ hàng.');
+        request()->session()->flash('success', 'Sản phẩm đã được thêm vào giỏ hàng.');
         return back();
     }
 
     /**
      * Xóa một mục trong giỏ hàng
      */
-    public function cartDelete(Request $request){
+    public function cartDelete(Request $request)
+    {
         $cart = Cart::find($request->id);
         if ($cart) {
             $cart->delete();
-            request()->session()->flash('success','Đã xóa sản phẩm khỏi giỏ hàng');
+            request()->session()->flash('success', 'Đã xóa sản phẩm khỏi giỏ hàng');
             return back();
         }
-        request()->session()->flash('error','Đã xảy ra lỗi, vui lòng thử lại');
+        request()->session()->flash('error', 'Đã xảy ra lỗi, vui lòng thử lại');
         return back();
     }
 
     /**
      * Cập nhật giỏ hàng
      */
-    public function cartUpdate(Request $request){
-        if($request->quant){
+    public function cartUpdate(Request $request)
+    {
+        if ($request->quant) {
             $error   = [];
             $success = '';
 
@@ -150,10 +155,10 @@ class CartController extends Controller
                 $id   = $request->qty_id[$k];
                 $cart = Cart::find($id);
 
-                if($quant > 0 && $cart) {
+                if ($quant > 0 && $cart) {
                     // Kiểm tra tồn kho
-                    if($cart->product->stock < $quant){
-                        request()->session()->flash('error','Hết hàng');
+                    if ($cart->product->stock < $quant) {
+                        request()->session()->flash('error', 'Hết hàng');
                         return back();
                     }
 
@@ -162,7 +167,7 @@ class CartController extends Controller
                     if ($cart->product->stock <= 0) continue;
 
                     // Tính lại giá tiền
-                    $after_price = ($cart->product->price - ($cart->product->price*$cart->product->discount)/100);
+                    $after_price = ($cart->product->price - ($cart->product->price * $cart->product->discount) / 100);
                     $cart->amount = $after_price * $cart->quantity;
                     $cart->save();
 
@@ -180,7 +185,8 @@ class CartController extends Controller
     /**
      * Trang checkout
      */
-    public function checkout(Request $request){
+    public function checkout(Request $request)
+    {
         return view('frontend.pages.checkout');
     }
 
@@ -197,9 +203,9 @@ class CartController extends Controller
 
         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
         $already_cart = Cart::where('user_id', auth()->user()->id)
-                            ->where('order_id', null)
-                            ->where('product_id', $product->id)
-                            ->first();
+            ->where('order_id', null)
+            ->where('product_id', $product->id)
+            ->first();
 
         if ($already_cart) {
             // Tăng thêm số lượng
@@ -229,7 +235,7 @@ class CartController extends Controller
         return redirect()->route('checkout');
     }
     // API
-    public function apigetUserCart($userID)
+    public function apiGetUserCart($userID)
     {
         try {
             // Lấy thông tin giỏ hàng của user
@@ -260,7 +266,7 @@ class CartController extends Controller
     }
 
 
-    public function apiaddProductToCart(Request $request)
+    public function apiAddProductToCart(Request $request)
     {
         try {
             // Xác thực dữ liệu đầu vào
@@ -326,7 +332,7 @@ class CartController extends Controller
         }
     }
 
-    public function apiremoveFromCartByUser(Request $request, $userId, $productId)
+    public function apiRemoveFromCartByUser(Request $request, $userId, $productId)
     {
         try {
             // Tìm sản phẩm trong giỏ hàng dựa trên user_id và product_id
@@ -359,58 +365,58 @@ class CartController extends Controller
     }
 
 
-    public function apiupdateCartQuantity(Request $request, $cartItemId)
-    {
-        try {
-            // Xác thực dữ liệu đầu vào
-            $request->validate([
-                'quantity' => 'required|integer|min:1',
-            ], [
-                'quantity.required' => 'Số lượng không được để trống.',
-                'quantity.integer' => 'Số lượng phải là số nguyên.',
-                'quantity.min' => 'Số lượng phải ít nhất là 1.',
-            ]);
+    // public function apiUpdateCartQuantity(Request $request, $cartItemId)
+    // {
+    //     try {
+    //         // Xác thực dữ liệu đầu vào
+    //         $request->validate([
+    //             'quantity' => 'required|integer|min:1',
+    //         ], [
+    //             'quantity.required' => 'Số lượng không được để trống.',
+    //             'quantity.integer' => 'Số lượng phải là số nguyên.',
+    //             'quantity.min' => 'Số lượng phải ít nhất là 1.',
+    //         ]);
 
-            // Tìm sản phẩm trong giỏ hàng
-            $cartItem = Cart::find($cartItemId);
+    //         // Tìm sản phẩm trong giỏ hàng
+    //         $cartItem = Cart::find($cartItemId);
 
-            if (!$cartItem) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Không tìm thấy sản phẩm trong giỏ hàng.',
-                ], 404);
-            }
+    //         if (!$cartItem) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Không tìm thấy sản phẩm trong giỏ hàng.',
+    //             ], 404);
+    //         }
 
-            // Lấy thông tin sản phẩm liên quan
-            $product = $cartItem->product;
+    //         // Lấy thông tin sản phẩm liên quan
+    //         $product = $cartItem->product;
 
-            if (!$product || $product->stock < $request->quantity) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Số lượng sản phẩm không đủ trong kho.',
-                ], 400);
-            }
+    //         if (!$product || $product->stock < $request->quantity) {
+    //             return response()->json([
+    //                 'success' => false,
+    //                 'message' => 'Số lượng sản phẩm không đủ trong kho.',
+    //             ], 400);
+    //         }
 
-            // Cập nhật số lượng và tổng tiền
-            $cartItem->quantity = $request->quantity;
-            $cartItem->amount = $request->quantity * $product->price;
-            $cartItem->save();
+    //         // Cập nhật số lượng và tổng tiền
+    //         $cartItem->quantity = $request->quantity;
+    //         $cartItem->amount = $request->quantity * $product->price;
+    //         $cartItem->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cập nhật số lượng sản phẩm thành công.',
-                'cart' => $cartItem,
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Không thể cập nhật số lượng sản phẩm.',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
+    //         return response()->json([
+    //             'success' => true,
+    //             'message' => 'Cập nhật số lượng sản phẩm thành công.',
+    //             'cart' => $cartItem,
+    //         ], 200);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Không thể cập nhật số lượng sản phẩm.',
+    //             'error' => $e->getMessage(),
+    //         ], 500);
+    //     }
+    // }
 
-    public function apiupdateUserCartQuantity(Request $request, $userId, $productId)
+    public function apiUpdateUserCartQuantity(Request $request, $userId, $productId)
     {
         try {
             // Xác thực dữ liệu đầu vào

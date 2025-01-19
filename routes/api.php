@@ -2,51 +2,73 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\AppointmentsController;
 use App\Models\Appointment;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\GetdoctorsController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\DoctorsController;
+use App\Http\Controllers\AppointmentsController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\PostController;
 
-// Authentication Routes
-Route::group(['prefix' => 'api/auth'], function () {
-    Route::post('/register', 'Auth\RegisterController@apiRegister');
-    Route::post('/login', 'Auth\LoginController@apilogin');
-    Route::post('/login/doctor', 'Auth\LoginController@apidoctorLogin');
-    Route::post('/logout', 'Auth\LoginController@apilogout');
-});
 
-// User Routes
-Route::group(['prefix' => 'api/user'], function () {
-    Route::post('/{userID}/upload-avatar', 'UsersController@apiuploadAvatar');
-    Route::get('/{userID}/get-avatar', 'UsersController@apigetAvatarByUserId');
-    Route::put('/{userID}/address', 'UsersController@apiupdateAddress');
+
+
+// AUTHENTICATION ROUTES
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
+Route::post('/register', [RegisterController::class, 'apiRegister']);
+
+// Login
+Route::post('/login', [LoginController::class, 'apiLogin']);
+// Doctor login
+Route::post('/login/doctor', [LoginController::class, 'apiDoctorLogin']);
+
+// Logout
+Route::post('/logout', [LoginController::class, 'apiLogout']);
+// Route::post('/login', [LoginController::class, 'apiLogin']);
+
+
+// USERS ROUTES
+// Upload user avt
+Route::post('/user/{userID}/upload-avatar', [UsersController::class, 'apiUploadAvatar']);
+Route::get('/user/{userID}/get-avatar', [UsersController::class, 'apiGetAvatarByUserId']);
+// Add address
+// Add user address
+Route::put('/users/{userID}/address', [UsersController::class, 'apiUpdateAddress']);
 Route::get('/users/{userID}', [UsersController::class, 'apiGetUserByID']);
 
-// Doctors Routes
-Route::group(['prefix' => 'api/doctors'], function () {
-    Route::get('/', 'GetdoctorsController@apihome')->middleware('auth:sanctum');
-    Route::get('/all', 'DoctorsController@apigetAllDoctors');
-    Route::get('/{doctorID}', 'DoctorsController@apigetDoctorsByDoctorId');
-});
 
-// Products Routes
-Route::group(['prefix' => 'api/products'], function () {
-    Route::get('/', 'ProductController@apigetAllProducts');
-    Route::get('/{id}', 'ProductController@apigetProductById');
-});
 
-// Appointments Routes
-Route::group(['prefix' => 'api/appointments'], function () {
-    Route::get('/', 'AppointmentsController@apigetAllAppointments');
-    Route::get('/{userID}', 'AppointmentsController@apigetAppointmentsByUser');
-    Route::post('/{userID}', 'AppointmentsController@apicreateAppointment');
-    Route::get('/upcoming/{userID}', 'AppointmentsController@apigetCurrentAppointments');
-    Route::put('/cancel/{userID}/{appointmentID}', 'AppointmentsController@apicancelAppointment');
-    //Update status
-    // Route::put('/{appointmentID}/confirm', 'AppointmentsController@apiConfirmAppointment');
-});
-// Appointments bookdoctor
+// DOCTORS ROUTES
+
+// Get list doctor
+Route::middleware('auth:sanctum')->get('/doctors', [GetdoctorsController::class, 'apiHome']);
+//Get doctors controller
+Route::get('/alldoctors', [DoctorsController::class, 'apiGetAllDoctors']);
+Route::get('/doctors/{doctorID}', [DoctorsController::class, 'apiGetDoctorsByDoctorId']);
+
+// PRODUCT ROUTES
+Route::get('/products', [ProductController::class, 'getAllProducts']);
+Route::get('/products/{id}', [ProductController::class, 'getProductById']);
+
+// APPOINTMENT ROUTES
+
+//Get all appointment
+Route::get('/appointments', [AppointmentsController::class, 'getAllAppointments']);
+// Get appointment by user
+Route::get('/appointments/{userID}', [AppointmentsController::class, 'getAppointmentsByUser']);
+//Create appointmet by user
+Route::post('/appointments/{userID}', [AppointmentsController::class, 'createAppointment']);
+// Get current appointmentappointment
+Route::get('/appointments/upcoming/{userID}', [AppointmentsController::class, 'getCurrentAppointments']);
+
+
+// APPOINTMENT BOOKING
 Route::post('appointments/{userID}/create', [AppointmentsController::class, 'apicreateAppointment']);
 //Update status
 Route::put('/appointments/{appointmentID}/confirm', [AppointmentsController::class, 'apiConfirmAppointment']);
@@ -57,22 +79,30 @@ Route::get('/appointments/doctor/{doctorID}/recent', [AppointmentsController::cl
 Route::delete('/appointments/{appointmentID}/reject', [AppointmentsController::class, 'apiDeleteAppointment']);
 
 
-// Cart Routes
-Route::group(['prefix' => 'api/cart'], function () {
-    Route::get('/{userID}', 'CartController@apigetUserCart');
-    Route::post('/add', 'CartController@apiaddProductToCart')->middleware('auth:sanctum');
-    Route::delete('/{userId}/{productId}', 'CartController@apiremoveFromCartByUser');
-    Route::put('/{userId}/{productId}', 'CartController@apiupdateUserCartQuantity');
-});
+// CART ROUTES
+Route::get('/cart/{userID}', [CartController::class, 'apiGetUserCart']);
+// Add more product to cart
+Route::middleware('auth:sanctum')->post('/cart/add', [CartController::class, 'apiAddProductToCart']);
+//Remove product by useruser
+Route::delete('/cart/{userId}/{productId}', [CartController::class, 'apiRemoveFromCartByUser']);
+// Update product quantity
+Route::put('/cart/{userId}/{productId}', [CartController::class, 'apiUpdateUserCartQuantity']);
 
 
-// Posts Routes
-Route::group(['prefix' => 'api/posts'], function () {
-    Route::get('/', 'PostController@apigetAllPosts');
-    Route::get('/{slug}', 'PostController@apigetPostBySlug');
-});
+// POST ROUTES
+Route::get('/posts', [PostController::class, 'apiGetAllPosts']);
+Route::get('/posts/{slug}', [PostController::class, 'apiGetPostBySlug']);
 
 // Default User Route
-Route::middleware('auth:sanctum')->get('/api/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/api/user', function (Request $request) {
+//     return $request->user();
+// });
+
+// ORDER ROUTES
+// Order Routes
+Route::middleware(['auth:sanctum'])->get('/orders', [OrderController::class, 'apiGetUserOrders']);
+Route::middleware(['auth:sanctum'])->post('/orders/create', [OrderController::class, 'apiCreateOrder']);
+
+// Order status 
+Route::middleware(['auth:sanctum'])->get('/orders/{order_id}/status', [OrderController::class, 'apiGetOrderStatus']);
+Route::middleware(['auth:sanctum'])->get('/orders/status', [OrderController::class, 'apiGetUserOrdersStatus']);

@@ -199,7 +199,7 @@ Route::group(['prefix'=>'/doctor','middleware'=>['doctor']],function(){
 
     // Danh sách bệnh nhân 
     Route::get('/patients', [AppointmentsController::class, 'getAllAppointmentsForDoctors'])->name('patients.index');
-    Route::patch('/appointments/{id}/updateStatus', [AppointmentsController::class, 'updateStatus'])->name('appointments.updateStatus');
+    Route::patch('/appointments/{id}/updateStatus', [AppointmentsController::class, 'apiUpdateStatus'])->name('appointments.updateStatus');
 
     // Danh sách đặt khám bệnh nhân 
     Route::get('/patients/appointments', [AppointmentsController::class, 'getAllAppointmentsForDoctors'])->name('doctor.patients.appointments');

@@ -9,6 +9,7 @@ use App\Models\Brand;
 use Illuminate\Support\Str;
 use Illuminate\Contracts\View\View as ViewContract;
 use Exception;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -18,7 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::getAllProduct();
-        return view('backend.product.index')->with('products',$products);
+        return view('backend.product.index')->with('products', $products);
     }
 
     /**
@@ -47,7 +48,7 @@ class ProductController extends Controller
             'stock'       => "required|numeric",
             'cat_id'      => 'required|exists:categories,id',
             'brand_id'    => 'nullable|exists:brands,id',
-            'child_cat_id'=> 'nullable|exists:categories,id',
+            'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
             'status'      => 'required|in:active,inactive',
             'condition'   => 'required|in:default,new,hot',
@@ -60,8 +61,8 @@ class ProductController extends Controller
         // Xử lý slug
         $slug  = Str::slug($request->title);
         $count = Product::where('slug', $slug)->count();
-        if($count > 0){
-            $slug = $slug.'-'.date('ymdis').'-'.rand(0,999);
+        if ($count > 0) {
+            $slug = $slug . '-' . date('ymdis') . '-' . rand(0, 999);
         }
         $data['slug'] = $slug;
 
@@ -69,17 +70,17 @@ class ProductController extends Controller
 
         // Xử lý size (nếu có)
         $size = $request->input('size');
-        if($size){
+        if ($size) {
             $data['size'] = implode(',', $size);
         } else {
             $data['size'] = '';
         }
 
         $status = Product::create($data);
-        if($status){
-            request()->session()->flash('success','Sản phẩm đã được thêm');
+        if ($status) {
+            request()->session()->flash('success', 'Sản phẩm đã được thêm');
         } else {
-            request()->session()->flash('error','Vui lòng thử lại!!');
+            request()->session()->flash('error', 'Vui lòng thử lại!!');
         }
         return redirect()->route('product.index');
     }
@@ -124,7 +125,7 @@ class ProductController extends Controller
             'size'        => 'nullable',
             'stock'       => "required|numeric",
             'cat_id'      => 'required|exists:categories,id',
-            'child_cat_id'=> 'nullable|exists:categories,id',
+            'child_cat_id' => 'nullable|exists:categories,id',
             'is_featured' => 'sometimes|in:1',
             'brand_id'    => 'nullable|exists:brands,id',
             'status'      => 'required|in:active,inactive',
@@ -138,17 +139,17 @@ class ProductController extends Controller
 
         // Xử lý size (nếu có)
         $size = $request->input('size');
-        if($size){
+        if ($size) {
             $data['size'] = implode(',', $size);
         } else {
             $data['size'] = '';
         }
 
         $status = $product->fill($data)->save();
-        if($status){
-            request()->session()->flash('success','Cập nhật sản phẩm thành công');
+        if ($status) {
+            request()->session()->flash('success', 'Cập nhật sản phẩm thành công');
         } else {
-            request()->session()->flash('error','Vui lòng thử lại!!');
+            request()->session()->flash('error', 'Vui lòng thử lại!!');
         }
         return redirect()->route('product.index');
     }
@@ -160,16 +161,18 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $status  = $product->delete();
-        
-        if($status){
-            request()->session()->flash('success','Đã xóa sản phẩm thành công');
+
+        if ($status) {
+            request()->session()->flash('success', 'Đã xóa sản phẩm thành công');
         } else {
-            request()->session()->flash('error','Đã xảy ra lỗi khi xóa sản phẩm');
+            request()->session()->flash('error', 'Đã xảy ra lỗi khi xóa sản phẩm');
         }
         return redirect()->route('product.index');
     }
 
-    public function apigetAllProducts(Request $request)
+
+    // APIAPI
+    public function apiGGetAllProducts(Request $request)
     {
         try {
             $products = Product::getAllProduct();
@@ -178,10 +181,41 @@ class ProductController extends Controller
                 'products' => $products,
             ], 200);
         } catch (Exception $e) {
-            \Log::error('Error in fetching products: ' . $e->getMessage());
+            Log::error('Error in fetching products: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Không thể lấy danh sách sản phẩm.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function apiGetProductById($id)
+    {
+        try {
+            // Tìm sản phẩm theo ID
+            $product = Product::find($id);
+
+            // Nếu không tìm thấy sản phẩm
+            if (!$product) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Không tìm thấy sản phẩm.',
+                ], 404);
+            }
+
+            // Trả về dữ liệu sản phẩm
+            return response()->json([
+                'success' => true,
+                'message' => 'Lấy thông tin sản phẩm thành công.',
+                'product' => $product,
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Error in fetching product: ' . $e->getMessage());
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Lỗi khi lấy sản phẩm.',
                 'error' => $e->getMessage(),
             ], 500);
         }

@@ -17,7 +17,7 @@ class GetdoctorsController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function apihome(Request $request)
+    public function apiHome(Request $request)
     {
         try {
             $user = Auth::user();

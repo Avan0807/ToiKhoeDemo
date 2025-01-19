@@ -165,7 +165,7 @@ class UsersController extends Controller
         }
     }
 
-    public function apiuploadAvatar(Request $request, $id)
+    public function apiUploadAvatar(Request $request, $id)
     {
         try {
             $user = User::findOrFail($id);
@@ -222,7 +222,7 @@ class UsersController extends Controller
     }
 
 
-    public function apigetAvatarByUserId($id)
+    public function apiGetAvatarByUserId($id)
     {
         try {
             // Tìm người dùng dựa trên ID
@@ -258,7 +258,7 @@ class UsersController extends Controller
             ], 500);
         }
     }
-    public function apiupdateAddress(Request $request, $id)
+    public function apiUpdateAddress(Request $request, $id)
     {
         try {
             // Xác thực dữ liệu
